@@ -1,12 +1,11 @@
 from ninja import NinjaAPI
+# My files
+from .schemas import (
+    StudentSchema
+)
 
 # API init
 api = NinjaAPI()
-
-# Test function
-@api.get("/hello")
-def hello(request):
-    return {"message": "Hello World!"}
 
 
 # Student

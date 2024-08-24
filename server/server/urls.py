@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 # My Files
-from student.api import api
+from student.api import api as std_api
+from hello.api import api as hello_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Student API
-    path('student/', api.urls),
+    # Hello API URLs
+    path('hello/', hello_api.urls),
+    # Student API URLs
+    path('student/', std_api.urls),
 ]

@@ -4,6 +4,6 @@
 4. swr                        (React Hooks for Data Fetching)
 5. fetch API                  (Fetch the data)
 6. Django Ninja JWT			  (For creating Auth Token using django)
-7. shadcn/ui                  (Tailwind CSS framework for creating UIs in Next JS)
+7. shadcn/ui                  (Tailwind CSS framework for creating UIs in Next JS)  ==> Optional (You can use any framework you like)
 	Radix UI (Optional)
 	Lucide for Icons

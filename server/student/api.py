@@ -1,14 +1,16 @@
 from ninja import NinjaAPI
 # My files
 from .schemas import (
-    StudentSchema
+    StudentSchema, Error
 )
 
 # API init
-api = NinjaAPI()
+api = NinjaAPI(version="1.0.0", urls_namespace="student")
 
 
 # Student
-@api.get("/")
+@api.get("/", response={200: StudentSchema, 403: Error})
 def student(request):
-    return {"message": "Student API"}
+    if not request.user.is_authenticated:
+        return 403, {"message": "Access Denied"}
+    return request.user 

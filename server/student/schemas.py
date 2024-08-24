@@ -6,10 +6,23 @@ from ninja import Schema
 # Student Schema
 class StudentSchema(Schema):
     id: UUID
-    first_name: str
-    last_name: str
-    email: str
+    # Student identity and details
+    first_name: str = None
+    last_name: str = None
+    email: str = None
     username: str
     password: str
-    created_at: datetime
+    # Authentication status
+    is_authenticated: bool = False
+    # Student buying history
+    taking_questionBanks: list = []
+    taking_courses: list = []
+    taking_bundles: list = []
+    # Student creation and update timestamps
+    timestamp: datetime
     updated_at: datetime
+
+
+# Error Schema
+class Error(Schema):
+    message: str

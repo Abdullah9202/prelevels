@@ -3,11 +3,11 @@ from ninja import NinjaAPI
 from .schemas import HelloSchema
 
 # API init
-api = NinjaAPI()
+api = NinjaAPI(version="1.0.0", urls_namespace="hello")
 
 
 
-@api.get("/hello")
+@api.get("")
 def hello(request):
     return {"message": "Hello World!"}
 

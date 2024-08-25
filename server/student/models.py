@@ -49,3 +49,46 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse("Student_detail", kwargs={"id": self.id})
 
+
+# Model for Topical Progress
+class TopicalProgress(models.Model):
+    # Unique identifier for each topical progress
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
+    # Relationship with student model
+    student = models.ForeignKey(Student, verbose_name=_("Student"), related_name="topical_progress", on_delete=models.CASCADE)
+
+    # Progress details
+    progress = models.JSONField(_("Topical Progress"), default=dict, blank=True)
+
+    class Meta:
+        verbose_name = _("TopicalProgress")
+        verbose_name_plural = _("TopicalProgresss")
+
+    def __str__(self):
+        return f"{self.student.first_name} { self.student.last_name} - Topical Progress"
+
+    def get_absolute_url(self):
+        return reverse("TopicalProgress_detail", kwargs={"id": self.id})
+
+
+# Model for Yearly Progress
+class YearlyProgress(models.Model):
+    # Unique identifier for each year progress
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
+    # Relationship with student model
+    student = models.ForeignKey(Student, verbose_name=_("Student"), related_name="yearly_progress", on_delete=models.CASCADE)
+
+    # Progress details
+    progress = models.JSONField(_("Yearly Progress"), default=dict, blank=True)
+
+    class Meta:
+        verbose_name = _("YearlyProgress")
+        verbose_name_plural = _("YearlyProgresss")
+
+    def __str__(self):
+        return f"{self.student.first_name} { self.student.last_name} - Yearly Progress"
+
+    def get_absolute_url(self):
+        return reverse("YearlyProgress_detail", kwargs={"id": self.id})

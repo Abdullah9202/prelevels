@@ -1,3 +1,6 @@
 from django.contrib import admin
+# My Files
+from .models import Bundle
 
-# Register your models here.
+# Registering the Bundle model
+admin.site.register(Bundle)

@@ -1,7 +1,7 @@
 from uuid import UUID
 from datetime import datetime
 from ninja import Schema
-from typing import List, Optional
+from typing import Optional
 
 # Schema for Course model
 class CourseSchema(Schema):

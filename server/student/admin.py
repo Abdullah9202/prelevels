@@ -1,3 +1,8 @@
 from django.contrib import admin
+# My Files
+from .models import Student, TopicalProgress, YearlyProgress
 
-# Register your models here.
+# Student models
+admin.site.register(
+    [Student, TopicalProgress, YearlyProgress]
+)

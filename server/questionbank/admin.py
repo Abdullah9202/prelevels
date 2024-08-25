@@ -1,3 +1,6 @@
 from django.contrib import admin
+# My Files
+from .models import QuestionBank
 
-# Register your models here.
+# Registering the Bundle model
+admin.site.register(QuestionBank)

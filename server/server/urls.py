@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 # My Files
-from student import api as std_api
 from hello import api as hello_api
+from student import api as std_api
 from questionbank import api as questionbank_api
 from course import api as course_api
 from bundle import api as bundle_api

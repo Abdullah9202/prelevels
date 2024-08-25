@@ -9,7 +9,7 @@ class QuestionBankSchema(Schema):
     name: str
     description: str
     price: float
-    timestamp: datetime
+    created_at: datetime
     updated_at: datetime
 
 
@@ -18,7 +18,7 @@ class CourseSchema(Schema):
     name: str
     description: str
     price: float
-    timestamp: datetime
+    created_at: datetime
     updated_at: datetime
 
 
@@ -27,7 +27,7 @@ class BundleSchema(Schema):
     name: str
     description: str
     price: float
-    timestamp: datetime
+    created_at: datetime
     updated_at: datetime
 
 
@@ -47,7 +47,7 @@ class StudentSchema(Schema):
     taking_courses: list[CourseSchema] = []
     taking_bundles: list[BundleSchema] = []
     # Student creation and update timestamps
-    timestamp: datetime
+    created_at: datetime
     updated_at: datetime
 
 

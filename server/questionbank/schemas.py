@@ -9,6 +9,8 @@ class QuestionBankSchema(Schema):
     name: str
     description: Optional[str]
     additional_details: Optional[str]
+    price: Optional[float]
+    validity: Optional[int]
     created_at: datetime
     updated_at: datetime
     is_active: bool

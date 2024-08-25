@@ -2,14 +2,16 @@
 import Timeline from "@/components/ui/timeline";
 import Navbar from "@/components/main/navbar";
 import Image from "next/image";
+import Hero from "@/components/main/hero";
 
 export default function Home() {
   return (
     
     <div>
       <Timeline/>
-      <div className="bg-[#F4F4F4]">
+      <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar/>
+        <Hero/>
       </div>
       
     </div>

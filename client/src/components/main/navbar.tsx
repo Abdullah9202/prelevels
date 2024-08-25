@@ -36,8 +36,8 @@ export default function Navbar() {
                         <Link href="/login" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
                             Login
                         </Link>
-                        <Link href="/contact" className="bg-red-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-red-700">
-                            Contact
+                        <Link href="/contact" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
+                            Create Account
                         </Link>
                     </div>
                     <div

@@ -19,6 +19,9 @@ from django.urls import path
 # My Files
 from student import api as std_api
 from hello import api as hello_api
+from questionbank import api as questionbank_api
+from course import api as course_api
+from bundle import api as bundle_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +29,10 @@ urlpatterns = [
     path('api/hello/', hello_api.api.urls),
     # Student API URLs
     path('api/student/', std_api.api.urls),
+    # Question Bank API URLs
+    path('api/questionbank/', questionbank_api.api.urls),
+    # Course API URLs
+    path('api/course/', course_api.api.urls),
+    # Bundle API URLs
+    path('api/bundle/', bundle_api.api.urls),
 ]

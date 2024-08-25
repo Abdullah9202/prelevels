@@ -11,6 +11,7 @@ class Course(models.Model):
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=3, null=True)
+    discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=3, null=True)
     validity = models.IntegerField(_("Validity"), null=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)

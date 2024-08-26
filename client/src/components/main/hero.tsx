@@ -1,11 +1,12 @@
 import Image from "next/image";
 import HeroImage from "@/assets/heroImage.png";
 import SearchBar from "../ui/searchbar";
+import Avatar from "../ui/avatar";
 
 export default function Hero() {
     return (
         <div className="flex relative z-20 items-center overflow-hidden">
-            <div className="container mx-auto px-14 flex flex-col sm:flex-row items-center justify-between py-5">
+            <div className="container mx-auto px-14 flex flex-col sm:flex-row items-center justify-between py-10">
                 <div className="sm:w-2/3 lg:w-3/5 flex flex-col relative z-20 sm:px-6">
                 <h1 className="font-bebas-neue font-semibold uppercase text-2xl sm:text-4xl text-[#454A52] leading-tight">
                     Welcome to <br />
@@ -22,6 +23,10 @@ export default function Hero() {
                     </div>
                     <div className="flex ">
                         <SearchBar/>
+                        
+                    </div>
+                    <div className="flex mt-6">
+                        <Avatar/>
                     </div>
                 </div>
                 <div className=" hidden sm:block sm:w-1/2 lg:w-3/5  relative">

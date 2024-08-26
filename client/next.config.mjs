@@ -3,7 +3,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['cdn.builder.io'], // Allow images from this domain
+      domains: ['cdn.builder.io','img.daisyui.com'], // Allow images from this domain
+
     },
   };
   

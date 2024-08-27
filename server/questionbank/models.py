@@ -9,7 +9,7 @@ class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
     description = models.TextField(_("Description"), null=True)
-    additional_details = models.TextField(_("Additional Details"), null=True)
+    additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=3, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=3, null=True)
     validity = models.IntegerField(_("Validity"), null=True)

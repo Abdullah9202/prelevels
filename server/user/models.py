@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 import uuid
-from django.contrib.auth.models import BaseUserManager, AbstractUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 
 # Custom User Manager
@@ -28,7 +28,7 @@ class CustomUserManager(BaseUserManager):
 
 
 # Custom User Model
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     # Unique identifier for each user
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -37,10 +37,6 @@ class User(AbstractUser):
     last_name = models.CharField("Last Name", max_length=50, blank=False)
     email = models.EmailField("Email", max_length=254, unique=True, blank=False)
     username = models.CharField("Username", max_length=50, unique=True, blank=False)
-    password = models.CharField("Password", max_length=50, blank=False)
-
-    # Authentication status
-    is_authenticated = models.BooleanField("Is Authenticated", default=False)
 
     # User status flags
     is_active = models.BooleanField(default=True)
@@ -54,8 +50,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     class Meta:
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
+        abstract = True
 
     def __str__(self):
         return self.email

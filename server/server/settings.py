@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # My Apps
     'hello', # Testing app
-    'admin',
     'user',
     'student',
     'questionbank',

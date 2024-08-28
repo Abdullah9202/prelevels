@@ -8,6 +8,7 @@ import TestimonialsSection from "@/components/main/teatimonials";
 import ServicesSection from "@/components/main/servicessection";
 import PricingSection from "@/components/main/pricingsection";
 import Footer from "@/components/main/footer";
+import Belowfooter from "@/components/main/belowfooter";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <ServicesSection/>
         <PricingSection/>
         <Footer/>
+        <Belowfooter/>
       </div>
       
     </div>

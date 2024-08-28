@@ -10,7 +10,7 @@ class QuestionBankAdmin(admin.ModelAdmin):
     # Display Fields and Filters
     list_display = ('name', 'description', 'price', 'discount', 'validity', 'is_active')
     search_fields = ('name', 'description')
-    list_filter = ('is_active', 'price')
+    list_filter = ('is_active', 'price', 'validity')
 
 admin.site.register(QuestionBank, QuestionBankAdmin)
 

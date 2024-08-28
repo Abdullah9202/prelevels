@@ -75,7 +75,7 @@ class Option(models.Model):
     # One-to-one relationship with WhyCorrectOption (Each why correct statement will be unique to each option)
     why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"),
                                             on_delete=models.CASCADE, null=True, blank=True)
-    
+
 
     class Meta:
         verbose_name = _("Option")

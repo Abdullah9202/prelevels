@@ -10,9 +10,9 @@ class QuestionBankAdmin(admin.ModelAdmin):
     # Display Fields and Filters
     list_display = ('name', 'description', 'price', 'discount', 'validity', 'is_active')
     search_fields = ('name', 'description')
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'price')
 
-admin.site.register(QuestionBank)
+admin.site.register(QuestionBank, QuestionBankAdmin)
 
 
 # Inlines
@@ -24,6 +24,7 @@ class OptionInline(admin.StackedInline):
     model = Option
     extra = 4
     inlines = [WhyCorrectOptionInline]
+
 
 # Question with Admin
 class QuestionAdmin(admin.ModelAdmin):

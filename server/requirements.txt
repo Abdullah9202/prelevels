@@ -1,0 +1,9 @@
+django~=5.1
+django-cors-headers
+django-ninja
+rav
+python-dotenv~=1.0.1
+psycopg2
+pydantic[email]~=2.8.2
+django-ninja-jwt[crypto]
+pip install django-phonenumber-field[phonenumbers]

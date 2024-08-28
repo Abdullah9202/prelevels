@@ -53,7 +53,7 @@ class Question(models.Model):
     # Fuction to save unique identifier
     def save(self, *args, **kwargs) -> None:
         if not self.unique_identifier:
-            self.unique_identifier = f"{(self.question_bank.name).replace(" ", "")}_{self.year}_{self.category}_{self.subject}_{self.topic}_{self.question_number}"
+            self.unique_identifier = f"{self.question_bank.name}_{self.year}_{self.category}_{self.subject}_{self.topic}_{self.question_number}"
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -73,7 +73,8 @@ class Option(models.Model):
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
     # One-to-one relationship with WhyCorrectOption (Each why correct statement will be unique to each option)
-    why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"), on_delete=models.CASCADE, null=True)
+    why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"),
+                                            on_delete=models.CASCADE, null=True, blank=True)
     
 
     class Meta:

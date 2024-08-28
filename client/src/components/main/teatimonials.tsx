@@ -21,7 +21,7 @@ export default function TestimonialsSection() {
                         <h3 className="text-xl font-semibold text-gray-800  mb-2">
                             Excellent Service
                         </h3>
-                        <p className="text-gray-600  mb-4">
+                        <p className="text-gray-400  mb-4">
                             The team provided outstanding service, exceeding all expectations.
                         </p>
                         <hr className="border-gray-300 dark:border-slate-600 mb-4" />
@@ -44,7 +44,7 @@ export default function TestimonialsSection() {
                         <h3 className="text-xl font-semibold text-gray-800  mb-2">
                             Amazing Experience
                         </h3>
-                        <p className="text-gray-600  mb-4">
+                        <p className="text-gray-400  mb-4">
                             The collaboration was seamless, and the results were phenomenal.
                         </p>
                         <hr className="border-gray-300 dark:border-slate-600 mb-4" />

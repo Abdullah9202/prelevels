@@ -39,8 +39,8 @@ class Question(models.Model):
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
     question_text = models.TextField(_("Question Text"), null=False)
-    additional_details = models.TextField(_("Additional Details"), null=True)
-    unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True)
+    additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
+    unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
@@ -52,11 +52,11 @@ class Question(models.Model):
     # Fuction to save unique identifier
     def save(self, *args, **kwargs) -> None:
         if not self.unique_identifier:
-            self.unique_identifier = f"{self.question_bank.name}_{self.year}_{self.category}_{self.subject}_{self.topic}_{self.question_number}"
+            self.unique_identifier = f"{(self.question_bank.name).replace(" ", "")}_{self.year}_{self.category}_{self.subject}_{self.topic}_{self.question_number}"
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.question_text} - {self.question_bank.name}"
+        return f"{self.question_number} - {self.question_text} - {self.question_bank.name}"
 
     def get_absolute_url(self):
         return reverse("questionbank:Question-detail", kwargs={"id": self.id})

@@ -9,7 +9,7 @@ const Service = () => {
     
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-14">
        {/* Feature 1  */}
-      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center">
+      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center border-2 border-white">
         <div className="text-red-500 mb-4">
           {/* <!-- Red Icon (Example: Feather icon from react-feather library) -- */}
           <FaFlask size={30} />
@@ -20,7 +20,7 @@ const Service = () => {
       </div>
 
       {/* <!-- Feature 2 --> */}
-      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center">
+      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center border-2 border-white">
         <div className="text-red-500 mb-4">
           {/* <!-- Red Icon (Example: Feather icon from react-feather library) --> */}
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" className="bi bi-question-circle" viewBox="0 0 16 16">
@@ -35,7 +35,7 @@ const Service = () => {
       </div>
 
       {/* <!-- Feature 3 --> */}
-      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center">
+      <div className="bg-[#D9D9D9] p-6 rounded-lg text-center border-2 border-white">
         <div className="text-red-500 mb-4">
           {/* <!-- Red Icon (Example: Feather icon from react-feather library) --> */}
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" className="bi bi-bar-chart-line" viewBox="0 0 16 16">

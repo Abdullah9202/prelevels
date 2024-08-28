@@ -16,7 +16,7 @@ export default function TestimonialsSection() {
                 {/* Testimonial Boxes */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-5">
                     {/* Box 1 */}
-                    <div className="bg-[#D9D9D9] p-6 rounded-lg shadow-lg">
+                    <div className="bg-[#D9D9D9] p-6 rounded-lg shadow-lg border-2 border-white">
                         <FaQuoteLeft className="text-red-500 text-3xl mb-4" />
                         <h3 className="text-xl font-semibold text-gray-800  mb-2">
                             Excellent Service
@@ -39,7 +39,7 @@ export default function TestimonialsSection() {
                     </div>
                     
                     {/* Box 2 */}
-                    <div className="bg-[#D9D9D9] p-6 rounded-lg shadow-lg">
+                    <div className="bg-[#D9D9D9] p-6 rounded-lg shadow-lg border-2 border-white">
                         <FaQuoteLeft className="text-red-500 text-3xl mb-4" />
                         <h3 className="text-xl font-semibold text-gray-800  mb-2">
                             Amazing Experience

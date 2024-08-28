@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 import uuid
+from phonenumber_field.modelfields import PhoneNumberField
 # My Files
 from questionbank.models import QuestionBank
 from course.models import Course
@@ -18,6 +19,7 @@ class Student(models.Model):
     last_name = models.CharField(_("Last Name"), max_length=50, null=False, blank=False)
     email = models.EmailField(_("Email"), max_length=254, null=False, unique=True, blank=False)
     username = models.CharField(_("Username"), max_length=50, null=False, unique=True, blank=False)
+    phone_number = PhoneNumberField(_("Phone Number"), max_length=13, null=False, unique=True, blank=False)
     password = models.CharField(_("Password"), max_length=50, null=False, blank=False)
     
     # Authentication status

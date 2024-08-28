@@ -39,6 +39,7 @@ class Question(models.Model):
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
     question_text = models.TextField(_("Question Text"), null=False)
+    question_image = models.ImageField(_("Question Image"), upload_to="questionbank/images/question_images/", null=True, blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)

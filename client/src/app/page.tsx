@@ -6,6 +6,7 @@ import Hero from "@/components/main/hero";
 import Service from "@/components/main/services";
 import TestimonialsSection from "@/components/main/teatimonials";
 import ServicesSection from "@/components/main/servicessection";
+import PricingSection from "@/components/main/pricingsection";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <Service/>
         <TestimonialsSection/>
         <ServicesSection/>
+        <PricingSection/>
       </div>
       
     </div>

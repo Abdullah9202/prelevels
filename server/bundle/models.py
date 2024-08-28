@@ -2,6 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 import uuid
+# My Files
+from ..course.models import Course
+from ..questionbank.models import QuestionBank
 
 
 # Bundle model
@@ -16,6 +19,10 @@ class Bundle(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
+
+    # Adding many to many relation with question bank and courses
+    courses = models.ManyToManyField(Course, verbose_name=_("Courses"), related_name="bundles", blank=True)
+    question_bank = models.ManyToManyField(QuestionBank, verbose_name=_("Question Banks"), related_name="bundles", blank=True)
 
     class Meta:
         verbose_name = _("Bundle")

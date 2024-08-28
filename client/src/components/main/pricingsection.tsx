@@ -5,8 +5,8 @@ import testImage3 from "@/assets/Rectangle 17.png";
 
 export default function PricingSection() {
   return (
-    <section className="bg-[#D9D9D9] py-12 lg:px-14 md:mr-20 md:ml-20 mt-9 rounded-lg">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 rounded-lg">
+    <section className="bg-[#D9D9D9] py-12 lg:px-14 md:mr-20 md:ml-20 mt-9 rounded-lg border-2 border-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 rounded-lg ">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">
             Fair & Simple Pricing for All

@@ -3,8 +3,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 import uuid
 # My Files
-from ..course.models import Course
-from ..questionbank.models import QuestionBank
+from course.models import Course
+from questionbank.models import QuestionBank
 
 
 # Bundle model

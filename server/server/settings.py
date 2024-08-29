@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Main App
+    'server',
     # My Apps
     'hello', # Testing app
     'student',

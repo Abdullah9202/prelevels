@@ -72,7 +72,7 @@ export default function Hero() {
                         className="w-full py-2 px-3 border-b-2 border-gray-400 text-gray-700 leading-tight focus:outline-none focus:border-red-500 rounded-xl"
                         id="message"
                         placeholder="Your message"
-                        rows="4"
+                        // rows="4"
                     ></textarea>
                     </div>
                     <p className="text-gray-500 text-sm mb-6">

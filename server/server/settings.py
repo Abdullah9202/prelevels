@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'questionbank',
     'course',
     'bundle',
+    'cart',
 ]
 
 MIDDLEWARE = [

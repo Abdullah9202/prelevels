@@ -21,7 +21,7 @@ class Bundle(models.Model):
     is_active = models.BooleanField(_("Is Active"), default=True)
 
     # Adding many to many relation with question bank and courses
-    courses = models.ManyToManyField(Course, verbose_name=_("Courses"), related_name="bundles", blank=True)
+    course = models.ManyToManyField(Course, verbose_name=_("Courses"), related_name="bundles", blank=True)
     question_bank = models.ManyToManyField(QuestionBank, verbose_name=_("Question Banks"), related_name="bundles", blank=True)
 
     class Meta:

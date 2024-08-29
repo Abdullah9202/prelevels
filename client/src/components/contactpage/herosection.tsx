@@ -1,5 +1,5 @@
 
-import { FaAddressBook,FaPhone,FaEnvelope } from "react-icons/fa";
+import { FaAddressBook,FaPhone,FaEnvelope,FaFacebook,FaInstagram,FaYoutube } from "react-icons/fa";
 
 export default function Hero() {
   return (
@@ -35,7 +35,14 @@ export default function Hero() {
                         <span className="text-sm ml-2 text-gray-500"> <span className="font-bold">Email</span> <br/> admin123@gmail.com</span>
                     </div>
                     </div>
-              
+                <hr className="border-gray-300 lg:w-96 w-20 mt-12"/>
+                <p className="font-bold text-xl text-gray-800 mt-4">Follow us:</p>
+                <div className="space-x-4 py-4">
+                    <button> <FaFacebook size={30} className="text-white bg-red-500 p-2 rounded-full" /> </button>
+                    <button> <FaInstagram size={30} className="text-white bg-red-500 p-2 rounded-full"/> </button>
+                    <button> <FaYoutube size={30} className="text-white bg-red-500 p-2 rounded-full"/> </button>
+                </div>
+
             </div>
 
             {/* Contact Form */}

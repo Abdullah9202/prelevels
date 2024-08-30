@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 # My Files
 from authentication import api as auth_api
+from customUser import api as custom_user_api
 from hello import api as hello_api
 from student import api as std_api
 from questionbank import api as questionbank_api
@@ -28,6 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Authentication API URLs
     path('api/auth/', auth_api.api.urls),
+    # Custom User API URLs
+    path('api/customuser', custom_user_api.api.urls),
     # Hello API URLs
     path('api/hello/', hello_api.api.urls),
     # Student API URLs

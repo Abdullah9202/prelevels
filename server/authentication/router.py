@@ -17,7 +17,7 @@ auth_router = Router()
 
 
 # Login Router
-@auth_router.post("/login")
+@auth_router.post("/login/")
 def login_user(request, payload: LoginSchema):
     user = authenticate(request, phone_number=payload.phone_number, password=payload.password)
     # Validation for user
@@ -58,7 +58,7 @@ def register_user(request, payload: RegisterSchema):
         username = payload.username,
         email = payload.email,
         phone_number = payload.phone_number,
-        password = hashed_password
+        password = hashed_password,
     )
     new_user.save()
     return JsonResponse({"message": "User registered successfully"})

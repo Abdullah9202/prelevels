@@ -30,7 +30,7 @@ urlpatterns = [
     # Authentication API URLs
     path('api/auth/', auth_api.api.urls),
     # Custom User API URLs
-    path('api/customuser', custom_user_api.api.urls),
+    path('api/customuser/', custom_user_api.api.urls),
     # Hello API URLs
     path('api/hello/', hello_api.api.urls),
     # Student API URLs

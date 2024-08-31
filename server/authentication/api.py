@@ -6,4 +6,4 @@ from .router import auth_router
 api = NinjaAPI(version="1.0.0", urls_namespace="authentication")
 
 # Including the auth_router
-api.add_router("/auth/", auth_router)
+api.add_router("", auth_router)

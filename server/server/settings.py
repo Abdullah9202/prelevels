@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd party apps
+    'corsheaders',
+    'ninja_extra',
+    'ninja_jwt',
     # Main App
     'server',
     # My Apps

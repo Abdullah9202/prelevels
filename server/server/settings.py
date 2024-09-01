@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'server',
     # My Apps
     'authentication', # For Login, Logout, Register
-    'customUser',
     'hello', # Testing app
     'student',
     'questionbank',

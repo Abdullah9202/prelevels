@@ -10,6 +10,7 @@ from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
     LoginSchema, RegisterSchema,
 )
+from .serializers import StudentSerializer
 
 
 # Router Init
@@ -17,13 +18,13 @@ auth_router = Router()
 
 
 # Login Router
-@auth_router.post("/login/", response=LoginSchema, auth=JWTAuth())
+@auth_router.post("/login/", response={200: LoginSchema, 401: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema):
     # Authenticating
     student = authenticate(request, phone_number=payload.phone_number, password=payload.password)
     # Validation 
     if student is not None:
-        login(student)
+        login(request, student)
         return JsonResponse({"message": "Student logged in successfully"})
     else:
         raise HttpError(401, "Login failed")
@@ -37,15 +38,18 @@ def logout_student(request):
 
 
 # Register Router
-@auth_router.post("/register/", response=RegisterSchema, auth=JWTAuth())
+@auth_router.post("/register/", response={200: RegisterSchema, 400: dict}, auth=JWTAuth())
 def register_student(request, payload: RegisterSchema):
-    # Validation for email
+    # Using the serializer to validate the input data
+    serializer = StudentSerializer(data=payload.dict())
+    if not serializer.is_valid():
+        raise HttpError(400, serializer.errors)
+    
+    # Checking for existing user
     if Student.objects.filter(email=payload.email).exists():
         raise HttpError(400, "Email already exists")
-    # Validation for username
     if Student.objects.filter(username=payload.username).exists():
         raise HttpError(400, "Username already exists")
-    # Validation for phone number
     if Student.objects.filter(phone_number=payload.phone_number).exists():
         raise HttpError(400, "Phone number already exists")
     
@@ -62,4 +66,7 @@ def register_student(request, payload: RegisterSchema):
         password = hashed_password,
     )
     new_student.save()
-    return JsonResponse({"message": "Student registered successfully"})
+    
+    # Serializing the newely created student and returning it
+    serialized_student = StudentSerializer(new_student)
+    return JsonResponse(serialized_student.data)

@@ -18,7 +18,7 @@ auth_router = Router()
 
 
 # Login Router
-@auth_router.post("/login/", response={200: LoginSchema, 401: dict}, auth=JWTAuth())
+@auth_router.post("/login", response={200: LoginSchema, 401: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema):
     # Authenticating
     student = authenticate(request, phone_number=payload.phone_number, password=payload.password)
@@ -31,14 +31,14 @@ def login_student(request, payload: LoginSchema):
 
 
 # Logout Router
-@auth_router.post("/logout/", auth=JWTAuth())
+@auth_router.post("/logout", auth=JWTAuth())
 def logout_student(request):
     logout(request)
     return JsonResponse({"message": "Student logged out successfully"})
 
 
 # Register Router
-@auth_router.post("/register/", response={200: RegisterSchema, 400: dict}, auth=JWTAuth())
+@auth_router.post("/register", response={200: RegisterSchema, 400: dict}, auth=JWTAuth())
 def register_student(request, payload: RegisterSchema):
     # Using the serializer to validate the input data
     serializer = StudentSerializer(data=payload.dict())

@@ -4,7 +4,6 @@ from ninja_jwt.controller import NinjaJWTDefaultController
 from .schemas import (
     StudentSchema, Error
 )
-from .router import auth_router
 
 
 # API init
@@ -14,4 +13,4 @@ api.register_controllers(NinjaJWTDefaultController)
 
 
 # Including the auth_router form Student
-api.add_router("", auth_router)
+api.add_router("", "student.router.auth_router")

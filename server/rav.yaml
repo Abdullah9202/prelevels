@@ -10,8 +10,8 @@ scripts:
   createsuperuser:
     python.exe .\manage.py createsuperuser
   curl_auth: |
-    powershell -Command "curl -Uri 'http://127.0.0.1:8000/api/student/token/pair' -Method Post -ContentType 'application/json' -Body '{\"username\": \"admin\", \"password\": \"admin\"}'"
-  curl_auth2: |
-    powershell -Command "Invoke-RestMethod -Uri 'http://127.0.0.1:8000/api/student/token/pair' -Method Post -ContentType 'application/json' -Body '{\"username\": \"admin\", \"password\": \"admin\"}' | ConvertTo-Json -Depth 5"
-  curl_protect: |
-    powershell -Command "curl -Uri 'http://127.0.0.1:8000/api/student/hello' -Method Get -Headers @{Authorization = 'Bearer <curl_auth-access_token>'}"
+    curl -X POST -H "Content-Type: application/json" -d "{\"username\": \"admin\", \"password\": \"admin\"}" "http://localhost:8000/api/student/token/pair" > token.json
+  curl_hello1: |
+    curl -X GET -H "Authorization: Bearer <curl_auth-access-token>" http://localhost:8000/api/student/hello
+  curl_hello2: |
+    powershell -Command "$access_token = (Get-Content token.json | jq -r .access); Invoke-WebRequest -Uri 'http://localhost:8000/api/student/hello' -Headers @{Authorization = \"Bearer $access_token\"} -Method GET"

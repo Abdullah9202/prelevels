@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
+# Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
 from ninja_jwt.authentication import JWTAuth
@@ -15,6 +16,13 @@ from .serializers import StudentSerializer
 
 # Router Init
 auth_router = Router()
+
+
+# Hello Router (Test Router)
+@auth_router.get("/hello", auth=JWTAuth())
+def hello(request):
+    print(request)
+    return {"message": "Hello World!"}
 
 
 # Login Router

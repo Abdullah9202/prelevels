@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
@@ -27,16 +27,20 @@ def hello(request):
 
 
 # Login Router
-@auth_router.post("/login", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/login", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema):
-    # Authenticating
-    student = authenticate(request, phone_number=payload.phone_number, password=payload.password)
-    # Validation 
-    if student is not None:
-        login(request, student)
-        return JsonResponse({"message": "Student logged in successfully"})
-    else:
-        raise HttpError(401, "Login failed")
+    try:
+        # Fetching the student
+        student = Student.objects.get(phone_number=payload.phone_number)
+        # Checking the password
+        if check_password(payload.password, student.password):
+            # Login the student
+            login(request, student)
+            return JsonResponse({"message": "Student logged in successfully"})
+        else:
+            raise HttpError(401, "Incorrect password")
+    except Student.DoesNotExist:
+        raise HttpError(401, "Student doesn't exists")
 
 
 # Logout Router

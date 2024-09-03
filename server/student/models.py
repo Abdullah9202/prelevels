@@ -42,6 +42,9 @@ class Student(models.Model):
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
 
+    # Last Login
+    last_login = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         verbose_name = _("Student")
         verbose_name_plural = _("Students")

@@ -19,9 +19,9 @@ class Student(models.Model):
     last_name = models.CharField(_("Last Name"), max_length=50, null=False, blank=False)
     email = models.EmailField(_("Email"), max_length=254, null=False, unique=True, blank=False)
     username = models.CharField(_("Username"), max_length=50, null=False, unique=True, blank=False)
-    phone_number = PhoneNumberField(_("Phone Number"), max_length=13, null=False, unique=True, 
+    phone_number = PhoneNumberField(_("Phone Number"), max_length=15, null=False, unique=True, 
                                     blank=False, default="+92XXXXXXXXXX")
-    password = models.CharField(_("Password"), max_length=50, null=False, blank=False)
+    password = models.CharField(_("Password"), max_length=100, null=False, blank=False)
     
     # Authentication status
     is_authenticated = models.BooleanField(_("Is Authenticated"), default=False)

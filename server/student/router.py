@@ -1,6 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+import logging
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
@@ -50,37 +53,59 @@ def logout_student(request):
     return JsonResponse({"message": "Student logged out successfully"})
 
 
-# Register Router
+# Set up logging
+logger = logging.getLogger(__name__)
+
 @auth_router.post("/register", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
 def register_student(request, payload: RegisterSchema):
-    # Using the serializer to validate the input data
-    serializer = StudentSerializer(data=payload.dict())
-    if not serializer.is_valid():
-        raise HttpError(400, serializer.errors)
+    logger.info(f"Registering student with data: {payload.dict()}")
     
-    # Checking for existing user
-    if Student.objects.filter(email=payload.email).exists():
-        raise HttpError(400, "Email already exists")
-    if Student.objects.filter(username=payload.username).exists():
-        raise HttpError(400, "Username already exists")
-    if Student.objects.filter(phone_number=payload.phone_number).exists():
-        raise HttpError(400, "Phone number already exists")
-    
-    # Hashing the password
-    hashed_password = make_password(payload.password)
-    
-    # Registering the new student
-    new_student = Student(
-        first_name = payload.first_name,
-        last_name = payload.last_name,
-        email = payload.email,
-        username = payload.username,
-        phone_number = payload.phone_number,
-        password = hashed_password,
-        is_authenticated = payload.is_authenticated
-    )
-    new_student.save()
-    
-    # Serializing the newely created student and returning it
-    serialized_student = StudentSerializer(new_student)
-    return JsonResponse(serialized_student.data)
+    try:
+        # Using the serializer to validate the input data
+        serializer = StudentSerializer(data=payload.dict())
+        if not serializer.is_valid():
+            logger.error(f"Validation error: {serializer.errors}")
+            raise HttpError(400, "Invalid input data.")
+        
+        # Checking for existing user
+        if Student.objects.filter(email=payload.email).exists():
+            logger.warning("Registration failed: Email already exists.")
+            raise HttpError(400, "Email address is already in use.")
+        if Student.objects.filter(username=payload.username).exists():
+            logger.warning("Registration failed: Username already exists.")
+            raise HttpError(400, "Username is already taken.")
+        if Student.objects.filter(phone_number=payload.phone_number).exists():
+            logger.warning("Registration failed: Phone number already exists.")
+            raise HttpError(400, "Phone number is already registered.")
+        
+        # Hashing the password
+        hashed_password = make_password(payload.password)
+        
+        # Registering the new student
+        new_student = Student(
+            first_name=payload.first_name,
+            last_name=payload.last_name,
+            email=payload.email,
+            username=payload.username,
+            phone_number=payload.phone_number,
+            password=hashed_password,
+            is_authenticated=payload.is_authenticated
+        )
+        new_student.save()
+        
+        # Serializing the newly created student and returning it
+        serialized_student = StudentSerializer(new_student)
+        return JsonResponse(serialized_student.data)
+
+    except IntegrityError as err:
+        logger.error(f"IntegrityError: {str(err)}")
+        raise HttpError(400, "Database error. Please ensure your data is unique.")
+    except ValidationError as err:
+        logger.error(f"ValidationError: {str(err)}")
+        raise HttpError(400, "Validation error.")
+    except HttpError as err:
+        logger.error(f"HttpError: {err}")
+        raise err
+    except Exception as err:
+        logger.error(f"Unexpected error: {str(err)}")
+        raise HttpError(500, "An unexpected error occurred. Please try again later.")

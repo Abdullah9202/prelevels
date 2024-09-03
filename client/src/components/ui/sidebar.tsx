@@ -1,11 +1,86 @@
 "use client";
 import { useState } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
-
-import { FaBook,FaInfoCircle } from 'react-icons/fa';
+import TestImage from "@/assets/Banner.png"
+import Image from 'next/image';
+import { FaBook, FaInfoCircle } from 'react-icons/fa';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const pricingData = [
+    {
+      id: 1,
+      title: "Complete Physiology Test",
+      price: "Rs. 100",
+      originalPrice: "Rs. 500",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    {
+      id: 2,
+      title: "Complete Cardiology Test",
+      price: "Rs. 250",
+      originalPrice: "Rs. 700",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    {
+      id: 3,
+      title: "Complete Pathology Test",
+      price: "Rs. 300",
+      originalPrice: "Rs. 500",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    {
+      id: 4,
+      title: "Complete Neurology Test",
+      price: "Rs. 150",
+      originalPrice: "Rs. 600",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    {
+      id: 5,
+      title: "Complete Immunology Test",
+      price: "Rs. 350",
+      originalPrice: "Rs. 800",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    {
+      id: 6,
+      title: "Complete Dermatology Test",
+      price: "Rs. 200",
+      originalPrice: "Rs. 450",
+      validTill: "Valid Till 02/2025",
+      image: TestImage,
+    },
+    // Add more items as needed
+  ];
+
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(pricingData.length / itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const paginatedData = pricingData.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   return (
     <div className="flex h-screen">
@@ -54,7 +129,7 @@ export default function Sidebar() {
             <FaInfoCircle size={30} className="w-6 h-6 text-green-600" />
             <div className="ml-2">
               <h3 className="text-md font-semibold">Need help?</h3>
-              <p className="text-sm">Dont know how to use <a href="#" className="text-red-500 underline">click here</a> to see the guide.</p>
+              <p className="text-sm">Dont know how to use? <a href="#" className="text-red-500 underline">Click here</a> to see the guide.</p>
             </div>
           </div>
         </div>
@@ -68,8 +143,54 @@ export default function Sidebar() {
           </button>
         </header>
         <main className="p-4">
-          <h1 className="text-2xl font-semibold">Responsive Sidebar</h1>
-          <p className="mt-2">This is the main content area.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {paginatedData.map((item) => (
+              <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="relative">
+                <Image
+                src={item.image}
+                alt={item.title}
+                className="w-full h-48 object-cover"
+              />
+                  <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
+                    Best Value
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
+                  <p className="text-gray-500">Prelevels</p>
+                  <p className="text-gray-500 mb-2">{item.validTill}</p>
+                  <div className="text-red-500 text-3xl font-bold">{item.price}</div>
+                  <div className="text-gray-500 line-through text-xl">{item.originalPrice}</div>
+                  <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center items-center mt-6 space-x-4">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 0}
+              className={`${
+                currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              } bg-red-500 text-white px-4 py-2 rounded-full`}
+            >
+              Previous
+            </button>
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages - 1}
+              className={`${
+                currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''
+              } bg-red-500 text-white px-4 py-2 rounded-full`}
+            >
+              Next
+            </button>
+          </div>
         </main>
       </div>
     </div>

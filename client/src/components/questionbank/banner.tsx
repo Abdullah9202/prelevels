@@ -1,10 +1,13 @@
-import Image from "next/image";
-import BannerImage from "@/assets/Banner.png"
+import Image, { StaticImageData } from "next/image";
 
-const Banner = () => {
+interface BannerProps {
+  src: StaticImageData;
+  alt: string;
+}
+const Banner = ({ src, alt }: BannerProps) => {
     return (
       <div className="flex justify-center items-center py-5">
-        <Image src={BannerImage} alt="map" />
+        <Image src={src} alt={alt} />
       </div>
     );
   };

@@ -3,10 +3,17 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useUser, UserButton } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
     const [nav, setNav] = useState(false);
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
+    const router = useRouter();
+
+    const handleViewProfile = () => {
+        const id = user?.id; // Get the user's ID
+        router.push(`/dashboard/${id}`);
+    };
 
     return (
         <nav>
@@ -46,9 +53,9 @@ export default function Navbar() {
                     ) : (
                         <div className="flex items-center space-x-4">
                         <UserButton/>
-                        <Link href="/auth/sign-up" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
+                        <button className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700" onClick={handleViewProfile}>
                             My dashboard
-                        </Link>
+                        </button>
                         
                     </div>
                     )}

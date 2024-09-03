@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { useUser } from '@clerk/nextjs';
 
 export default function Navbar() {
     const [nav, setNav] = useState(false);
+    const { isSignedIn } = useUser();
 
     return (
         <nav>
@@ -32,14 +34,24 @@ export default function Navbar() {
                             </Link>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                        <Link href="/login" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
-                            Login
-                        </Link>
-                        <Link href="/contact" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
-                            Create Account
+                    {!isSignedIn ? (
+                                        <div className="flex items-center space-x-4">
+                                            <Link href="/auth/sign-in" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
+                                                Login
+                                            </Link>
+                                            <Link href="/auth/sign-up" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
+                                                Create Account
+                                            </Link>
+                                        </div>
+                    ) : (
+                        <div className="flex items-center space-x-4">
+                        
+                        <Link href="/auth/sign-up" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
+                            My dashboard
                         </Link>
                     </div>
+                    )}
+
                     <div
                         onClick={() => setNav(!nav)}
                         className="cursor-pointer md:hidden"

@@ -116,6 +116,5 @@ cython_debug/
 # Django ignores
 migrations/
 question_images/
-token.json
 
 # End of Python ignores

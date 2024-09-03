@@ -3,8 +3,8 @@ scripts:
     python.exe .\manage.py runserver
   makemigrations:
     python.exe .\manage.py makemigrations
-  migrte:
-    python.exe .\manage.py migrte
+  migrate:
+    python.exe .\manage.py migrate
   shell:
     python.exe .\manage.py shell
   createsuperuser:

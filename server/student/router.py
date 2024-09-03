@@ -72,6 +72,7 @@ def register_student(request, payload: RegisterSchema):
         username = payload.username,
         phone_number = payload.phone_number,
         password = hashed_password,
+        is_authenticated = payload.is_authenticated
     )
     new_student.save()
     

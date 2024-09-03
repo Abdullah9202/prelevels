@@ -20,14 +20,14 @@ auth_router = Router()
 
 
 # Hello Router (Test Router)
-@auth_router.get("/hello", auth=JWTAuth())
+@auth_router.get("/hello", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
 def hello(request):
     print(request)
     return {"message": "Hello World!"}
 
 
 # Login Router
-@auth_router.post("/login", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/login", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema):
     try:
         # Fetching the student
@@ -51,7 +51,7 @@ def logout_student(request):
 
 
 # Register Router
-@auth_router.post("/register", response={200: RegisterSchema, 400: dict}, auth=JWTAuth())
+@auth_router.post("/register", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
 def register_student(request, payload: RegisterSchema):
     # Using the serializer to validate the input data
     serializer = StudentSerializer(data=payload.dict())

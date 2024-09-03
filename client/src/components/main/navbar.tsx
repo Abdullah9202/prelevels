@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { useUser } from '@clerk/nextjs';
+import { useUser, UserButton } from '@clerk/nextjs';
 
 export default function Navbar() {
     const [nav, setNav] = useState(false);
@@ -45,10 +45,11 @@ export default function Navbar() {
                                         </div>
                     ) : (
                         <div className="flex items-center space-x-4">
-                        
+                        <UserButton/>
                         <Link href="/auth/sign-up" className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700">
                             My dashboard
                         </Link>
+                        
                     </div>
                     )}
 

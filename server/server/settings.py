@@ -150,7 +150,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Ninja JWT settings
 NINJA_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # Default is 5 minutes (AZAK)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7), # Default is 5 minutes (AZAK)
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # Default is 1 day (AZAK)
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,

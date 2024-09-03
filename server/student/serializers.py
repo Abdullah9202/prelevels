@@ -7,10 +7,10 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = [
-            'id', 'first_name', 'last_name', 'email', 'username', 'phone_number',
-            'is_authenticated', 'taking_questionBanks', 'taking_courses', 
-            'taking_bundles', 'daysStreak', 'questionSolved', 'questionRemained',
-            'timestamp', 'updated_at'
+            'id', 'first_name', 'last_name', 'student_image', 'email', 'username', 
+            'phone_number', 'is_authenticated', 'taking_questionBanks', 'taking_courses', 
+            'taking_bundles', 'daysStreak', 'questionSolved', 
+            'questionRemained', 'timestamp', 'updated_at', 'last_login',
         ]
 
 class TopicalProgressSerializer(serializers.ModelSerializer):

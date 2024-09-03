@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from ninja import Router
 from ninja.errors import HttpError
 from ninja_jwt.authentication import JWTAuth
+from ninja.responses import codes_4xx
 # My Files
 from student.models import Student
 from .schemas import (
@@ -26,7 +27,7 @@ def hello(request):
 
 
 # Login Router
-@auth_router.post("/login", response={200: LoginSchema, 401: dict}, auth=JWTAuth())
+@auth_router.post("/login", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema):
     # Authenticating
     student = authenticate(request, phone_number=payload.phone_number, password=payload.password)

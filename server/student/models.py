@@ -17,6 +17,8 @@ class Student(models.Model):
     # Student personal information
     first_name = models.CharField(_("First Name"), max_length=50, null=False, blank=False)
     last_name = models.CharField(_("Last Name"), max_length=50, null=False, blank=False)
+    student_image = models.ImageField(_("Student image"), upload_to=None, height_field=None, 
+                                    width_field=None, max_length=None, null=True, blank=True)
     email = models.EmailField(_("Email"), max_length=254, null=False, unique=True, blank=False)
     username = models.CharField(_("Username"), max_length=50, null=False, unique=True, blank=False)
     phone_number = PhoneNumberField(_("Phone Number"), max_length=15, null=False, unique=True, 

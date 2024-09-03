@@ -1,0 +1,29 @@
+GET http://127.0.0.1/api/student/hello
+Content-Type: application/json
+
+### 
+
+POST http://127.0.0.1/api/student/register
+Content-Type: application/json
+
+{
+    "first_name": "Abdullah",
+    "last_name": "Khurram",
+    "email": "abdullahkhurram9202@gmail.com",
+    "username": "abdullah9202",
+    "phone_number": "+923555973951",
+    "password": "abdullah@9202",
+    "is_authenticated": true
+}
+
+###
+
+POST http://127.0.0.1/api/student/login
+Content-Type: application/json
+
+{
+    "phone_number": "+923555973951",
+    "password": "abdullah@9202" 
+}
+
+###

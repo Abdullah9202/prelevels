@@ -34,6 +34,7 @@ class RegisterSchema(Schema):
     email: EmailStr
     phone_number: str
     password: str
+    is_authenticated: bool = False
     
     # Validating the phone number 
     _phone_number_validator = phone_number_validator

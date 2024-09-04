@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses
-        courses = get_list_or_404(Course)
+        courses = Course.objects.all()
         # Serializing the courses
         serialized_courses = CourseSerializer(courses, many=True).data
         # Returning the Json data
-        return JsonResponse(serialized_courses, status=200, safe=False)
+        return JsonResponse(serialized_courses, status=200, safe=False) # It will return the empty list if DB doesn't contains any course
     except HttpError as err:
         logger.error(f"HttpError: {err}")
         raise err

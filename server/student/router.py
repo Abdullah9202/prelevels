@@ -1,9 +1,13 @@
+# Python imports
+import logging
+from uuid import UUID
+# Django imports
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-import logging
+from django.shortcuts import get_object_or_404
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
@@ -13,7 +17,7 @@ from ninja.responses import codes_4xx
 from student.models import Student
 from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
-    LoginSchema, RegisterSchema,
+    LoginSchema, RegisterSchema, GetStudentDetailSchema
 )
 from .serializers import StudentSerializer
 
@@ -24,14 +28,32 @@ auth_router = Router()
 
 # Hello Router (Test Router)
 @auth_router.get("/hello", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
-def hello(request):
+def hello(request, *args, **kwargs):
     print(request)
     return {"message": "Hello World!"}
 
 
+# Student detail router
+@auth_router.get("/{student_id}", response={200: GetStudentDetailSchema, codes_4xx: dict}, auth=JWTAuth())
+def get_student_details(request, student_id: UUID, *args, **kwargs):
+    try:
+        # Getting the student
+        student = get_object_or_404(Student, student_id)
+        # Serializing
+        serialized_student = StudentSerializer(student).data
+        # Returning
+        return JsonResponse(serialized_student, status=200)
+    except HttpError as err:
+        logger.error(f"HttpError: {err}")
+        raise err
+    except Exception as err:
+        logger.error(f"Unexpected error: {str(err)}")
+        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+
+
 # Login Router
 @auth_router.post("/login", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
-def login_student(request, payload: LoginSchema):
+def login_student(request, payload: LoginSchema, *args, **kwargs):
     try:
         # Fetching the student
         student = Student.objects.get(phone_number=payload.phone_number)
@@ -48,7 +70,7 @@ def login_student(request, payload: LoginSchema):
 
 # Logout Router
 @auth_router.post("/logout", auth=JWTAuth())
-def logout_student(request):
+def logout_student(request, *args, **kwargs):
     logout(request)
     return JsonResponse({"message": "Student logged out successfully"})
 
@@ -57,7 +79,7 @@ def logout_student(request):
 logger = logging.getLogger(__name__)
 
 @auth_router.post("/register", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
-def register_student(request, payload: RegisterSchema):
+def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
     
     try:

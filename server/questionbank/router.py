@@ -4,7 +4,7 @@ from uuid import UUID
 from typing import List
 # Django imports
 from django.http import JsonResponse
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.shortcuts import get_object_or_404
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError

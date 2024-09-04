@@ -1,4 +1,3 @@
-# Django imports
 # Ninja imports
 from ninja_extra import NinjaExtraAPI
 from ninja_jwt.controller import NinjaJWTDefaultController

@@ -8,11 +8,13 @@ import uuid
 class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
+    question_bank_image = models.ImageField(_("Question bank image"), upload_to=None, height_field=None, 
+                                            width_field=None, max_length=None, blank=True, null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    price = models.DecimalField(_("Price"), max_digits=10, decimal_places=3, null=True)
-    discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=3, null=True)
-    validity = models.IntegerField(_("Validity"), null=True)
+    price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2, null=True)
+    discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=2, null=True, blank=True)
+    validity = models.IntegerField(_("Validity"), null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)

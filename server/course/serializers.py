@@ -3,8 +3,8 @@ from rest_framework import serializers
 from .models import Course
 
 
+# Serializer for course model
 class CourseSerializer(serializers.ModelSerializer):
-    # Serializer for course model
     class Meta:
         model = Course
         fields = [

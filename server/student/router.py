@@ -38,7 +38,7 @@ def hello(request, *args, **kwargs):
 def get_student_details(request, student_id: UUID, *args, **kwargs):
     try:
         # Getting the student
-        student = get_object_or_404(Student, student_id)
+        student = get_object_or_404(Student, id=student_id)
         # Serializing
         serialized_student = StudentSerializer(student).data
         # Returning
@@ -48,7 +48,7 @@ def get_student_details(request, student_id: UUID, *args, **kwargs):
         raise err
     except Exception as err:
         logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later.")
 
 
 # Login Router

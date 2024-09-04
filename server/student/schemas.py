@@ -1,6 +1,6 @@
 from uuid import UUID
 from datetime import datetime
-from ninja import Schema, File
+from ninja import Schema
 from pydantic import field_validator, EmailStr
 from typing import Optional
 import phonenumbers
@@ -75,7 +75,7 @@ class StudentSchema(Schema):
     # Student identity and details
     first_name: str = None
     last_name: str = None
-    student_image: Optional[File] = None
+    student_image: str = None
     email: str = None
     username: str
     password: str

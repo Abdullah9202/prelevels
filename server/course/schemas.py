@@ -5,14 +5,14 @@ from typing import Optional
 
 # Schemas for Course model
 class GetCourseDetailSchema(Schema):
-    id: UUID
+    id: UUID = None
     name: str
     description: str = None
     additional_details: Optional[str] = None
     course_image: Optional[str] = None
     whatsapp_link: str = None
     resource_link: str = None
-    price: float = None
+    price: int
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None

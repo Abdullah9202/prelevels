@@ -90,6 +90,22 @@ class StudentSchema(Schema):
     updated_at: datetime
 
 
+class GetStudentDetailSchema(Schema):
+    id: UUID
+    first_name: str = None
+    last_name: str = None
+    student_image: Optional[str] = None
+    email: str = None
+    username: str
+    password: str
+    is_authenticated: bool = True
+    taking_questionBanks: list[QuestionBankSchema]  = []
+    taking_courses: list[CourseSchema] = []
+    taking_bundles: list[BundleSchema] = []
+    created_at: datetime
+    updated_at: datetime
+
+
 # Error Schema
 class Error(Schema):
     message: str

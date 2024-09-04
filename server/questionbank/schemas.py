@@ -7,13 +7,30 @@ from typing import List, Optional
 class QuestionBankSchema(Schema):
     id: UUID
     name: str
-    description: Optional[str]
+    question_bank_image: Optional[str] = None
+    description: str = None
     additional_details: Optional[str]
-    price: Optional[float]
-    validity: Optional[int]
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool
+    price: float = None
+    validity: Optional[int] = None
+    discount: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
+
+
+class QuestionBankDetailSchema(Schema):
+    id: UUID
+    name: str
+    question_bank_image: Optional[str] = None
+    description: str = None
+    additional_details: Optional[str]
+    price: float = None
+    validity: Optional[int] = None
+    discount: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
+
 
 # Schema for Question model
 class QuestionSchema(Schema):

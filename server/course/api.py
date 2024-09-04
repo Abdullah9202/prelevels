@@ -1,7 +1,7 @@
 from ninja_extra import NinjaExtraAPI
 from ninja_jwt.controller import NinjaJWTDefaultController
 # My Files
-from .schemas import CourseSchema
+from .schemas import GetCourseDetailSchema
 
 
 # API init

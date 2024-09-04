@@ -10,9 +10,9 @@ class QuestionBankSchema(Schema):
     question_bank_image: Optional[str] = None
     description: str = None
     additional_details: Optional[str]
-    price: float = None
-    validity: Optional[int] = None
+    price: int
     discount: Optional[int] = None
+    validity: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True

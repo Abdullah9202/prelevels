@@ -25,8 +25,8 @@ class QuestionBankDetailSchema(Schema):
     description: str = None
     additional_details: Optional[str]
     price: float = None
-    validity: Optional[int] = None
     discount: Optional[int] = None
+    validity: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
@@ -42,11 +42,30 @@ class QuestionSchema(Schema):
     topic: str
     question_number: int
     question_text: str
+    question_image: Optional[str]
     additional_details: Optional[str]
-    unique_identifier: str
+    unique_identifier: Optional[str]
     created_at: datetime
     updated_at: datetime
     is_active: bool
+
+
+class QuestionDetailSchema(Schema):
+    id: UUID
+    question_bank_id: UUID
+    year: int
+    category: str
+    subject: str
+    topic: str
+    question_number: int
+    question_text: str
+    question_image: Optional[str]
+    additional_details: Optional[str]
+    unique_identifier: Optional[str]
+    created_at: datetime
+    updated_at: datetime
+    is_active: bool
+
 
 # Schema for Option model
 class OptionSchema(Schema):

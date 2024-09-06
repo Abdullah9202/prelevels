@@ -69,7 +69,7 @@ class Question(models.Model):
 class Option(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Foreign key for question (Each option can occur in only one question)
-    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options" ,on_delete=models.CASCADE)
+    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options", on_delete=models.CASCADE)
     option_text = models.TextField(_("Option Text"), null=False)
     is_correct = models.BooleanField(_("Is Correct"), default=False)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)

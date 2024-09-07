@@ -1,12 +1,14 @@
 from ninja import Schema
+from uuid import UUID
 
 class CartItemSchema(Schema):
-    product_id: int
+    product_id: UUID
+    product_model: str
     quantity: int
 
 class CartResponseSchema(Schema):
-    id: int
-    product_id: int
+    id: UUID
+    product_id: UUID
     product_name: str
     quantity: int
     created_at: str

@@ -117,4 +117,7 @@ cython_debug/
 migrations/
 question_images/
 
+# My File Ignores
+info.ipynb
+
 # End of Python ignores

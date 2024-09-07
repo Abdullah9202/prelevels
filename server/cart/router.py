@@ -40,6 +40,8 @@ def list_cart_items(request, *args, **kwargs):
         "product_id": str(item.content_object.id),  # Assuming product IDs are UUIDs
         "product_name": item.content_object.name,
         "quantity": item.quantity,
+        "price": item.content_object.price,
+        "total_price": item.content_object.price * item.quantity,
         "created_at": item.added_at.isoformat()
     } for item in cart_items]
     
@@ -91,12 +93,17 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
         )
         cart.items.add(cart_item)
 
+    # Calculating the total price for items in the cart
+    total_price = cart_item.quantity * product.price
+
     # Response data
     data = {
         "id": str(cart_item.id),
         "product_id": str(cart_item.content_object.id),
         "product_name": cart_item.content_object.name,
         "quantity": cart_item.quantity,
+        "price": product.price, # Price of one item
+        "total_price": total_price, # Total price of all items
         "created_at": cart_item.added_at.isoformat(),
     }
 

@@ -27,7 +27,7 @@ auth_router = Router()
 
 
 # Hello Router (Test Router)
-@auth_router.get("/hello", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.get("/hello/", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
 def hello(request, *args, **kwargs):
     print(request)
     return {"message": "Hello World!"}
@@ -52,7 +52,7 @@ def get_student_details(request, student_id: UUID, *args, **kwargs):
 
 
 # Login Router
-@auth_router.post("/login", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
 def login_student(request, payload: LoginSchema, *args, **kwargs):
     try:
         # Fetching the student
@@ -69,7 +69,7 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout Router
-@auth_router.post("/logout", auth=JWTAuth())
+@auth_router.post("/logout/", auth=JWTAuth())
 def logout_student(request, *args, **kwargs):
     logout(request)
     return JsonResponse({"message": "Student logged out successfully"})
@@ -78,7 +78,7 @@ def logout_student(request, *args, **kwargs):
 # Set up logging
 logger = logging.getLogger(__name__)
 
-@auth_router.post("/register", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
 def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
     

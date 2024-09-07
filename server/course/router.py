@@ -23,7 +23,7 @@ course_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all courses router
-@course_router.get("", response={200: List[GetCourseListSchema], codes_4xx: dict}, auth=JWTAuth())
+@course_router.get("/", response={200: List[GetCourseListSchema], codes_4xx: dict}, auth=JWTAuth())
 def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses
@@ -41,7 +41,7 @@ def get_all_courses(request, *args, **kwargs):
 
 
 # Get course router
-@course_router.get("/{course_id}", response={200: GetCourseDetailSchema, codes_4xx: dict}, auth=JWTAuth())
+@course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict}, auth=JWTAuth())
 def get_course(request, course_id: UUID, *args, **kwargs):
     try:
         # Getting the course

@@ -23,7 +23,7 @@ bundle_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all bundles router
-@bundle_router.get("", response={200: List[BundleSchema], codes_4xx: dict}, auth=JWTAuth())
+@bundle_router.get("/", response={200: List[BundleSchema], codes_4xx: dict}, auth=JWTAuth())
 def get_all_bundles(request, *args, **kwargs):
     try:
         # Getting all bundles
@@ -41,7 +41,7 @@ def get_all_bundles(request, *args, **kwargs):
 
 
 # Get bundle details router
-@bundle_router.get("/{bundle_id}", response={200: BundleDetailSchema, codes_4xx: dict}, auth=JWTAuth())
+@bundle_router.get("/{bundle_id}/", response={200: BundleDetailSchema, codes_4xx: dict}, auth=JWTAuth())
 def get_bundle_details(request, bundle_id: UUID, *args, **kwargs):
     try:
         # Getting the bundle

@@ -37,5 +37,5 @@ urlpatterns = [
     # Bundle API URLs
     path('api/bundle/', bundle_api.api.urls),
     # Cart API URLs
-    path('api/cart', cart_api.api.urls),
+    path('api/cart/', cart_api.api.urls),
 ]

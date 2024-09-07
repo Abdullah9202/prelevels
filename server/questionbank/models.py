@@ -1,7 +1,12 @@
+# Python imports
+import uuid
+# Django imports
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
-import uuid
+from django.contrib.contenttypes.models import ContentType
+# My Files
+from cart.models import Cart, CartItem
 
 
 # Question bank model
@@ -25,6 +30,15 @@ class QuestionBank(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def add_to_cart(self, user, quantity=1):
+        cart, created = Cart.objects.get_or_create(user=user)
+        content_type = ContentType.objects.get_for_model(self)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, content_type=content_type, object_id=self.id)
+        cart_item.quantity = quantity
+        cart_item.save()
+        cart.items.add(cart_item)
+        cart.save()
 
     def get_absolute_url(self):
         return reverse("questionbank:QuestionBank-detail", kwargs={"id": self.id})

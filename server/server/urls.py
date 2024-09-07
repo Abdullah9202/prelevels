@@ -22,6 +22,7 @@ from student import api as std_api
 from questionbank import api as questionbank_api
 from course import api as course_api
 from bundle import api as bundle_api
+from cart import api as cart_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +36,6 @@ urlpatterns = [
     path('api/course/', course_api.api.urls),
     # Bundle API URLs
     path('api/bundle/', bundle_api.api.urls),
+    # Cart API URLs
+    path('api/cart', cart_api.api.urls),
 ]

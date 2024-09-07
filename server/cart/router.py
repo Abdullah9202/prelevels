@@ -23,33 +23,71 @@ cart_router = Router()
 # Set up logging
 logger = logging.getLogger(__name__)
 
+# Model mapping
+MODEL_MAP = {
+    'QuestionBank': 'questionbank.QuestionBank',
+    'Course': 'course.Course',
+    'Bundle': 'bundle.Bundle',
+}
+
 
 # Get all items in cart
-@cart_router.get("", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=JWTAuth())
+@cart_router.get("/list/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=JWTAuth())
 def list_cart_items(request, *args, **kwargs):
-    cart_items = Cart.objects.filter(user=request.user)
-    data = [{"id": str(item.id), "product_id": str(item.content_object.id), "product_name": item.content_object.name, 
-            "quantity": item.quantity, "created_at": item.added_at.isoformat()} for item in cart_items]
+    cart_items = CartItem.objects.filter(cart__user=request.user)
+    data = [{
+        "id": str(item.id),  # Assuming CartItem.id is a UUID
+        "product_id": str(item.content_object.id),  # Assuming product IDs are UUIDs
+        "product_name": item.content_object.name,
+        "quantity": item.quantity,
+        "created_at": item.added_at.isoformat()
+    } for item in cart_items]
+    
     return JsonResponse(data, safe=False)
 
 
 # Add items in cart
-@cart_router.post("", response={200 or 201: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth)
+@cart_router.post("/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
 def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    product = get_object_or_404(ContentType.objects.get_for_model(item.product_id).model_class(), id=item.product_id)
+    try:
+        # Validate the UUID format for product_id
+        product_id = UUID(str(item.product_id))
+    except ValueError:
+        return JsonResponse({"error": "Invalid UUID format"}, status=400)
 
+    # Get or create the user's cart
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    # Retrieve the model class path based on the product_model
+    model_class_path = MODEL_MAP.get(item.product_model)
+    if not model_class_path:
+        return JsonResponse({"error": "Invalid product model"}, status=400)
+
+    app_label, model_name = model_class_path.split('.')
+
+    try:
+        # Get the ContentType and corresponding model class
+        content_type = ContentType.objects.get(app_label=app_label, model=model_name.lower())
+        product_model = content_type.model_class()
+        product = get_object_or_404(product_model, id=product_id)
+    except ContentType.DoesNotExist:
+        return JsonResponse({"error": f"Content type for '{model_name}' does not exist"}, status=400)
+    except AttributeError:
+        return JsonResponse({"error": "Invalid model class"}, status=400)
+
+    # Get or create the cart item
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
-        content_type=ContentType.objects.get_for_model(product),
+        content_type=content_type,
         object_id=product.id,
         defaults={"quantity": item.quantity},
     )
-    
+
     if not created:
         cart_item.quantity += item.quantity
         cart_item.save()
 
+    # Prepare the response data
     data = {
         "id": str(cart_item.id),
         "product_id": str(cart_item.content_object.id),
@@ -57,12 +95,13 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
         "quantity": cart_item.quantity,
         "created_at": cart_item.added_at.isoformat(),
     }
-    
+
     return JsonResponse(data, status=201 if created else 200)
 
 
+
 # Update item quantity in cart
-@cart_router.put("/{item_id}", response={200: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
+@cart_router.put("/{item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
 def update_cart_item(request, item_id: UUID, item: CartItemSchema, *args, **kwargs):
     cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
 
@@ -81,7 +120,7 @@ def update_cart_item(request, item_id: UUID, item: CartItemSchema, *args, **kwar
 
 
 # Remove item from cart
-@cart_router.delete("/{item_id}", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
+@cart_router.delete("/{item_id}/delete/", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
 def remove_from_cart(request, item_id: UUID, *args, **kwargs):
     cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
     cart_item.delete()

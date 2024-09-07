@@ -75,19 +75,23 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     except AttributeError:
         return JsonResponse({"error": "Invalid model class"}, status=400)
 
-    # Get or create the cart item
-    cart_item, created = CartItem.objects.get_or_create(
-        cart=cart,
-        content_type=content_type,
-        object_id=product.id,
-        defaults={"quantity": item.quantity},
-    )
-
-    if not created:
+    # Try to find an existing CartItem or create a new one without setting the cart first
+    try:
+        cart_item = CartItem.objects.get(
+            content_type=content_type,
+            object_id=product.id,
+        )
         cart_item.quantity += item.quantity
         cart_item.save()
+    except CartItem.DoesNotExist:
+        cart_item = CartItem.objects.create(
+            content_type=content_type,
+            object_id=product.id,
+            quantity=item.quantity,
+        )
+        cart.items.add(cart_item)
 
-    # Prepare the response data
+    # Response data
     data = {
         "id": str(cart_item.id),
         "product_id": str(cart_item.content_object.id),
@@ -97,7 +101,6 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     }
 
     return JsonResponse(data, status=201 if created else 200)
-
 
 
 # Update item quantity in cart

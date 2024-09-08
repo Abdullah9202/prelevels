@@ -37,7 +37,7 @@ def list_cart_items(request, *args, **kwargs):
     cart_items = CartItem.objects.filter(cart__user=request.user)
     data = [{
         "id": str(item.id),  # Assuming CartItem.id is a UUID
-        "product_id": str(item.content_object.id),  # Assuming product IDs are UUIDs
+        "item_id": str(item.content_object.id),  # Assuming item IDs are UUIDs
         "product_name": item.content_object.name,
         "quantity": item.quantity,
         "price": item.content_object.price,
@@ -52,7 +52,7 @@ def list_cart_items(request, *args, **kwargs):
 @cart_router.post("/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
 def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     try:
-        # Validate the UUID format for product_id
+        # Validate the UUID format for item_id
         product_id = UUID(str(item.product_id))
     except ValueError:
         return JsonResponse({"error": "Invalid UUID format"}, status=400)
@@ -98,12 +98,12 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
     # Response data
     data = {
-        "id": str(cart_item.id),
-        "product_id": str(cart_item.content_object.id),
+        "id": UUID(str(cart_item.id)),
+        "product_id": UUID(str(cart_item.content_object.id)),
         "product_name": cart_item.content_object.name,
         "quantity": cart_item.quantity,
-        "price": product.price, # Price of one item
-        "total_price": total_price, # Total price of all items
+        "price": product.price,  # Price of one item
+        "total_price": total_price,  # Total price of all items
         "created_at": cart_item.added_at.isoformat(),
     }
 
@@ -111,18 +111,22 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
 
 # Update item quantity in cart
-@cart_router.put("/{item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
+@cart_router.put("{item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
 def update_cart_item(request, item_id: UUID, item: CartItemSchema, *args, **kwargs):
     cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
 
     cart_item.quantity = item.quantity
     cart_item.save()
 
+    # Updating the price of items in the cart
+    total_price = cart_item.get_total_price()
+
     data = {
-        "id": str(cart_item.id),
-        "product_id": str(cart_item.content_object.id),
-        "product_name": cart_item.content_object.name,
+        "id": UUID(str(cart_item.id)),
+        "item_id": UUID(str(cart_item.content_object.id)),
+        "item_name": cart_item.content_object.name,
         "quantity": cart_item.quantity,
+        "total_price": total_price,
         "created_at": cart_item.added_at.isoformat(),
     }
     

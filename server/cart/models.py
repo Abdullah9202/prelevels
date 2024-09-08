@@ -10,10 +10,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE, 
-                            related_name="cart_items", null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
+                             related_name="cart_items", null=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.UUIDField()
+    object_id = models.UUIDField(default=uuid4, editable=False)
     content_object = GenericForeignKey('content_type', 'object_id')
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
@@ -25,12 +25,13 @@ class CartItem(models.Model):
         return self.content_object.price * self.quantity
 
     def get_discounted_price(self):
-        return (self.content_object.price - self.content_object.discount) * self.quantity if self.content_object.discount else self.get_total_price()
+        return ((self.content_object.price - self.content_object.discount) *
+                self.quantity) if self.content_object.discount else self.get_total_price()
 
 
 class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE, 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
                                 related_name="cart", null=True)
     items = models.ManyToManyField(CartItem, verbose_name=_("Cart Items"), related_name="cart")
 

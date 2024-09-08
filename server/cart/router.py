@@ -32,12 +32,12 @@ MODEL_MAP = {
 
 
 # Get all items in cart
-@cart_router.get("/list/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=JWTAuth())
+@cart_router.get("/cart-item/list/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=JWTAuth())
 def list_cart_items(request, *args, **kwargs):
     cart_items = CartItem.objects.filter(cart__user=request.user)
     data = [{
-        "id": str(item.id),  # Assuming CartItem.id is a UUID
-        "item_id": str(item.content_object.id),  # Assuming item IDs are UUIDs
+        "cart_item_id": str(item.id),  # Assuming CartItem.id is a UUID
+        "product_id": str(item.content_object.id),  # Assuming item IDs are UUIDs
         "product_name": item.content_object.name,
         "quantity": item.quantity,
         "price": item.content_object.price,
@@ -49,7 +49,8 @@ def list_cart_items(request, *args, **kwargs):
 
 
 # Add items in cart
-@cart_router.post("/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
+@cart_router.post("/cart-item/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict},
+                  auth=JWTAuth())
 def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     try:
         # Validate the UUID format for item_id
@@ -98,7 +99,7 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
     # Response data
     data = {
-        "id": UUID(str(cart_item.id)),
+        "cart_item_id": UUID(str(cart_item.id)),
         "product_id": UUID(str(cart_item.content_object.id)),
         "product_name": cart_item.content_object.name,
         "quantity": cart_item.quantity,
@@ -111,31 +112,56 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
 
 # Update item quantity in cart
-@cart_router.put("{item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict}, auth=JWTAuth())
-def update_cart_item(request, item_id: UUID, item: CartItemSchema, *args, **kwargs):
-    cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
+@cart_router.put("/cart-item/{cart_item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict},
+                 auth=JWTAuth())
+def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *args, **kwargs):
+    # Getting the cart item
+    try:
+        cart_item = get_object_or_404(CartItem, id=cart_item_id)
+    except CartItem.DoesNotExist:
+        return JsonResponse({"error": "Cart item not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
 
-    cart_item.quantity = item.quantity
+    # Update logic (based on item schema if provided)
+    if item:
+        cart_item.quantity = item.quantity  # Update quantity if present in body
+
+    # Update the user
+    cart_item.user = request.user
+
+    # Update the cart
+    cart_item.cart.set([request.user.cart])
+
     cart_item.save()
 
     # Updating the price of items in the cart
     total_price = cart_item.get_total_price()
 
     data = {
-        "id": UUID(str(cart_item.id)),
-        "item_id": UUID(str(cart_item.content_object.id)),
-        "item_name": cart_item.content_object.name,
+        "cart_item_id": UUID(str(cart_item.id)),
+        "product_id": UUID(str(cart_item.content_object.id)),
+        "product_name": cart_item.content_object.name,
         "quantity": cart_item.quantity,
         "total_price": total_price,
         "created_at": cart_item.added_at.isoformat(),
     }
-    
+
     return JsonResponse(data)
 
 
 # Remove item from cart
-@cart_router.delete("/{item_id}/delete/", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
-def remove_from_cart(request, item_id: UUID, *args, **kwargs):
-    cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
-    cart_item.delete()
-    return JsonResponse({"message": "Item deleted from cart"})
+@cart_router.delete("/cart-item/{cart_item_id}/delete/", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
+def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
+    try:
+        # Getting the cart item
+        cart_item = get_object_or_404(CartItem, id=cart_item_id)
+        # Getting the user associated with cart
+        cart_item.user = request.user
+    except CartItem.DoesNotExist:
+        return JsonResponse({"error": "Cart item not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+    else:
+        cart_item.delete()
+        return JsonResponse({"message": "Item deleted from cart"})

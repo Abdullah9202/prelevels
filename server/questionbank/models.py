@@ -68,7 +68,7 @@ class Question(models.Model):
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
 
-    # Fuction to save unique identifier
+    # Function to save unique identifier
     def save(self, *args, **kwargs) -> None:
         if not self.unique_identifier:
             self.unique_identifier = f"{self.question_bank.name}_{self.year}_{self.category}_{self.subject}_{self.topic}_{self.question_number}"
@@ -124,3 +124,22 @@ class WhyCorrectOption(models.Model):
 
     def get_absolute_url(self):
         return reverse("questionbank:WhyCorrectOption_detail", kwargs={"id": self.id})
+
+
+# Report Model
+class Report(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question_id = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,
+                                    verbose_name=_("Reported Question"), related_name=_("question"))
+    comment = models.CharField(_("Comment"), max_length=250, null=True, blank=True)
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Report")
+        verbose_name_plural = _("Reports")
+
+    def __str__(self):
+        return Question.objects.get(id=self.question_id)
+
+    def get_absolute_url(self):
+        return reverse("questionbank:Report_detail", kwargs={"id": self.id})

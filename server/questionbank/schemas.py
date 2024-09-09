@@ -97,3 +97,11 @@ class DetailedQuestionSchema(QuestionSchema):
 # Composite Schema for detailed QuestionBank including questions
 class DetailedQuestionBankSchema(QuestionBankSchema):
     questions: List[DetailedQuestionSchema] = []
+
+
+# Schema for Report Question
+class ReportQuestionSchema(Schema):
+    id: UUID
+    question_id: UUID
+    comment: Optional[str]
+    created_at: datetime

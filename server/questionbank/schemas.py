@@ -3,6 +3,7 @@ from datetime import datetime
 from ninja import Schema
 from typing import List, Optional
 
+
 # Schema for QuestionBank model
 class QuestionBankSchema(Schema):
     id: UUID
@@ -78,6 +79,7 @@ class OptionSchema(Schema):
     is_active: bool
     why_correct_option_id: Optional[UUID]
 
+
 # Schema for WhyCorrectOption model
 class WhyCorrectOptionSchema(Schema):
     id: UUID
@@ -86,9 +88,11 @@ class WhyCorrectOptionSchema(Schema):
     updated_at: datetime
     is_active: bool
 
+
 # Composite Schema for detailed Question including options
 class DetailedQuestionSchema(QuestionSchema):
     options: List[OptionSchema] = []
+
 
 # Composite Schema for detailed QuestionBank including questions
 class DetailedQuestionBankSchema(QuestionBankSchema):

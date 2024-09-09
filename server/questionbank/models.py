@@ -13,7 +13,7 @@ from cart.models import Cart, CartItem
 class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
-    question_bank_image = models.ImageField(_("Question bank image"), upload_to=None, height_field=None, 
+    question_bank_image = models.ImageField(_("Question bank image"), upload_to=None, height_field=None,
                                             width_field=None, max_length=None, blank=True, null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
@@ -30,7 +30,7 @@ class QuestionBank(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def add_to_cart(self, user, quantity=1):
         cart, created = Cart.objects.get_or_create(user=user)
         content_type = ContentType.objects.get_for_model(self)
@@ -48,14 +48,16 @@ class QuestionBank(models.Model):
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Foreign Key for question bank (One to Many)
-    question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions", on_delete=models.CASCADE)
+    question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
+                                      on_delete=models.CASCADE)
     year = models.IntegerField(_("Year"), null=False)
     category = models.CharField(_("Category"), max_length=50, null=False)
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
     question_text = models.TextField(_("Question Text"), null=False)
-    question_image = models.ImageField(_("Question Image"), upload_to="questionbank/images/question_images/", null=True, blank=True)
+    question_image = models.ImageField(_("Question Image"), upload_to="questionbank/images/question_images/", null=True,
+                                       blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -65,7 +67,7 @@ class Question(models.Model):
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
-    
+
     # Fuction to save unique identifier
     def save(self, *args, **kwargs) -> None:
         if not self.unique_identifier:
@@ -83,7 +85,8 @@ class Question(models.Model):
 class Option(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Foreign key for question (Each option can occur in only one question)
-    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options", on_delete=models.CASCADE)
+    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options",
+                                 on_delete=models.CASCADE)
     option_text = models.TextField(_("Option Text"), null=False)
     is_correct = models.BooleanField(_("Is Correct"), default=False)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -91,8 +94,7 @@ class Option(models.Model):
     is_active = models.BooleanField(_("Is Active"), default=True)
     # One-to-one relationship with WhyCorrectOption (Each why correct statement will be unique to each option)
     why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"),
-                                            on_delete=models.CASCADE, null=True, blank=True)
-
+                                              on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Option")

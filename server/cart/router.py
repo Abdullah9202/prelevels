@@ -156,7 +156,7 @@ def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
     try:
         # Getting the cart item
         cart_item = get_object_or_404(CartItem, id=cart_item_id)
-        # Getting the user associated with cart
+        # Getting the current user
         cart_item.user = request.user
     except CartItem.DoesNotExist:
         return JsonResponse({"error": "Cart item not found"}, status=404)

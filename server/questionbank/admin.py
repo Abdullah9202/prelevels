@@ -12,6 +12,7 @@ class QuestionBankAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     list_filter = ('is_active', 'price', 'validity')
 
+
 admin.site.register(QuestionBank, QuestionBankAdmin)
 
 
@@ -19,7 +20,8 @@ admin.site.register(QuestionBank, QuestionBankAdmin)
 class WhyCorrectOptionInline(admin.StackedInline):
     model = WhyCorrectOption
     extra = 1
-    
+
+
 class OptionInline(admin.StackedInline):
     model = Option
     extra = 4
@@ -35,6 +37,7 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ('question_text', 'question_bank__name', 'category', 'subject')
     list_filter = ('question_bank', 'year', 'category', 'subject', 'topic')
 
+
 admin.site.register(Question, QuestionAdmin)
 
 
@@ -45,6 +48,7 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ('option_text',)
     list_filter = ('is_correct', 'is_active')
 
+
 admin.site.register(Option, OptionAdmin)
 
 
@@ -53,6 +57,7 @@ class WhyCorrectOptionAdmin(admin.ModelAdmin):
     list_display = ('why_correct_option_text', 'is_active')
     search_fields = ('why_correct_option_text',)
     list_filter = ('is_active',)
+
 
 admin.site.register(WhyCorrectOption)
 

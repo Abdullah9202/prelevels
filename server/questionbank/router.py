@@ -1,4 +1,5 @@
 # Python imports
+import json
 import logging
 from uuid import UUID
 from typing import List
@@ -16,9 +17,10 @@ from .models import (
 )
 from .schemas import (
     QuestionBankSchema, QuestionBankDetailSchema, QuestionSchema, QuestionDetailSchema,
-    OptionSchema, WhyCorrectOptionSchema
+    OptionSchema, WhyCorrectOptionSchema, ReportQuestionSchema,
 )
-from .serializers import QuestionBankSerializer
+from .serializers import QuestionBankSerializer, ReportSerializer
+
 
 # Router Init
 question_bank_router = Router()
@@ -48,7 +50,7 @@ def get_all_question_banks(request, *args, **kwargs):
 
 # Get the details of specific Question bank
 @question_bank_router.get("/{question_bank_id}", response={200: QuestionBankDetailSchema, codes_4xx: dict},
-                          auth=JWTAuth())
+                            auth=JWTAuth())
 def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank
@@ -67,14 +69,14 @@ def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
 
 # Get all questions in a question bank
 @question_bank_router.get("/{question_bank_id}/all-questions/", response={200: QuestionSchema, codes_4xx: dict},
-                          auth=JWTAuth())
+                            auth=JWTAuth())
 def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
     # Getting the question banks using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
 
     # Getting the questions along with their options and why correct option from question bank
     questions = Question.objects.filter(question_bank=question_bank).prefetch_related('options',
-                                                                                      'options__why_correct_option')
+                                                                                    'options__why_correct_option')
 
     # Creating a list of questions with option and why correct option
     detailed_question = []
@@ -90,7 +92,7 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
 
     # Structuring the response data
     response_data = {
-        "id": str(question_bank.id),
+        "id": UUID(str(question_bank.id)),
         "name": question_bank.name,
         "question_bank_image": question_bank.question_bank_image.url if question_bank.question_bank_image else None,
         "description": question_bank.description,
@@ -109,7 +111,7 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
 
 # Get the details for specific question in a question bank
 @question_bank_router.get("/{question_bank_id}/question/{question_id}", response={200: QuestionDetailSchema,
-                                                                                  codes_4xx: dict}, auth=JWTAuth())
+                                                                                    codes_4xx: dict}, auth=JWTAuth())
 def get_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
     # Getting the question bank using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
@@ -126,8 +128,8 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
 
     # Structuring the response data
     response_data = {
-        "id": str(question.id),
-        "question_bank_id": str(question_bank.id),
+        "id": UUID(str(question.id)),
+        "question_bank_id": UUID(str(question_bank.id)),
         "year": question.year,
         "category": question.category,
         "subject": question.subject,
@@ -144,3 +146,58 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
     }
 
     return JsonResponse(response_data)
+
+
+# Report a question in a question bank
+@question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
+                            response={200: ReportQuestionSchema, codes_4xx: dict}, auth=JWTAuth())
+def report_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
+    # Verifying the UUIDs
+    try:
+        question_bank_id = UUID(str(question_bank_id))
+        question_id = UUID(str(question_id))
+    except ValueError:
+        return JsonResponse({"error": "Invalid UUID format"}, status=400)
+
+    # Getting the question bank using uuid
+    try:
+        question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
+    except QuestionBank.DoesNotExist:
+        return JsonResponse({"error": "Question bank not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+
+    # Getting the question using uuid
+    try:
+        question = get_object_or_404(Question, id=question_id)
+    except Question.DoesNotExist:
+        return JsonResponse({"error": "Question not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+
+    # Getting the request body
+    try:
+        request_data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occured: {str(e)}"})
+
+    # Creating a new report object
+    try:
+        data = {
+            "question_bank_id": question_bank.id,
+            "question_id": question.id,
+            "question_text": question.question_text,
+            "comment": request_data.get('comment', '')
+        }
+
+        serializer = ReportSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=200)
+        else:
+            return JsonResponse(serializer.errors, status=400)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})

@@ -11,7 +11,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
-                             related_name="cart_items", null=True)
+                            related_name="cart_items", null=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.UUIDField(default=uuid4, editable=False)
     content_object = GenericForeignKey('content_type', 'object_id')

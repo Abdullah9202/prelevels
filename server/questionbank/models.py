@@ -49,7 +49,7 @@ class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Foreign Key for question bank (One to Many)
     question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
-                                      on_delete=models.CASCADE)
+                                        on_delete=models.CASCADE)
     year = models.IntegerField(_("Year"), null=False)
     category = models.CharField(_("Category"), max_length=50, null=False)
     subject = models.CharField(_("Subject"), max_length=50, null=False)
@@ -57,7 +57,7 @@ class Question(models.Model):
     question_number = models.IntegerField(_("Question Number"), null=False)
     question_text = models.TextField(_("Question Text"), null=False)
     question_image = models.ImageField(_("Question Image"), upload_to="questionbank/images/question_images/", null=True,
-                                       blank=True)
+                                        blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -86,7 +86,7 @@ class Option(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Foreign key for question (Each option can occur in only one question)
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options",
-                                 on_delete=models.CASCADE)
+                                    on_delete=models.CASCADE)
     option_text = models.TextField(_("Option Text"), null=False)
     is_correct = models.BooleanField(_("Is Correct"), default=False)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -94,7 +94,7 @@ class Option(models.Model):
     is_active = models.BooleanField(_("Is Active"), default=True)
     # One-to-one relationship with WhyCorrectOption (Each why correct statement will be unique to each option)
     why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"),
-                                              on_delete=models.CASCADE, null=True, blank=True)
+                                                on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Option")
@@ -129,8 +129,12 @@ class WhyCorrectOption(models.Model):
 # Report Model
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question_bank_id = models.ForeignKey("questionbank.QuestionBank", on_delete=models.CASCADE,
+                                            verbose_name=_("Question bank of reported question"),
+                                            related_name="reports", default=None)
     question_id = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,
-                                    verbose_name=_("Reported Question"), related_name=_("question"))
+                                    verbose_name=_("Reported Question"), related_name="reports")
+    question_text = models.TextField(_("Question Text"), default=None, null=False)
     comment = models.CharField(_("Comment"), max_length=250, null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
 
@@ -139,7 +143,8 @@ class Report(models.Model):
         verbose_name_plural = _("Reports")
 
     def __str__(self):
-        return Question.objects.get(id=self.question_id)
+        return f"{self.question_bank_id.name} - {self.question_text}"
 
     def get_absolute_url(self):
         return reverse("questionbank:Report_detail", kwargs={"id": self.id})
+

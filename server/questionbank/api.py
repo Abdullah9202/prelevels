@@ -1,11 +1,6 @@
 # Ninja imports
 from ninja_extra import NinjaExtraAPI
 from ninja_jwt.controller import NinjaJWTDefaultController
-# My Files
-from .schemas import (
-    QuestionBankSchema, QuestionSchema, DetailedQuestionBankSchema,
-    DetailedQuestionSchema
-)
 
 
 # API init

@@ -50,7 +50,7 @@ def list_cart_items(request, *args, **kwargs):
 
 # Add items in cart
 @cart_router.post("/cart-item/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict},
-                  auth=JWTAuth())
+                    auth=JWTAuth())
 def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     try:
         # Validate the UUID format for item_id
@@ -113,7 +113,7 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
 # Update item quantity in cart
 @cart_router.put("/cart-item/{cart_item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict},
-                 auth=JWTAuth())
+                auth=JWTAuth())
 def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *args, **kwargs):
     # Getting the cart item
     try:

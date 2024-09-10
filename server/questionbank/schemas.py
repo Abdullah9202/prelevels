@@ -102,6 +102,8 @@ class DetailedQuestionBankSchema(QuestionBankSchema):
 # Schema for Report Question
 class ReportQuestionSchema(Schema):
     id: UUID
+    question_bank_id: UUID
     question_id: UUID
+    question_text: str
     comment: Optional[str]
     created_at: datetime

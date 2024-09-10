@@ -1,7 +1,8 @@
 from django.contrib import admin
 # My Files
 from .models import (
-    QuestionBank, Question, Option, WhyCorrectOption
+    QuestionBank, Question, Option, WhyCorrectOption,
+    Report
 )
 
 
@@ -61,3 +62,6 @@ class WhyCorrectOptionAdmin(admin.ModelAdmin):
 
 admin.site.register(WhyCorrectOption)
 
+
+# Report with Admin
+admin.site.register(Report)

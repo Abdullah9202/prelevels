@@ -42,5 +42,5 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = [
-            'id', 'question_id', 'comment', 'created_at',
+            'id', 'question_bank_id', 'question_id', 'question_text', 'comment', 'created_at',
         ]

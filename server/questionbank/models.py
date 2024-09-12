@@ -75,7 +75,7 @@ class Question(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.question_number} - {self.question_text} - {self.question_bank.name}"
+        return f"{self.question_number} - {self.question_text} - {self.subject} - {self.question_bank.name}"
 
     def get_absolute_url(self):
         return reverse("questionbank:Question-detail", kwargs={"id": self.id})

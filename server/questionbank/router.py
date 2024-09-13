@@ -17,9 +17,11 @@ from .models import (
 )
 from .schemas import (
     QuestionBankSchema, QuestionBankDetailSchema, QuestionSchema, QuestionDetailSchema,
-    OptionSchema, WhyCorrectOptionSchema, ReportQuestionSchema,
+    OptionSchema, WhyCorrectOptionSchema, SaveQuestionSchema, ReportQuestionSchema,
 )
-from .serializers import QuestionBankSerializer, ReportSerializer
+from .serializers import (
+    QuestionBankSerializer, ReportSerializer, SaveQuestionSerializer,
+)
 
 
 # Router Init
@@ -110,7 +112,7 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
 
 
 # Get the details for specific question in a question bank
-@question_bank_router.get("/{question_bank_id}/question/{question_id}", response={200: QuestionDetailSchema,
+@question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionDetailSchema,
                                                                                     codes_4xx: dict}, auth=JWTAuth())
 def get_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
     # Getting the question bank using id
@@ -147,6 +149,52 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
 
     return JsonResponse(response_data)
 
+
+# Save question
+@question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
+                        response={200: SaveQuestionSchema, codes_4xx: dict}, auth=JWTAuth())
+def save_question(request, question_bank_id, question_id, *args, **kwargs):
+    # Verifying the UUIDs
+    try:
+        question_bank_id = UUID(str(question_bank_id))
+        question_id = UUID(str(question_id))
+    except ValueError:
+        return JsonResponse({"error": "Invalid UUID format"}, status=400)
+
+    # Getting the question bank using uuid
+    try:
+        question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
+    except QuestionBank.DoesNotExist:
+        return JsonResponse({"error": "Question bank not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+
+    # Getting the question using uuid
+    try:
+        question = get_object_or_404(Question, id=question_id)
+    except Question.DoesNotExist:
+        return JsonResponse({"error": "Question not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+    
+    # Creating a new save question object
+    try:
+        data = {
+            "user_id": request.user,
+            "question_bank_id": question_bank.id,
+            "question_id": question.id,
+        }
+        # Serializing the data
+        serializer = SaveQuestionSerializer(data=data)
+        # Validation for serializer
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=200)
+        else:
+            return JsonResponse(serializer.errors, status=400)
+        
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
 
 # Report a question in a question bank
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
@@ -191,9 +239,9 @@ def report_question_in_question_bank(request, question_bank_id, question_id, *ar
             "question_text": question.question_text,
             "comment": request_data.get('comment', '')
         }
-
+        # Serializing the data
         serializer = ReportSerializer(data=data)
-
+        # Validation for serializer
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=200)

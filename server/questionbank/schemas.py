@@ -99,6 +99,15 @@ class DetailedQuestionBankSchema(QuestionBankSchema):
     questions: List[DetailedQuestionSchema] = []
 
 
+# Save question Schema
+class SaveQuestionSchema(Schema):
+    id: UUID
+    user_id: UUID
+    question_bank_id: UUID
+    question_id: UUID
+    saved_at: datetime
+
+
 # Schema for Report Question
 class ReportQuestionSchema(Schema):
     id: UUID

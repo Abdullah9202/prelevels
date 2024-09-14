@@ -131,6 +131,8 @@ class WhyCorrectOption(models.Model):
 class SaveQuestion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
+                                    on_delete=models.CASCADE, default=None)
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_student",
                                 on_delete=models.CASCADE)
     saved_at = models.DateField(_("Saved at"), auto_now_add=True)

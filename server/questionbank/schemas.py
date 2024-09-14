@@ -102,9 +102,9 @@ class DetailedQuestionBankSchema(QuestionBankSchema):
 # Save question Schema
 class SaveQuestionSchema(Schema):
     id: UUID
-    user_id: UUID
-    question_bank_id: UUID
-    question_id: UUID
+    user: UUID
+    question_bank: UUID
+    question: UUID
     saved_at: datetime
 
 

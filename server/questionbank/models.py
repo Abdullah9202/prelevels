@@ -3,6 +3,7 @@ import uuid
 # Django imports
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 # My Files
@@ -75,7 +76,7 @@ class Question(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.question_number} - {self.question_text} - {self.question_bank.name}"
+        return f"{self.question_number} - {self.question_text} - {self.subject} - {self.question_bank.name}"
 
     def get_absolute_url(self):
         return reverse("questionbank:Question-detail", kwargs={"id": self.id})
@@ -124,6 +125,29 @@ class WhyCorrectOption(models.Model):
 
     def get_absolute_url(self):
         return reverse("questionbank:WhyCorrectOption_detail", kwargs={"id": self.id})
+
+
+# Save question model
+class SaveQuestion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
+                                    on_delete=models.CASCADE, default=None)
+    question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_student",
+                                on_delete=models.CASCADE)
+    saved_at = models.DateField(_("Saved at"), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("SaveQuestion")
+        verbose_name_plural = _("SaveQuestions")
+        unique_together = ("user", "question") # Ensuring that user can only save the question once
+
+    def __str__(self):
+        return f"{self.user.username} - {self.question.question_text}"
+
+    def get_absolute_url(self):
+        return reverse("SaveQuestion_detail", kwargs={"id": self.id})
+
 
 
 # Report Model

@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import QuestionBank, Question, Option, WhyCorrectOption, Report
+from .models import (
+    QuestionBank, Question, Option, WhyCorrectOption,
+    SaveQuestion, Report
+)
 
 
 class QuestionBankSerializer(serializers.ModelSerializer):
@@ -35,6 +38,14 @@ class WhyCorrectOptionSerializer(serializers.ModelSerializer):
         model = WhyCorrectOption
         fields = [
             'id', 'why_correct_option_text', 'created_at', 'updated_at', 'is_active',
+        ]
+
+
+class SaveQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaveQuestion
+        fields = [
+            'id', 'user', 'question_bank', 'question', 'saved_at',
         ]
 
 

@@ -180,9 +180,9 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
     # Creating a new save question object
     try:
         data = {
-            "user_id": request.user,
-            "question_bank_id": question_bank.id,
-            "question_id": question.id,
+            "user": request.user.id,
+            "question_bank": question_bank.id,
+            "question": question.id,
         }
         # Serializing the data
         serializer = SaveQuestionSerializer(data=data)
@@ -195,6 +195,7 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
         
     except Exception as e:
         return JsonResponse({"error": f"An error occurred: {str(e)}"})
+
 
 # Report a question in a question bank
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",

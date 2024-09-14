@@ -45,7 +45,7 @@ class SaveQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaveQuestion
         fields = [
-            'id', 'user_id', 'question_bank_id', 'question_id', 'saved_at',
+            'id', 'user', 'question_bank', 'question', 'saved_at',
         ]
 
 

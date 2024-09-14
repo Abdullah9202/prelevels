@@ -2,7 +2,7 @@ from django.contrib import admin
 # My Files
 from .models import (
     QuestionBank, Question, Option, WhyCorrectOption,
-    Report
+    SaveQuestion, Report
 )
 
 
@@ -61,6 +61,10 @@ class WhyCorrectOptionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(WhyCorrectOption)
+
+
+# SaveQuestion with admin
+admin.site.register(SaveQuestion)
 
 
 # Report with Admin

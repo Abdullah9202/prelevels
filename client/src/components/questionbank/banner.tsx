@@ -6,7 +6,7 @@ interface BannerProps {
 }
 const Banner = ({ src, alt }: BannerProps) => {
     return (
-      <div className="flex justify-center items-center py-5">
+      <div className="flex justify-center items-center py-5 lg:w-max">
         <Image src={src} alt={alt} />
       </div>
     );

@@ -6,14 +6,14 @@ export default function Testing() {
   // Define the user data
   const User = {
     id: uuidv4(),
-    clerkId: 123,
+    clerkId: "123",
     firstName: "Abdullah",
     lastName: "Zulliqar",
-    email: "abdullah@gmail.com",
+    email: "abdullah341@gmail.com",
     username: "abdullahZ",
     avatarUrl: "sdfgdggsgsdgsdgsdgsdg",
-    phoneNumber: null, // Assuming phone number is not included in the payload
-    password: null, // Assuming password is not included in the payload
+    phoneNumber: "+923196576632",
+    password: "daad3dafd443r",
     createdAt: new Date(),
     updatedAt: new Date()
 };

@@ -9,7 +9,7 @@ interface User {
   first_name: string | null;
   last_name: string | null;
   email: string;
-  userame: string;
+  username: string;
   avatar_url: string | null;
   phone_number: string | null;
   password: string | null;
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       first_name: first_name || null,
       last_name: last_name || null,
       email: email_addresses[0].email_address,
-      userame:`${first_name}${last_name}`,
+      username:`${first_name}${last_name}`,
       avatar_url: image_url || null,
       phone_number: "+92319635429", 
       password: "cda23@_2341d8h3",
@@ -94,6 +94,7 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify(user), // Send the user data
       });
+      console.log(JSON.stringify(user))
       
       if (!response.ok) {
         console.error('Failed to send data to Python backend');

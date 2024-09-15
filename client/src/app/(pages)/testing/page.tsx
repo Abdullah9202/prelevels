@@ -1,21 +1,18 @@
 "use client";
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { json } from 'stream/consumers';
 
 export default function Testing() {
   // Define the user data
   const User = {
-    id: uuidv4(),
     clerkId: "123",
-    firstName: "Abdullah",
-    lastName: "Zulliqar",
-    email: "abdullah341@gmail.com",
-    username: "abdullahZ",
-    avatarUrl: "sdfgdggsgsdgsdgsdgsdg",
-    phoneNumber: "+923196576632",
-    password: "daad3dafd443r",
-    createdAt: new Date(),
-    updatedAt: new Date()
+    first_name: "Jack",
+    last_name: "Harper",
+    email: "jack123@gmail.com",
+    username: "jack@9202",
+    avatar_url: "www.myimages.com",
+    phone_number: "+923355596933",
+    password: "jack@9202"
 };
 
   // Function to handle the button click and send the data
@@ -28,6 +25,8 @@ export default function Testing() {
         },
         body: JSON.stringify(User), // Send the user data
       });
+
+      console.log(JSON.stringify(User))
 
       if (!response.ok) {
         console.error('Failed to send data to Python backend');

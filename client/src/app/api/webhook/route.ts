@@ -11,7 +11,7 @@ interface User {
   email: string;
   userame: string;
   avatar_url: string | null;
-  phoneNumber: string | null;
+  phone_number: string | null;
   password: string | null;
 
 }
@@ -80,8 +80,8 @@ export async function POST(req: Request) {
       email: email_addresses[0].email_address,
       userame:`${first_name}${last_name}`,
       avatar_url: image_url || null,
-      phoneNumber: null, // Assuming phone number is not included in the payload
-      password: null, // Assuming password is not included in the payload
+      phone_number: "+92319635429", 
+      password: "cda23@_2341d8h3",
 
     };
 

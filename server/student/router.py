@@ -111,7 +111,6 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
             username=payload.username,
             phone_number=payload.phone_number,
             password=hashed_password,
-            is_authenticated=payload.is_authenticated
         )
         new_student.save()
         
@@ -130,4 +129,4 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
         raise err
     except Exception as err:
         logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later")

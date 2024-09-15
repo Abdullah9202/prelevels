@@ -85,7 +85,6 @@ export async function POST(req: Request) {
 
     };
 
-    
     try {
       const response = await fetch('http://127.0.0.1:8000/api/student/register/', { // Replace with your Python backend URL
         method: 'POST',

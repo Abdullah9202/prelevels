@@ -46,8 +46,8 @@ class Student(models.Model):
     questionRemained = models.IntegerField(_("Question Remained"), default=0)
     
     # Timestamps for student creation and update
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
+    createdAt = models.DateTimeField(_("Created At"), auto_now_add=True, null=True)
+    updatedAt = models.DateTimeField(_("Updated At"), auto_now=True, null=True)
 
     # Last Login
     last_login = models.DateTimeField(null=True, blank=True)

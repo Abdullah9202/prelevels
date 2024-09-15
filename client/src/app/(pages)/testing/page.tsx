@@ -1,9 +1,10 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Testing() {
   // Define the user data
   const User = {
-    id: 1,
+    id: uuidv4(),
     clerkId: 123,
     firstName: "Abdullah",
     lastName: "Zulliqar",

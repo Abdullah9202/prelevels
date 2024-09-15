@@ -6,9 +6,9 @@ from .models import Student, TopicalProgress, YearlyProgress
 # Student with Admin
 class StudentAdmin(admin.ModelAdmin):
     # Display Fields and Filters
-    list_display = ('username', 'phone_number', 'email', 'is_authenticated', 'createdAt', 'updatedAt', 'last_login')
+    list_display = ('username', 'phone_number', 'email', 'createdAt', 'updatedAt', 'last_login')
     search_fields = ('username', 'email', 'phone_number')
-    list_filter = ('is_authenticated', 'taking_questionBanks', 'taking_courses', 'taking_bundles')
+    list_filter = ('taking_questionBanks', 'taking_courses', 'taking_bundles')
 
 
 admin.site.register(Student, StudentAdmin)

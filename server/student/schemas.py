@@ -29,7 +29,7 @@ class LoginSchema(Schema):
 
 # Register Schema
 class RegisterSchema(Schema):
-    id: int
+    id: UUID
     clerkId: str
     first_name: str
     last_name: str
@@ -38,7 +38,8 @@ class RegisterSchema(Schema):
     avatarUrl: Optional[str]
     phone_number: str
     password: str
-    is_authenticated: bool = True
+    createdAt: datetime
+    updatedAt: datetime
     
     # Validating the phone number 
     _phone_number_validator = phone_number_validator

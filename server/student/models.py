@@ -30,9 +30,6 @@ class Student(models.Model):
                                     blank=False, default="+92XXXXXXXXXX")
     password = models.CharField(_("Password"), max_length=100, null=False, blank=False)
     
-    # Authentication status
-    is_authenticated = models.BooleanField(_("Is Authenticated"), default=False)
-    
     # Relationship with other models
     # Each student can take multiple question banks, courses, and bundles
     # Each question bank, course, and bundle can be taken by a same student

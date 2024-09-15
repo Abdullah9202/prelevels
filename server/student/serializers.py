@@ -8,9 +8,9 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = [
             'id', 'first_name', 'last_name', 'avatar', 'email', 'username', 
-            'phone_number', 'is_authenticated', 'taking_questionBanks', 'taking_courses', 
+            'phone_number', 'taking_questionBanks', 'taking_courses', 
             'taking_bundles', 'daysStreak', 'questionSolved', 
-            'questionRemained', 'timestamp', 'updated_at', 'last_login',
+            'questionRemained', 'createdAt', 'updatedAt', 'last_login',
         ]
 
 class TopicalProgressSerializer(serializers.ModelSerializer):

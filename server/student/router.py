@@ -77,6 +77,7 @@ def logout_student(request, *args, **kwargs):
 # Set up logging
 logger = logging.getLogger(__name__)
 
+# Register Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
 def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")

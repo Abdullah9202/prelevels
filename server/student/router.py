@@ -105,10 +105,12 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
         
         # Registering the new student
         new_student = Student(
+            clerkId=payload.clerkId,
             first_name=payload.first_name,
             last_name=payload.last_name,
             email=payload.email,
             username=payload.username,
+            avatar_url=payload.avatar_url,
             phone_number=payload.phone_number,
             password=hashed_password,
         )

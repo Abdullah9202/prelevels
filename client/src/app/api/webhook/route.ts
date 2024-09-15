@@ -4,16 +4,16 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 
 
 interface User {
-  id: string;
+
   clerkId: string;
-  firstName: string | null;
-  lastName: string | null;
+  first_name: string | null;
+  last_name: string | null;
   email: string;
-  avatarUrl: string | null;
+  userame: string;
+  avatar_url: string | null;
   phoneNumber: string | null;
   password: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+
 }
 
 export async function POST(req: Request) {
@@ -73,19 +73,36 @@ export async function POST(req: Request) {
     }
 
     const user: User = {
-      id: id,
+      
       clerkId: id,
-      firstName: first_name || null,
-      lastName: last_name || null,
+      first_name: first_name || null,
+      last_name: last_name || null,
       email: email_addresses[0].email_address,
-      avatarUrl: image_url || null,
+      userame:`${first_name}${last_name}`,
+      avatar_url: image_url || null,
       phoneNumber: null, // Assuming phone number is not included in the payload
       password: null, // Assuming password is not included in the payload
-      createdAt: new Date(),
-      updatedAt: new Date()
+ 
     };
 
-    console.log(user)
+    
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/student/register/', { // Replace with your Python backend URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user), // Send the user data
+      });
+      
+      if (!response.ok) {
+        console.error('Failed to send data to Python backend');
+      } else {
+        console.log('Data sent successfully');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
   }
 
   return new Response('', { status: 200 })

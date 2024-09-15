@@ -28,7 +28,7 @@ export default function Testing() {
         },
         body: JSON.stringify(User), // Send the user data
       });
-
+      
       if (!response.ok) {
         console.error('Failed to send data to Python backend');
       } else {

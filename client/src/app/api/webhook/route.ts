@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       avatar_url: image_url || null,
       phoneNumber: null, // Assuming phone number is not included in the payload
       password: null, // Assuming password is not included in the payload
- 
+
     };
 
     

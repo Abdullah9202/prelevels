@@ -8,6 +8,7 @@ export default function Testing() {
     firstName: "Abdullah",
     lastName: "Zulliqar",
     email: "abdullah@gmail.com",
+    username: "abdullahZ",
     avatarUrl: "sdfgdggsgsdgsdgsdgsdg",
     phoneNumber: null, // Assuming phone number is not included in the payload
     password: null, // Assuming password is not included in the payload
@@ -18,7 +19,7 @@ export default function Testing() {
   // Function to handle the button click and send the data
   const handleClick = async () => {
     try {
-      const response = await fetch('https://your-python-backend-url/api/users', { // Replace with your Python backend URL
+      const response = await fetch('http://127.0.0.1:8000/api/student/register/', { // Replace with your Python backend URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

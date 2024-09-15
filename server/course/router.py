@@ -4,11 +4,10 @@ from uuid import UUID
 from typing import List
 # Django imports
 from django.http import JsonResponse
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.shortcuts import get_object_or_404
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
-from ninja_jwt.authentication import JWTAuth
 from ninja.responses import codes_4xx
 # My Files
 from .models import Course
@@ -23,7 +22,7 @@ course_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all courses router
-@course_router.get("/", response={200: List[GetCourseListSchema], codes_4xx: dict}, auth=JWTAuth())
+@course_router.get("/", response={200: List[GetCourseListSchema], codes_4xx: dict})
 def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses
@@ -41,7 +40,7 @@ def get_all_courses(request, *args, **kwargs):
 
 
 # Get course router
-@course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict}, auth=JWTAuth())
+@course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict})
 def get_course(request, course_id: UUID, *args, **kwargs):
     try:
         # Getting the course

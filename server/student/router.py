@@ -11,7 +11,6 @@ from django.shortcuts import get_object_or_404
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
-from ninja_jwt.authentication import JWTAuth
 from ninja.responses import codes_4xx
 # My Files
 from student.models import Student
@@ -27,14 +26,14 @@ auth_router = Router()
 
 
 # Hello Router (Test Router)
-@auth_router.get("/hello/", response={200: dict, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.get("/hello/", response={200: dict, codes_4xx: dict})
 def hello(request, *args, **kwargs):
     print(request)
     return {"message": "Hello World!"}
 
 
 # Student detail router
-@auth_router.get("/{student_id}", response={200: GetStudentDetailSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.get("/{student_id}", response={200: GetStudentDetailSchema, codes_4xx: dict})
 def get_student_details(request, student_id: UUID, *args, **kwargs):
     try:
         # Getting the student
@@ -52,7 +51,7 @@ def get_student_details(request, student_id: UUID, *args, **kwargs):
 
 
 # Login Router
-@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, payload: LoginSchema, *args, **kwargs):
     try:
         # Fetching the student
@@ -69,7 +68,7 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout Router
-@auth_router.post("/logout/", auth=JWTAuth())
+@auth_router.post("/logout/")
 def logout_student(request, *args, **kwargs):
     logout(request)
     return JsonResponse({"message": "Student logged out successfully"})
@@ -78,7 +77,7 @@ def logout_student(request, *args, **kwargs):
 # Set up logging
 logger = logging.getLogger(__name__)
 
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict}, auth=JWTAuth())
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
 def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
     

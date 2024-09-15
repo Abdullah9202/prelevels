@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
-from ninja_jwt.authentication import JWTAuth
 from ninja.responses import codes_4xx
 # My Files
 from .models import (
@@ -32,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 # Get all question banks
-@question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict}, auth=JWTAuth())
+@question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict})
 def get_all_question_banks(request, *args, **kwargs):
     try:
         # Getting all question banks
@@ -51,8 +50,7 @@ def get_all_question_banks(request, *args, **kwargs):
 
 
 # Get the details of specific Question bank
-@question_bank_router.get("/{question_bank_id}", response={200: QuestionBankDetailSchema, codes_4xx: dict},
-                            auth=JWTAuth())
+@question_bank_router.get("/{question_bank_id}", response={200: QuestionBankDetailSchema, codes_4xx: dict})
 def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank
@@ -70,8 +68,7 @@ def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
 
 
 # Get all questions in a question bank
-@question_bank_router.get("/{question_bank_id}/all-questions/", response={200: QuestionSchema, codes_4xx: dict},
-                            auth=JWTAuth())
+@question_bank_router.get("/{question_bank_id}/all-questions/", response={200: QuestionSchema, codes_4xx: dict})
 def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
     # Getting the question banks using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
@@ -113,7 +110,7 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
 
 # Get the details for specific question in a question bank
 @question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionDetailSchema,
-                                                                                    codes_4xx: dict}, auth=JWTAuth())
+                                                                                    codes_4xx: dict})
 def get_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
     # Getting the question bank using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
@@ -152,7 +149,7 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
 
 # Save question
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
-                        response={200: SaveQuestionSchema, codes_4xx: dict}, auth=JWTAuth())
+                        response={200: SaveQuestionSchema, codes_4xx: dict})
 def save_question(request, question_bank_id, question_id, *args, **kwargs):
     # Verifying the UUIDs
     try:
@@ -199,7 +196,7 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
 
 # Report a question in a question bank
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
-                            response={200: ReportQuestionSchema, codes_4xx: dict}, auth=JWTAuth())
+                            response={200: ReportQuestionSchema, codes_4xx: dict})
 def report_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
     # Verifying the UUIDs
     try:

@@ -6,7 +6,6 @@ from .schemas import HelloSchema
 api = NinjaAPI(version="1.0.0", urls_namespace="hello")
 
 
-
 @api.get("")
 def hello(request):
     return {"message": "Hello World!"}

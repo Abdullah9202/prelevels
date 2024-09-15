@@ -3,20 +3,17 @@ import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 
 
-
-
-
 interface User {
-    id: string;
-    clerkId: string;
-    firstName: string | null;
-    lastName: string | null;
-    email: string;
-    avatarUrl: string | null;
-    phoneNumber: string | null;
-    password: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+  id: string;
+  clerkId: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  avatarUrl: string | null;
+  phoneNumber: string | null;
+  password: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export async function POST(req: Request) {
@@ -76,18 +73,18 @@ export async function POST(req: Request) {
     }
 
     const user: User = {
-        id: id,
-        clerkId: id,
-        firstName: first_name || null,
-        lastName: last_name || null,
-        email: email_addresses[0].email_address,
-        avatarUrl: image_url || null,
-        phoneNumber: null, // Assuming phone number is not included in the payload
-        password: null, // Assuming password is not included in the payload
-        createdAt: new Date(),
-        updatedAt: new Date()
+      id: id,
+      clerkId: id,
+      firstName: first_name || null,
+      lastName: last_name || null,
+      email: email_addresses[0].email_address,
+      avatarUrl: image_url || null,
+      phoneNumber: null, // Assuming phone number is not included in the payload
+      password: null, // Assuming password is not included in the payload
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
-    
+
     console.log(user)
   }
 

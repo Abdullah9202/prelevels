@@ -1,10 +1,10 @@
 "use client";
-import { useState } from 'react';
-import { FiMenu, FiX } from 'react-icons/fi';
-import TestImage from "@/assets/Banner.png"
-import Image from 'next/image';
-import { FaBook, FaInfoCircle } from 'react-icons/fa';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
+import TestImage from "@/assets/Banner.png";
+import Image from "next/image";
+import { FaBook, FaInfoCircle } from "react-icons/fa";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +87,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 w-64 bg-white text-gray-800 transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-30 md:relative md:translate-x-0 shadow-lg`}
       >
         {/* Close Button for Mobile */}
@@ -105,19 +105,31 @@ export default function Sidebar() {
             <FaBook className="w-5 h-5 text-red-600" />
             <span className="ml-2 text-red-600 font-semibold">ETA</span>
           </a>
-          <a href="#" className="flex items-center p-2 rounded hover:bg-gray-100">
+          <a
+            href="#"
+            className="flex items-center p-2 rounded hover:bg-gray-100"
+          >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">NMDCAT</span>
           </a>
-          <a href="#" className="flex items-center p-2 rounded hover:bg-gray-100">
+          <a
+            href="#"
+            className="flex items-center p-2 rounded hover:bg-gray-100"
+          >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">GAT</span>
           </a>
-          <a href="#" className="flex items-center p-2 rounded hover:bg-gray-100">
+          <a
+            href="#"
+            className="flex items-center p-2 rounded hover:bg-gray-100"
+          >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">LUMS</span>
           </a>
-          <a href="#" className="flex items-center p-2 rounded hover:bg-gray-100">
+          <a
+            href="#"
+            className="flex items-center p-2 rounded hover:bg-gray-100"
+          >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">NUST</span>
           </a>
@@ -129,7 +141,13 @@ export default function Sidebar() {
             <FaInfoCircle size={30} className="w-6 h-6 text-green-600" />
             <div className="ml-2">
               <h3 className="text-md font-semibold">Need help?</h3>
-              <p className="text-sm">Dont know how to use? <a href="#" className="text-red-500 underline">Click here</a> to see the guide.</p>
+              <p className="text-sm">
+                Dont know how to use?{" "}
+                <a href="#" className="text-red-500 underline">
+                  Click here
+                </a>{" "}
+                to see the guide.
+              </p>
             </div>
           </div>
         </div>
@@ -145,23 +163,32 @@ export default function Sidebar() {
         <main className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedData.map((item) => (
-              <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div
+                key={item.id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
+              >
                 <div className="relative">
-                <Image
-                src={item.image}
-                alt={item.title}
-                className="w-full h-48 object-cover"
-              />
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-48 object-cover"
+                  />
                   <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
                     Best Value
                   </span>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {item.title}
+                  </h3>
                   <p className="text-gray-500">Prelevels</p>
                   <p className="text-gray-500 mb-2">{item.validTill}</p>
-                  <div className="text-red-500 text-3xl font-bold">{item.price}</div>
-                  <div className="text-gray-500 line-through text-xl">{item.originalPrice}</div>
+                  <div className="text-red-500 text-3xl font-bold">
+                    {item.price}
+                  </div>
+                  <div className="text-gray-500 line-through text-xl">
+                    {item.originalPrice}
+                  </div>
                   <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                     Add to Cart
                   </button>
@@ -176,7 +203,7 @@ export default function Sidebar() {
               onClick={prevPage}
               disabled={currentPage === 0}
               className={`${
-                currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
               } bg-red-500 text-white px-4 py-2 rounded-full`}
             >
               Previous
@@ -185,7 +212,9 @@ export default function Sidebar() {
               onClick={nextPage}
               disabled={currentPage === totalPages - 1}
               className={`${
-                currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''
+                currentPage === totalPages - 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               } bg-red-500 text-white px-4 py-2 rounded-full`}
             >
               Next

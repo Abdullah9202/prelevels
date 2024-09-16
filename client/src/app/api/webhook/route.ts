@@ -107,3 +107,5 @@ export async function POST(req: Request) {
 
   return new Response('', { status: 200 })
 }
+
+// ngrok http --domain=stunning-highly-gnu.ngrok-free.app 3000

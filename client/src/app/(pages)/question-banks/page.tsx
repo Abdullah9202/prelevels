@@ -20,7 +20,7 @@ export default function QuestionBankPage() {
         const data = await res.json();
         if (res.ok) {
           setPosts(data);
-          console.log('Posts fetched:', data,posts);
+          console.log('Posts fetched:', data);
         } else {
           console.log('No data found');
         }

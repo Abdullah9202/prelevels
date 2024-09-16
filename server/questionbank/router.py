@@ -38,6 +38,8 @@ def get_all_question_banks(request, *args, **kwargs):
         question_banks = QuestionBank.objects.all()
         # Serializing the question banks
         serialized_question_banks = QuestionBankSerializer(question_banks, many=True).data
+        # Fetching the number of questions in a question bank and appending in serializer
+
         # # Returning the Json data
         return JsonResponse(serialized_question_banks, status=200,
                             safe=False)  # It will return the empty list if DB doesn't contain any question bank
@@ -50,13 +52,17 @@ def get_all_question_banks(request, *args, **kwargs):
 
 
 # Get the details of specific Question bank
-@question_bank_router.get("/{question_bank_id}", response={200: QuestionBankDetailSchema, codes_4xx: dict})
+@question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankDetailSchema, codes_4xx: dict})
 def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank
         question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
+        # Fetching the number of question in a question bank
+        question_count = question_bank.get_question_count()
         # Serializing the question bank
         serialized_question_bank = QuestionBankSerializer(question_bank).data
+        # Adding the question count to serializer
+        serialized_question_bank['question_count'] = question_count
         # Returning the Json data
         return JsonResponse(serialized_question_bank, status=200)
     except HttpError as err:

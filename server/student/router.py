@@ -103,6 +103,7 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
         raise HttpError(500, f"An unexpected error occurred. Please try again later")
 
 
+# AZAK
 # Login and logout are being managed by Clerk ()
 # =============================================================================================
 # Login Router

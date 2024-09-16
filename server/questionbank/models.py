@@ -31,6 +31,9 @@ class QuestionBank(models.Model):
     def __str__(self):
         return self.name
 
+    def get_question_count(self):
+        return self.questions.count()
+
     def add_to_cart(self, user, quantity=1):
         cart, created = Cart.objects.get_or_create(user=user)
         content_type = ContentType.objects.get_for_model(self)

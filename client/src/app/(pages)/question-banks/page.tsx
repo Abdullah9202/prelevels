@@ -29,7 +29,7 @@ export default function QuestionBankPage() {
       }
     }
     fetchPost();
-  }, [posts]);
+  }, []);
 
   return (
     <div>

@@ -11,7 +11,7 @@ export default function Testing() {
     email: "jack123@gmail.com",
     username: "jack@9202",
     avatar_url: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybTZCbG5vSUxnVGVJaWpNM3BwRjExZGluSVYifQ",
-    phone_number: "+923355596933",
+    phone_number: "+923355566939",
     password: "jack@9202"
 };
 

@@ -14,8 +14,7 @@ from cart.models import Cart, CartItem
 class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
-    question_bank_image = models.ImageField(_("Question bank image"), upload_to=None, height_field=None,
-                                            width_field=None, max_length=None, blank=True, null=True)
+    question_bank_image = models.URLField(_("Question bank image"), null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
@@ -149,7 +148,6 @@ class SaveQuestion(models.Model):
         return reverse("SaveQuestion_detail", kwargs={"id": self.id})
 
 
-
 # Report Model
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -171,4 +169,3 @@ class Report(models.Model):
 
     def get_absolute_url(self):
         return reverse("questionbank:Report_detail", kwargs={"id": self.id})
-

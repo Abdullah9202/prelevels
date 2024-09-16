@@ -28,6 +28,24 @@ auth_router = Router()
 logger = logging.getLogger(__name__)
 
 
+# Student detail router
+@auth_router.get("/{student_id}/", response={200: GetStudentDetailSchema, codes_4xx: dict})
+def get_student_details(request, student_id: UUID, *args, **kwargs):
+    try:
+        # Getting the student
+        student = get_object_or_404(Student, id=student_id)
+        # Serializing
+        serialized_student = StudentSerializer(student).data
+        # Returning
+        return JsonResponse(serialized_student, status=200)
+    except HttpError as e:
+        logger.error(f"HttpError: {e}")
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
+
+
 # Register Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
 def register_student(request, payload: RegisterSchema, *args, **kwargs):
@@ -115,21 +133,3 @@ def logout_student(request, *args, **kwargs):
     except Exception as e:
         raise HttpError(500, f"An unexpected error occured: {e}")
 # =============================================================================================
-
-
-# Student detail router
-@auth_router.get("/{student_id}/", response={200: GetStudentDetailSchema, codes_4xx: dict})
-def get_student_details(request, student_id: UUID, *args, **kwargs):
-    try:
-        # Getting the student
-        student = get_object_or_404(Student, id=student_id)
-        # Serializing
-        serialized_student = StudentSerializer(student).data
-        # Returning
-        return JsonResponse(serialized_student, status=200)
-    except HttpError as e:
-        logger.error(f"HttpError: {e}")
-        raise e
-    except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")

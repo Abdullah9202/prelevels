@@ -36,19 +36,25 @@ def get_all_question_banks(request, *args, **kwargs):
     try:
         # Getting all question banks
         question_banks = QuestionBank.objects.all()
+        
         # Serializing the question banks
         serialized_question_banks = QuestionBankSerializer(question_banks, many=True).data
-        # Fetching the number of questions in a question bank and appending in serializer
         
-        # # Returning the Json data
+        # Fetching the number of questions in a question bank and appending in serializer
+        question_count_list = [QB.get_question_count() for QB in question_banks] # Getting the question count in every question bank and appending in list
+        
+        for question_count, QB in zip(question_count_list, serialized_question_banks): # Appending the question count from list in serializer
+            QB['question_count'] = question_count
+        
+        # Returning the Json data
         return JsonResponse(serialized_question_banks, status=200,
                             safe=False)  # It will return the empty list if DB doesn't contain any question bank
     except HttpError as err:
         logger.error(f"HttpError: {err}")
         raise err
-    except Exception as err:
-        logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
 
 
 # Get the details of specific Question bank
@@ -57,12 +63,16 @@ def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank
         question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
+        
         # Fetching the number of question in a question bank
         question_count = question_bank.get_question_count()
+        
         # Serializing the question bank
         serialized_question_bank = QuestionBankSerializer(question_bank).data
+        
         # Adding the question count to serializer
         serialized_question_bank['question_count'] = question_count
+        
         # Returning the Json data
         return JsonResponse(serialized_question_bank, status=200)
     except HttpError as err:

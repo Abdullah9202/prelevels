@@ -70,8 +70,13 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
 # Logout Router
 @auth_router.post("/logout/")
 def logout_student(request, *args, **kwargs):
-    logout(request)
-    return JsonResponse({"message": "Student logged out successfully"})
+    try:
+        logout(request)
+        return JsonResponse({"message": "Student logged out successfully"}, status=200)
+    except ValidationError as e:
+        return JsonResponse({"error": f"Validation error occurred: {e}"}, status=400)
+    except Exception as err:
+        return JsonResponse({"error": f"An unexpected error occurred: {str(err)}"}, status=500)
 
 
 # Set up logging

@@ -16,7 +16,7 @@ export default function QuestionBankPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("your python api", { method: 'GET' });
+        const res = await fetch("http://127.0.0.1:8000/api/questionbank/", { method: 'GET' });
         const data = await res.json();
         if (res.ok) {
           setPosts(data);
@@ -29,7 +29,7 @@ export default function QuestionBankPage() {
       }
     }
     fetchPost();
-  }, []);
+  }, [posts]);
 
   return (
     <div>

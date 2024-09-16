@@ -1,4 +1,5 @@
 # Python imports
+import logging
 from uuid import UUID
 # Django imports
 from django.contrib.auth import authenticate, login, logout
@@ -42,8 +43,10 @@ def get_student_details(request, student_id: UUID, *args, **kwargs):
         # Returning
         return JsonResponse(serialized_student, status=200)
     except HttpError as e:
+        logger.error(f"HttpError: {e}")
         raise e
     except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
         raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
 
 
@@ -76,22 +79,30 @@ def logout_student(request, *args, **kwargs):
         raise HttpError(500, f"An unexpected error occured: {e}")
 
 
+# Set up logging
+logger = logging.getLogger(__name__)
+
 # Register Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
 def register_student(request, payload: RegisterSchema, *args, **kwargs):
+    logger.info(f"Registering student with data: {payload.dict()}")
     
     try:
         # Using the serializer to validate the input data
         serializer = StudentSerializer(data=payload.dict())
         if not serializer.is_valid():
+            logger.error(f"Validation error: {serializer.errors}")
             raise HttpError(400, "Invalid input data.")
         
         # Checking for existing user
         if Student.objects.filter(email=payload.email).exists():
+            logger.warning("Registration failed: Email already exists.")
             raise HttpError(400, "Email address is already in use.")
         if Student.objects.filter(username=payload.username).exists():
+            logger.warning("Registration failed: Username already exists.")
             raise HttpError(400, "Username is already taken.")
         if Student.objects.filter(phone_number=payload.phone_number).exists():
+            logger.warning("Registration failed: Phone number already exists.")
             raise HttpError(400, "Phone number is already registered.")
         
         # Hashing the password
@@ -114,11 +125,15 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
         serialized_student = StudentSerializer(new_student)
         return JsonResponse(serialized_student.data)
 
-    except IntegrityError as e:
+    except IntegrityError as err:
+        logger.error(f"IntegrityError: {str(err)}")
         raise HttpError(400, "Database error. Please ensure your data is unique.")
-    except ValidationError as e:
+    except ValidationError as err:
+        logger.error(f"ValidationError: {str(err)}")
         raise HttpError(400, "Validation error.")
-    except HttpError as e:
-        raise e
-    except Exception as e:
+    except HttpError as err:
+        logger.error(f"HttpError: {err}")
+        raise err
+    except Exception as err:
+        logger.error(f"Unexpected error: {str(err)}")
         raise HttpError(500, f"An unexpected error occurred. Please try again later")

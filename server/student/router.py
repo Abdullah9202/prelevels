@@ -24,16 +24,12 @@ from .serializers import StudentSerializer
 # Router Init
 auth_router = Router()
 
-
-# Hello Router (Test Router)
-@auth_router.get("/hello/", response={200: dict, codes_4xx: dict})
-def hello(request, *args, **kwargs):
-    print(request)
-    return {"message": "Hello World!"}
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 # Student detail router
-@auth_router.get("/{student_id}", response={200: GetStudentDetailSchema, codes_4xx: dict})
+@auth_router.get("/{student_id}/", response={200: GetStudentDetailSchema, codes_4xx: dict})
 def get_student_details(request, student_id: UUID, *args, **kwargs):
     try:
         # Getting the student
@@ -42,40 +38,13 @@ def get_student_details(request, student_id: UUID, *args, **kwargs):
         serialized_student = StudentSerializer(student).data
         # Returning
         return JsonResponse(serialized_student, status=200)
-    except HttpError as err:
-        logger.error(f"HttpError: {err}")
-        raise err
-    except Exception as err:
-        logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later.")
+    except HttpError as e:
+        logger.error(f"HttpError: {e}")
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
 
-
-# Login Router
-@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
-def login_student(request, payload: LoginSchema, *args, **kwargs):
-    try:
-        # Fetching the student
-        student = Student.objects.get(phone_number=payload.phone_number)
-        # Checking the password
-        if check_password(payload.password, student.password):
-            # Login the student
-            login(request, student)
-            return JsonResponse({"message": "Student logged in successfully"})
-        else:
-            raise HttpError(401, "Incorrect password")
-    except Student.DoesNotExist:
-        raise HttpError(401, "Student doesn't exists")
-
-
-# Logout Router
-@auth_router.post("/logout/")
-def logout_student(request, *args, **kwargs):
-    logout(request)
-    return JsonResponse({"message": "Student logged out successfully"})
-
-
-# Set up logging
-logger = logging.getLogger(__name__)
 
 # Register Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
@@ -105,10 +74,12 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
         
         # Registering the new student
         new_student = Student(
+            clerkId=payload.clerkId,
             first_name=payload.first_name,
             last_name=payload.last_name,
             email=payload.email,
             username=payload.username,
+            avatar_url=payload.avatar_url,
             phone_number=payload.phone_number,
             password=hashed_password,
         )
@@ -130,3 +101,35 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
     except Exception as err:
         logger.error(f"Unexpected error: {str(err)}")
         raise HttpError(500, f"An unexpected error occurred. Please try again later")
+
+
+# Login and logout are being managed by Clerk ()
+# =============================================================================================
+# Login Router
+@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
+def login_student(request, payload: LoginSchema, *args, **kwargs):
+    try:
+        # Fetching the student
+        student = Student.objects.get(phone_number=payload.phone_number)
+        # Checking the password
+        if check_password(payload.password, student.password):
+            # Login the student
+            login(request, student)
+            return JsonResponse({"message": "Student logged in successfully"})
+        else:
+            raise HttpError(401, "Incorrect password")
+    except Student.DoesNotExist:
+        raise HttpError(401, "Student doesn't exists")
+
+
+# Logout Router
+@auth_router.post("/logout/")
+def logout_student(request, *args, **kwargs):
+    try:
+        logout(request)
+        return JsonResponse({"message": "Student logged out successfully"}, status=200)
+    except ValidationError as e:
+        raise HttpError(400, f"Validation error occured: {e}")
+    except Exception as e:
+        raise HttpError(500, f"An unexpected error occured: {e}")
+# =============================================================================================

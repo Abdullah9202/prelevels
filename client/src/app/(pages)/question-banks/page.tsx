@@ -1,13 +1,36 @@
+"use client";
 import Belowfooter from "@/components/main/belowfooter";
 import Footer from "@/components/main/footer";
 import Navbar from "@/components/main/navbar";
 import Banner from "@/components/questionbank/banner";
 import Sidebar from "@/components/ui/sidebar";
 import BannerImage from "@/assets/Banner.png";
-
+import { useEffect,useState } from "react";
 import SeasonSale from "@/components/ui/timeline";
 
+
 export default function QuestionBankPage() {
+  const [posts, setPosts] = useState([]);
+  
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await fetch("your python api", { method: 'GET' });
+        const data = await res.json();
+        if (res.ok) {
+          setPosts(data);
+          console.log('Posts fetched:', data,posts);
+        } else {
+          console.log('No data found');
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+    fetchPost();
+  }, []);
+
   return (
     <div>
       <SeasonSale />

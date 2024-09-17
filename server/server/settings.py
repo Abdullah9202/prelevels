@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     # Main App
     'server',
     # My Apps
-    'hello', # Testing app
     'student',
     'questionbank',
     'course',

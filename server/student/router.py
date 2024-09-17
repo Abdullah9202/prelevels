@@ -2,7 +2,7 @@
 import logging
 from uuid import UUID
 # Django imports
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
@@ -113,7 +113,19 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
 @auth_router.post("/logout/")
 def logout_student(request, *args, **kwargs):
     try:
-        logout(request)
+        # Flushing the current user session
+        request.session.flush()
+        # Clearing the details
+        request.user.id = None
+        request.user.pk = None
+        request.user.clerk_id = None
+        request.user.first_name = ""
+        request.user.last_name = ""
+        request.user.avatar_url = ""
+        request.user.username = ""
+        request.user.email = ""
+        request.user.phone_number = ""
+        request.user.password = ""
         return JsonResponse({"message": "Student logged out successfully"}, status=200)
     except ValidationError as err:
         raise HttpError(400, f"Validation error occured: {err}")

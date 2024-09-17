@@ -39,7 +39,7 @@ def get_all_courses(request, *args, **kwargs):
         raise HttpError(500, "An unexpected error occurred. Please try again later.")
 
 
-# Get course router
+# Get course details router
 @course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict})
 def get_course(request, course_id: UUID, *args, **kwargs):
     try:

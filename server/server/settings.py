@@ -31,6 +31,9 @@ DEBUG = True # (AZAK)
 
 ALLOWED_HOSTS = []
 
+# Handling the UUIDs during the sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

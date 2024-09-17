@@ -26,8 +26,6 @@ from cart import api as cart_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Hello API URLs
-    path('api/hello/', hello_api.api.urls),
     # Student API URLs
     path('api/student/', std_api.api.urls),
     # Question Bank API URLs

@@ -15,8 +15,7 @@ from cart.models import Cart, CartItem
 class Bundle(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Bundle")
-    bundle_image = models.ImageField(_("Bundle image"), upload_to=None, height_field=None, 
-                                    width_field=None, max_length=None, blank=True, null=True)
+    bundle_image = models.URLField(_("Bundle image"), null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)

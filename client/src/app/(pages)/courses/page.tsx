@@ -24,6 +24,7 @@ export default function CoursesPage() {
                 console.error('Error fetching posts:', error);
             }
         }
+        fetchPost();
     }
     , []);
 

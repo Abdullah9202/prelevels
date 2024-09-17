@@ -109,7 +109,7 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
     response_data = {
         "id": UUID(str(question_bank.id)),
         "name": question_bank.name,
-        "question_bank_image": question_bank.question_bank_image.url if question_bank.question_bank_image else None,
+        "question_bank_image": question_bank.question_bank_image if question_bank.question_bank_image else None,
         "description": question_bank.description,
         "additional_details": question_bank.additional_details,
         "price": question_bank.price,

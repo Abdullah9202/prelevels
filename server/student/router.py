@@ -34,12 +34,6 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
     
     try:
-        # Using the serializer to validate the input data
-        serializer = StudentSerializer(data=payload.dict())
-        if not serializer.is_valid():
-            logger.error(f"Validation error: {serializer.errors}")
-            raise HttpError(400, "Invalid input data.")
-        
         # Checking for existing user
         if Student.objects.filter(email=payload.email).exists():
             logger.warning("Registration failed: Email already exists.")
@@ -51,12 +45,18 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
             logger.warning("Registration failed: Phone number already exists.")
             raise HttpError(400, "Phone number is already registered.")
         
+        # Using the serializer to validate the input data
+        serializer = StudentSerializer(data=payload.dict())
+        if not serializer.is_valid():
+            logger.error(f"Validation error: {serializer.errors}")
+            raise HttpError(400, "Invalid input data.")
+        
         # Hashing the password
         hashed_password = make_password(payload.password)
         
         # Registering the new student
         new_student = Student(
-            clerkId=payload.clerkId,
+            clerk_id=payload.clerk_id,
             first_name=payload.first_name,
             last_name=payload.last_name,
             email=payload.email,
@@ -91,7 +91,7 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Login Router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, payload: LoginSchema, *args, **kwargs):
-    try:
+    try: 
         # Fetching the student
         student = Student.objects.get(phone_number=payload.phone_number)
         # Checking the password

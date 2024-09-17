@@ -1,3 +1,4 @@
+"use client";
 import SeasonSale from "@/components/ui/timeline";
 import Navbar from "@/components/main/navbar";
 import Banner from "@/components/questionbank/banner";
@@ -12,7 +13,7 @@ export default function CoursesPage() {
     useEffect(() => {
         const fetchPost = async () => {
             try{
-                const res = await fetch("your python server link",{ method: 'GET' });
+                const res = await fetch("http://127.0.0.1:8000/api/course/",{ method: 'GET' });
                 const data = await res.json();
                 if(res.ok) {
                     setPosts(data);

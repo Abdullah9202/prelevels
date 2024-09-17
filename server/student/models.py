@@ -17,7 +17,7 @@ class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     # Clerk ID
-    clerkId = models.CharField(max_length=150, null=True)
+    clerk_id = models.CharField(max_length=150, null=True)
     
     # Student personal information
     first_name = models.CharField(_("First Name"), max_length=50, null=False, blank=False)

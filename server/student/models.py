@@ -14,7 +14,7 @@ from bundle.models import Bundle
 # Student model
 class Student(models.Model):
     # Unique identifier for each student
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     
     # Clerk ID
     clerk_id = models.CharField(max_length=150, null=True)

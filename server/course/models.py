@@ -11,7 +11,7 @@ from cart.models import Cart, CartItem
 
 # Course model
 class Course(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course")
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)

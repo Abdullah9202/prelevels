@@ -12,7 +12,7 @@ from cart.models import Cart, CartItem
 
 # Question bank model
 class QuestionBank(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
     question_bank_image = models.URLField(_("Question bank image"), null=True)
     description = models.TextField(_("Description"), null=True)
@@ -49,7 +49,7 @@ class QuestionBank(models.Model):
 
 # Question Model
 class Question(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     # Foreign Key for question bank (One to Many)
     question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
                                         on_delete=models.CASCADE)
@@ -85,7 +85,7 @@ class Question(models.Model):
 
 # Options Model
 class Option(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     # Foreign key for question (Each option can occur in only one question)
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options",
                                     on_delete=models.CASCADE)
@@ -111,7 +111,7 @@ class Option(models.Model):
 
 # Why Correct Option Model
 class WhyCorrectOption(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
@@ -130,7 +130,7 @@ class WhyCorrectOption(models.Model):
 
 # Save question model
 class SaveQuestion(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
                                     on_delete=models.CASCADE, default=None)
@@ -152,7 +152,7 @@ class SaveQuestion(models.Model):
 
 # Report Model
 class Report(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     question_bank_id = models.ForeignKey("questionbank.QuestionBank", on_delete=models.CASCADE,
                                             verbose_name=_("Question bank of reported question"),
                                             related_name="reports", default=None)

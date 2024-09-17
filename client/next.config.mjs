@@ -2,11 +2,23 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      domains: ['cdn.builder.io','img.daisyui.com'], // Allow images from this domain
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.builder.io',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.daisyui.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+};
 
-    },
-  };
-  
-  export default nextConfig;
+export default nextConfig;
   

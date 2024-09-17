@@ -80,9 +80,9 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
     except HttpError as err:
         logger.error(f"HttpError: {err}")
         raise err
-    except Exception as err:
+    except Exception as e:
         logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later")
+        return JsonResponse({"error": f"An unexpected error occurred. Please try again later"}, status=500)
 
 
 # AZAK
@@ -98,11 +98,15 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
         if check_password(payload.password, student.password):
             # Login the student
             login(request, student)
-            return JsonResponse({"message": "Student logged in successfully"})
+            return JsonResponse({"message": "Student logged in successfully"}, status=200)
         else:
             raise HttpError(401, "Incorrect password")
     except Student.DoesNotExist:
         raise HttpError(401, "Student doesn't exists")
+    except ValidationError as err:
+        raise HttpError(400, f"Validation error occured: {err}")
+    except Exception as e:
+        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
 
 
 # Logout Router
@@ -111,10 +115,10 @@ def logout_student(request, *args, **kwargs):
     try:
         logout(request)
         return JsonResponse({"message": "Student logged out successfully"}, status=200)
-    except ValidationError as e:
-        raise HttpError(400, f"Validation error occured: {e}")
+    except ValidationError as err:
+        raise HttpError(400, f"Validation error occured: {err}")
     except Exception as e:
-        raise HttpError(500, f"An unexpected error occured: {e}")
+        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
 # =============================================================================================
 
 

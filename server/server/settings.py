@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     # 3rd party apps
     'corsheaders',
     'ninja_extra',
-    'ninja_jwt',
     # Main App
     'server',
     # My Apps

@@ -12,7 +12,6 @@ from django.shortcuts import get_object_or_404
 from ninja import Router
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx
-from ninja_jwt.authentication import JWTAuth
 # My Files
 from student.models import Student
 from .schemas import (
@@ -97,15 +96,16 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # =============================================================================================
 # Login Router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
-def login_student(request, payload: LoginSchema, *args, **kwargs):
+def login_student(request, *args, **kwargs):
     try: 
-        student = Student.objects.get(phone_number=payload.phone_number)
-        if check_password(payload.password, student.password):
-            print(request.user)
+        if request.clerk_user.is_authenticated:
+            # Getting the student using clerk_id
+            student = get_object_or_404(Student, clerk_id=request.clerk_user["id"])
+            # Logging in the student
             login(request, student)
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
         else:
-            raise HttpError(401, "Incorrect password")
+            raise HttpError(401, "User is not authenticated.")
     except Student.DoesNotExist:
         raise HttpError(401, "Student doesn't exist")
     except Exception as e:
@@ -113,7 +113,7 @@ def login_student(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout Router
-@auth_router.post("/logout/", auth=JWTAuth())
+@auth_router.post("/logout/")
 def logout_student(request, *args, **kwargs):
     try:
         logout(request)
@@ -127,14 +127,16 @@ def logout_student(request, *args, **kwargs):
 
 # Student detail router
 @auth_router.get("/{student_id}/", response={200: GetStudentDetailSchema, codes_4xx: dict})
-def get_student_details(request, student_id: UUID, *args, **kwargs):
+def get_student_details(request, *args, **kwargs):
     try:
-        # Getting the student
-        student = get_object_or_404(Student, id=student_id)
-        # Serializing
-        serialized_student = StudentSerializer(student).data
-        # Returning
-        return JsonResponse(serialized_student, status=200)
+        if request.clerk_user.is_authenticated:
+            # Getting the student
+            student = get_object_or_404(Student, clerk_id=request.clerk_user["id"])
+            # Serializing
+            serialized_student = StudentSerializer(student).data
+            return JsonResponse(serialized_student, status=200)
+        else:
+            raise HttpError(401, "User is not authenticated.")
     except HttpError as e:
         logger.error(f"HttpError: {e}")
         raise e

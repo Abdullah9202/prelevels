@@ -2,7 +2,7 @@
 import logging
 from uuid import UUID
 # Django imports
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
@@ -12,11 +12,12 @@ from django.shortcuts import get_object_or_404
 from ninja import Router
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx
+from ninja_jwt.authentication import JWTAuth
 # My Files
 from student.models import Student
 from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
-    LoginSchema, RegisterSchema, GetStudentDetailSchema
+    LoginSchema, RegisterSchema, GetStudentDetailSchema, HelloSchema
 )
 from .serializers import StudentSerializer
 
@@ -26,6 +27,12 @@ auth_router = Router()
 
 # Set up logging
 logger = logging.getLogger(__name__)
+
+
+# Test route
+@auth_router.get("/hello/", response={200: HelloSchema, codes_4xx: dict})
+def hello(request, *args, **kwargs):
+    return JsonResponse({"msg": "Hello World!"}, status=200)
 
 
 # Register Router
@@ -92,40 +99,24 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, payload: LoginSchema, *args, **kwargs):
     try: 
-        # Fetching the student
         student = Student.objects.get(phone_number=payload.phone_number)
-        # Checking the password
         if check_password(payload.password, student.password):
-            # Login the student
+            print(request.user)
             login(request, student)
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
         else:
             raise HttpError(401, "Incorrect password")
     except Student.DoesNotExist:
-        raise HttpError(401, "Student doesn't exists")
-    except ValidationError as err:
-        raise HttpError(400, f"Validation error occured: {err}")
+        raise HttpError(401, "Student doesn't exist")
     except Exception as e:
-        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
+        return JsonResponse({"error": f"An unexpected error occurred: {e}"}, status=500)
 
 
 # Logout Router
-@auth_router.post("/logout/")
+@auth_router.post("/logout/", auth=JWTAuth())
 def logout_student(request, *args, **kwargs):
     try:
-        # Flushing the current user session
-        request.session.flush()
-        # Clearing the details
-        request.user.id = None
-        request.user.pk = None
-        request.user.clerk_id = None
-        request.user.first_name = ""
-        request.user.last_name = ""
-        request.user.avatar_url = ""
-        request.user.username = ""
-        request.user.email = ""
-        request.user.phone_number = ""
-        request.user.password = ""
+        logout(request)
         return JsonResponse({"message": "Student logged out successfully"}, status=200)
     except ValidationError as err:
         raise HttpError(400, f"Validation error occured: {err}")

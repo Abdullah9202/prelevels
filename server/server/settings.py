@@ -56,15 +56,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # Cors Middleware
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # Clerk Middleware
-    'clerk_django.middlewares.clerk.ClerkAuthMiddleware'
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # My Middlewares
+    "corsheaders.middleware.CorsMiddleware",
+    'clerk_django.middlewares.clerk.ClerkAuthMiddleware'
 ]
 
 ROOT_URLCONF = 'server.urls'

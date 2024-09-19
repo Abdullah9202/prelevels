@@ -13,12 +13,12 @@ from bundle.models import Bundle
 
 
 # Student model
-class Student(AbstractBaseUser):
+class Student(models.Model):
     # Primary key - Auto incrementing Integer ID
     id = models.BigAutoField(primary_key=True, editable=False, unique=True, null=False)
     
     # Clerk ID
-    clerk_id = models.CharField(max_length=150, editable=False, null=True)
+    clerk_id = models.CharField(max_length=150, editable=False, unique=True, null=True)
     
     # Student personal information
     first_name = models.CharField(_("First Name"), max_length=50, null=False, blank=False)

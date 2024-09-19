@@ -97,19 +97,19 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Login Router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, *args, **kwargs):
-    try: 
-        if request.clerk_user.is_authenticated:
-            # Getting the student using clerk_id
-            student = get_object_or_404(Student, clerk_id=request.clerk_user["id"])
-            # Logging in the student
-            login(request, student)
+    # Getting Clerk user data from the request
+    clerk_user = request.clerk_user  
+    if clerk_user:
+        try:
+            student = get_object_or_404(Student, clerk_id=clerk_user['id'])
+            login(request, student)  # Django login to attach the session
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
-        else:
-            raise HttpError(401, "User is not authenticated.")
-    except Student.DoesNotExist:
-        raise HttpError(401, "Student doesn't exist")
-    except Exception as e:
-        return JsonResponse({"error": f"An unexpected error occurred: {e}"}, status=500)
+        except Student.DoesNotExist:
+            raise HttpError(401, "Student does not exist.")
+        except Exception as e:
+            return JsonResponse({"error": f"Unexpected error: {e}"}, status=500)
+    else:
+        raise HttpError(401, "User is not authenticated.")
 
 
 # Logout Router
@@ -126,20 +126,21 @@ def logout_student(request, *args, **kwargs):
 
 
 # Student detail router
-@auth_router.get("/{student_id}/", response={200: GetStudentDetailSchema, codes_4xx: dict})
+@auth_router.get("/me/", response={200: GetStudentDetailSchema, codes_4xx: dict})
 def get_student_details(request, *args, **kwargs):
-    try:
-        if request.clerk_user.is_authenticated:
-            # Getting the student
-            student = get_object_or_404(Student, clerk_id=request.clerk_user["id"])
-            # Serializing
+    # Get Clerk user data from the request
+    clerk_user = request.clerk_user
+    if clerk_user:
+        try:
+            # Fetch the student using the clerk_id
+            student = get_object_or_404(Student, clerk_id=clerk_user['id'])
+            # Serialize student details
             serialized_student = StudentSerializer(student).data
+            # Return the serialized data
             return JsonResponse(serialized_student, status=200)
-        else:
-            raise HttpError(401, "User is not authenticated.")
-    except HttpError as e:
-        logger.error(f"HttpError: {e}")
-        raise e
-    except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
+        except Student.DoesNotExist:
+            raise HttpError(404, "Student not found.")
+        except Exception as e:
+            return JsonResponse({"error": f"Unexpected error: {e}"}, status=500)
+    else:
+        raise HttpError(401, "User is not authenticated.")

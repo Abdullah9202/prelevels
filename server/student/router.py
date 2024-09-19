@@ -2,7 +2,7 @@
 import logging
 from uuid import UUID
 # Django imports
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
@@ -34,12 +34,6 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
     
     try:
-        # Using the serializer to validate the input data
-        serializer = StudentSerializer(data=payload.dict())
-        if not serializer.is_valid():
-            logger.error(f"Validation error: {serializer.errors}")
-            raise HttpError(400, "Invalid input data.")
-        
         # Checking for existing user
         if Student.objects.filter(email=payload.email).exists():
             logger.warning("Registration failed: Email already exists.")
@@ -51,12 +45,18 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
             logger.warning("Registration failed: Phone number already exists.")
             raise HttpError(400, "Phone number is already registered.")
         
+        # Using the serializer to validate the input data
+        serializer = StudentSerializer(data=payload.dict())
+        if not serializer.is_valid():
+            logger.error(f"Validation error: {serializer.errors}")
+            raise HttpError(400, "Invalid input data.")
+        
         # Hashing the password
         hashed_password = make_password(payload.password)
         
         # Registering the new student
         new_student = Student(
-            clerkId=payload.clerkId,
+            clerk_id=payload.clerk_id,
             first_name=payload.first_name,
             last_name=payload.last_name,
             email=payload.email,
@@ -80,9 +80,9 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
     except HttpError as err:
         logger.error(f"HttpError: {err}")
         raise err
-    except Exception as err:
+    except Exception as e:
         logger.error(f"Unexpected error: {str(err)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later")
+        return JsonResponse({"error": f"An unexpected error occurred. Please try again later"}, status=500)
 
 
 # AZAK
@@ -91,30 +91,46 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Login Router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, payload: LoginSchema, *args, **kwargs):
-    try:
+    try: 
         # Fetching the student
         student = Student.objects.get(phone_number=payload.phone_number)
         # Checking the password
         if check_password(payload.password, student.password):
             # Login the student
             login(request, student)
-            return JsonResponse({"message": "Student logged in successfully"})
+            return JsonResponse({"message": "Student logged in successfully"}, status=200)
         else:
             raise HttpError(401, "Incorrect password")
     except Student.DoesNotExist:
         raise HttpError(401, "Student doesn't exists")
+    except ValidationError as err:
+        raise HttpError(400, f"Validation error occured: {err}")
+    except Exception as e:
+        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
 
 
 # Logout Router
 @auth_router.post("/logout/")
 def logout_student(request, *args, **kwargs):
     try:
-        logout(request)
+        # Flushing the current user session
+        request.session.flush()
+        # Clearing the details
+        request.user.id = None
+        request.user.pk = None
+        request.user.clerk_id = None
+        request.user.first_name = ""
+        request.user.last_name = ""
+        request.user.avatar_url = ""
+        request.user.username = ""
+        request.user.email = ""
+        request.user.phone_number = ""
+        request.user.password = ""
         return JsonResponse({"message": "Student logged out successfully"}, status=200)
-    except ValidationError as e:
-        raise HttpError(400, f"Validation error occured: {e}")
+    except ValidationError as err:
+        raise HttpError(400, f"Validation error occured: {err}")
     except Exception as e:
-        raise HttpError(500, f"An unexpected error occured: {e}")
+        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
 # =============================================================================================
 
 

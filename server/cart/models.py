@@ -1,5 +1,5 @@
 # Python imports
-from uuid import uuid4
+import uuid
 # Django imports
 from django.db import models
 from django.conf import settings
@@ -9,11 +9,11 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 class CartItem(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
                             related_name="cart_items", null=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.UUIDField(default=uuid4, editable=False)
+    object_id = models.UUIDField(default=uuid.uuid4, editable=False)
     content_object = GenericForeignKey('content_type', 'object_id')
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
@@ -30,7 +30,7 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
                                 related_name="cart", null=True)
     items = models.ManyToManyField(CartItem, verbose_name=_("Cart Items"), related_name="cart")

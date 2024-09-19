@@ -2,9 +2,9 @@ django
 django-cors-headers
 django-ninja
 rav
-python-dotenv~=1.0.1
+python-dotenv
 psycopg2
-pydantic[email]~=2.8.2
+pydantic[email]
 django-ninja-jwt[crypto]
 django-phonenumber-field[phonenumbers]
 Pillow

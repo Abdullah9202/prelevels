@@ -14,10 +14,10 @@ from bundle.models import Bundle
 # Student model
 class Student(models.Model):
     # Unique identifier for each student
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     
     # Clerk ID
-    clerkId = models.CharField(max_length=150, null=True)
+    clerk_id = models.CharField(max_length=150, null=True)
     
     # Student personal information
     first_name = models.CharField(_("First Name"), max_length=50, null=False, blank=False)

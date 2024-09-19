@@ -29,7 +29,7 @@ class LoginSchema(Schema):
 
 # Register Schema
 class RegisterSchema(Schema):
-    clerkId: str
+    clerk_id: str
     first_name: str
     last_name: str
     email: EmailStr

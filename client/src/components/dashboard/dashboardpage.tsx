@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const {user} = useUser();
   
   return (
-    <div className="flex-1 p-6">
+    <div className="flex-1 p-6 lg:py-7 py-16">
       {/* Top Section */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-semibold">Welcome Back, {user?.firstName} 👋</h1>

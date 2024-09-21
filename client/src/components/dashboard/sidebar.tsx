@@ -14,17 +14,17 @@ const Sidebar = () => {
   return (
     <div>
       {/* Mobile Header with Hamburger Menu */}
-      <div className="flex items-center justify-between p-6 md:hidden">
+      <div className="flex bg-white  items-center justify-between max-w-full p-4 md:hidden">
         <div className="text-2xl font-semibold text-red-600">
-          <span className="hidden md:block">Prelevels</span>
+          <span className="">Prelevels</span>
         </div>
         <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
-          <FaBars />
+          <FaBars size={24} /> {/* Increased size */}
         </button>
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-md transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 lg:min-h-screen`}>
+      <div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-md transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:min-h-screen z-50`}>
         <div className="p-6 text-2xl font-semibold text-red-600 flex items-center justify-between">
           <span className="hidden md:block">Prelevels</span>
           <button className='px-6' onClick={() => router.push('/')}>
@@ -54,9 +54,10 @@ const Sidebar = () => {
       </div>
 
       {/* Overlay for Mobile */}
-      {isOpen && <div className="fixed inset-0 bg-black opacity-50 md:hidden" onClick={toggleSidebar}></div>}
+      {isOpen && <div className="fixed inset-0 bg-black opacity-50 z-40 md:hidden" onClick={toggleSidebar}></div>}
     </div>
   );
 };
 
 export default Sidebar;
+

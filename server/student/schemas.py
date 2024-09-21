@@ -18,6 +18,10 @@ def phone_number_validator(cls, value):
     return value
 
 
+class HelloSchema(Schema):
+    msg: Optional[str]
+
+
 # Login Schema
 class LoginSchema(Schema):
     phone_number: str

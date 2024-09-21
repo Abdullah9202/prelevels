@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import AbstractBaseUser
 # My Files
 from questionbank.models import QuestionBank
 from course.models import Course
@@ -13,11 +14,11 @@ from bundle.models import Bundle
 
 # Student model
 class Student(models.Model):
-    # Unique identifier for each student
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
+    # Primary key - Auto incrementing Integer ID
+    id = models.BigAutoField(primary_key=True, editable=False, unique=True, null=False)
     
     # Clerk ID
-    clerk_id = models.CharField(max_length=150, null=True)
+    clerk_id = models.CharField(max_length=150, editable=False, unique=True, null=True)
     
     # Student personal information
     first_name = models.CharField(_("First Name"), max_length=50, null=False, blank=False)

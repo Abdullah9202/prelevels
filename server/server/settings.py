@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# Python imports
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -55,13 +56,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # Cors Middleware
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # My Middlewares
+    "corsheaders.middleware.CorsMiddleware",
+    'clerk_django.middlewares.clerk.ClerkAuthMiddleware'
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -167,3 +169,9 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "x-requested-with",
 )
+
+# Clerk Settings
+ALLOWED_PARTIES = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]

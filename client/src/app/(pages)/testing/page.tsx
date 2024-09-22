@@ -5,7 +5,7 @@ import { json } from 'stream/consumers';
 export default function Testing() {
   // Define the user data
   const User = {
-    clerkId: "123",
+    clerk_id: "123",
     first_name: "Jack",
     last_name: "Harper",
     email: "jack123@gmail.com",

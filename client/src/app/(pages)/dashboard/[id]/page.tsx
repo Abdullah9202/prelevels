@@ -5,9 +5,10 @@ export default function Dashboard({ params }: { params: { id: string } }) {
   const { id } = params;
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
       <Sidebar />
       <DashboardPage />
     </div>
+
   );
 }

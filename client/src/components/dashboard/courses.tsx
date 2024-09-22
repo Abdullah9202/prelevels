@@ -2,7 +2,7 @@ import React from 'react';
 
 const Courses = () => {
   return (
-    <div className="mt-8 bg-white p-6 shadow-md rounded-lg">
+    <div className="mt-8 bg-white p-6 shadow-md rounded-lg mx-auto">
       <h2 className="text-xl font-semibold mb-4">Your Courses</h2>
       <div className="grid grid-cols-3 gap-4">
         <CourseCard

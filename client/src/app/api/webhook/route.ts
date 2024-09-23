@@ -5,7 +5,7 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 
 interface User {
 
-  clerkId: string;
+  clerk_id: string;
   first_name: string | null;
   last_name: string | null;
   email: string;
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 
     const user: User = {
       
-      clerkId: id,
+      clerk_id: id,
       first_name: first_name || null,
       last_name: last_name || null,
       email: email_addresses[0].email_address,

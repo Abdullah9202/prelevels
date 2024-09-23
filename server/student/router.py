@@ -109,7 +109,7 @@ def login_student(request, *args, **kwargs):
         except Exception as e:
             return JsonResponse({"error": f"Unexpected error: {e}"}, status=500)
     else:
-        raise HttpError(401, "User is not authenticated.")
+        raise HttpError(401, "Student is not authenticated.")
 
 
 # Logout Router

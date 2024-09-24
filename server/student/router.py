@@ -98,14 +98,14 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, *args, **kwargs):
     # Getting Clerk user data from the request
-    clerk_user = request.clerk_user  
-    if clerk_user:
+    clerk_id = request.user_id  
+    if clerk_id:
         try:
             # Getting the student using clerk id
-            student = get_object_or_404(Student, clerk_id=clerk_user['id'])
+            student = get_object_or_404(Student, clerk_id=clerk_id)
             login(request, student)  # Django login to attach the session
             # Storing the relevant user data in session
-            request.session['clerk_user_id'] = clerk_user['id']
+            # request.session['clerk_user_id'] = clerk_user['id']
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
         except Student.DoesNotExist:
             raise HttpError(401, "Student does not exist.")

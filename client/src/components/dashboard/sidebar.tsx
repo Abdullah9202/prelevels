@@ -24,7 +24,7 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-md transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:min-h-screen z-50`}>
+      <div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-md transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:h-full z-50`}>
         <div className="p-6 text-2xl font-semibold text-red-600 flex items-center justify-between">
           <span className="hidden md:block">Prelevels</span>
           <button className='px-6' onClick={() => router.push('/')}>
@@ -35,10 +35,10 @@ const Sidebar = () => {
           </button>
         </div>
         <nav className="mt-6 px-5 space-y-4">
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard" className="flex items-center p-2 hover:bg-gray-100">
             <FaHome size={20} className="mr-3" /> Home
           </a>
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard/courses" className="flex items-center p-2 hover:bg-gray-100">
             <FaBook size={20} className="mr-3" /> Courses
           </a>
           <a href="#" className="flex items-center p-2 hover:bg-gray-100">

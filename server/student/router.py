@@ -1,5 +1,6 @@
 # Python imports
 import logging
+import json
 from uuid import UUID
 # Django imports
 from django.contrib.auth import login, logout, authenticate
@@ -97,8 +98,10 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Login Router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 def login_student(request, *args, **kwargs):
-    # Getting Clerk user data from the request
-    clerk_id = request.user_id  
+    # Getting Clerk user data from the request and parsing it
+    data = request.body.decode('utf-8')
+    user_data = json.loads(data)
+    clerk_id = user_data.get('user_id')
     if clerk_id:
         try:
             # Getting the student using clerk id

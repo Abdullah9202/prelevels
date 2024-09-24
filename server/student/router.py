@@ -101,8 +101,11 @@ def login_student(request, *args, **kwargs):
     clerk_user = request.clerk_user  
     if clerk_user:
         try:
+            # Getting the student using clerk id
             student = get_object_or_404(Student, clerk_id=clerk_user['id'])
             login(request, student)  # Django login to attach the session
+            # Storing the relevant user data in session
+            request.session['clerk_user_id'] = clerk_user['id']
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
         except Student.DoesNotExist:
             raise HttpError(401, "Student does not exist.")

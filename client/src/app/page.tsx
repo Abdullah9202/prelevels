@@ -18,13 +18,19 @@ export default function Home() {
     const sendUserIdToBackend = async () => {
       if (isSignedIn && user) {  // Check if user is signed in
         try {
+          // Create the body JSON string
+          const body = JSON.stringify({ userId: user.id });
+
+          // Log the body
+          console.log("Request body:", body);
+
           // Send the userId to your Python backend using fetch
-          const response = await fetch("http://127.0.0.1:8000/api/student/login/", {
+          const response = await fetch("http://your-python-backend.com/api/send-user-id", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ user_id: user.id }),  // Send user.id
+            body: body,  // Send user.id
           });
 
           if (!response.ok) {

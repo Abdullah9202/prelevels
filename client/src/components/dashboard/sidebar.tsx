@@ -35,10 +35,10 @@ const Sidebar = () => {
           </button>
         </div>
         <nav className="mt-6 px-5 space-y-4">
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard" className="flex items-center p-2 hover:bg-gray-100">
             <FaHome size={20} className="mr-3" /> Home
           </a>
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard/courses" className="flex items-center p-2 hover:bg-gray-100">
             <FaBook size={20} className="mr-3" /> Courses
           </a>
           <a href="#" className="flex items-center p-2 hover:bg-gray-100">

@@ -22,15 +22,6 @@ class HelloSchema(Schema):
     msg: Optional[str]
 
 
-# Login Schema
-class LoginSchema(Schema):
-    phone_number: str
-    password: str 
-    
-    # Validating the phone number 
-    _phone_number_validator = phone_number_validator
-
-
 # Register Schema
 class RegisterSchema(Schema):
     clerk_id: str

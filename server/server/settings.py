@@ -59,11 +59,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # Clerk Middleware
+    'clerk_django.middlewares.clerk.ClerkAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # My Middlewares
+    # Cors Middleware
     "corsheaders.middleware.CorsMiddleware",
-    'clerk_django.middlewares.clerk.ClerkAuthMiddleware'
 ]
 
 ROOT_URLCONF = 'server.urls'

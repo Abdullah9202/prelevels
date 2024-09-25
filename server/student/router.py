@@ -9,21 +9,27 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from django.contrib.sessions.models import Session
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx
+# Clerk imports
+from clerk_django.client import ClerkClient
 # My Files
 from student.models import Student
 from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
-    LoginSchema, RegisterSchema, GetStudentDetailSchema, HelloSchema
+    RegisterSchema, GetStudentDetailSchema, HelloSchema
 )
 from .serializers import StudentSerializer
 
 
 # Router Init
 auth_router = Router()
+
+# Clerk Client Init
+cc = ClerkClient()
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -95,20 +101,41 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # AZAK
 # Login and logout are being managed by Clerk ()
 # =============================================================================================
-# Login Router
-@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
-def login_student(request, *args, **kwargs):
+# Session initialization Router
+@auth_router.post("/init-session/", response={codes_4xx: dict})
+def init_session(request, *args, **kwargs):
+    # Check for sessions
+    if 'clerk_user_id' in request.session:
+        print("Session Data:", dict(request.session))  # Print all session data
+        return JsonResponse({"message": "Session already active"}, status=200)
+    
+    print("Session Data before Clerk ID:", dict(request.session))
+    
     # Getting Clerk user data from the request and parsing it
     data = request.body.decode('utf-8')
     user_data = json.loads(data)
     clerk_id = user_data.get('user_id')
+    
     if clerk_id:
         try:
+            # Getting user details from Clerk using Clerk ID
+            clerk_user = cc.users.getUser(user_id=clerk_id)
+            
+            if not clerk_user:
+                raise HttpError(401, "User doesn't exists")
+            
             # Getting the student using clerk id
             student = get_object_or_404(Student, clerk_id=clerk_id)
-            login(request, student)  # Django login to attach the session
-            # Storing the relevant user data in session
-            # request.session['clerk_user_id'] = clerk_user['id']
+            
+            # Check if the user is already authenticated
+            if request.session.get('clerk_user_id') == clerk_id:
+                return JsonResponse({"message": "Student is already logged in."}, status=200)
+            
+            # Storing the Clerk user ID in session for authentication tracking
+            request.session['clerk_user_id'] = clerk_id
+            
+            print("Session Data after Clerk ID:", dict(request.session))  # Print session data after setting it
+            
             return JsonResponse({"message": "Student logged in successfully"}, status=200)
         except Student.DoesNotExist:
             raise HttpError(401, "Student does not exist.")
@@ -118,9 +145,9 @@ def login_student(request, *args, **kwargs):
         raise HttpError(401, "Student is not authenticated.")
 
 
-# Logout Router
-@auth_router.post("/logout/")
-def logout_student(request, *args, **kwargs):
+# Session closing Router
+@auth_router.post("/close-session/")
+def close_session(request, *args, **kwargs):
     try:
         logout(request)
         return JsonResponse({"message": "Student logged out successfully"}, status=200)

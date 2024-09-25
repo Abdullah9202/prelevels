@@ -9,25 +9,26 @@ import PricingSection from "@/components/main/pricingsection";
 import Footer from "@/components/main/footer";
 import Belowfooter from "@/components/main/belowfooter";
 import { useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 
 export default function Home() {
   const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
   
+   // Destructure to get both isSignedIn and user
+  const [requestSent, setRequestSent] = useState(false);  // Track if the request has been sent
+
   useEffect(() => {
     const sendUserIdToBackend = async () => {
-      if (isSignedIn && user) {  // Check if user is signed in
+      if (isSignedIn && user && !requestSent) {
         try {
-          // Create the body JSON string
           const body = JSON.stringify({ user_id: user.id });
 
-          // Send the userId to your Python backend using fetch
           const response = await fetch("http://127.0.0.1:8000/api/student/login/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: body,  // Send user.id
+            body: body,
           });
 
           if (!response.ok) {
@@ -36,14 +37,23 @@ export default function Home() {
 
           const data = await response.json();
           console.log("User ID sent successfully:", data);
+
+          // Set the state to true to prevent duplicate requests
+          setRequestSent(true);
         } catch (error) {
           console.error("Error sending user ID:", error);
         }
       }
     };
 
-    sendUserIdToBackend();  // Call the function if user is signed in
-  }, [isSignedIn, user]);  // Effect runs when isSignedIn or user changes
+    // Send the userId if signed in
+    sendUserIdToBackend();
+
+    // Reset requestSent to false when the user logs out
+    if (!isSignedIn) {
+      setRequestSent(false);
+    }
+  }, [isSignedIn, user, requestSent]);    // Effect runs when isSignedIn or user changes
   
   return (
     <div>

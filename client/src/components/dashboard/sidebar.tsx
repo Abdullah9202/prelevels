@@ -2,10 +2,13 @@
 import React, { useState } from 'react';
 import { FaHome, FaBook, FaQuestion, FaChartBar, FaSignOutAlt, FaBars } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { useUser } from "@clerk/nextjs";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { user } = useUser();
+  const dashboardUrl = user ? `/dashboard/${user.id}` : "/dashboard";
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -35,7 +38,7 @@ const Sidebar = () => {
           </button>
         </div>
         <nav className="mt-6 px-5 space-y-4">
-          <a href="/dashboard" className="flex items-center p-2 hover:bg-gray-100">
+          <a href={dashboardUrl} className="flex items-center p-2 hover:bg-gray-100">
             <FaHome size={20} className="mr-3" /> Home
           </a>
           <a href="/dashboard/courses" className="flex items-center p-2 hover:bg-gray-100">

@@ -10,3 +10,4 @@ django-ninja-jwt[crypto]
 django-phonenumber-field[phonenumbers]
 Pillow
 phonenumbers
+pandas

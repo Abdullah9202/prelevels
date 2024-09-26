@@ -44,7 +44,7 @@ const Sidebar = () => {
           <a href="/dashboard/courses" className="flex items-center p-2 hover:bg-gray-100">
             <FaBook size={20} className="mr-3" /> Courses
           </a>
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard/question-bank" className="flex items-center p-2 hover:bg-gray-100">
             <FaQuestion size={20} className="mr-3" /> Question Banks
           </a>
           <a href="#" className="flex items-center p-2 hover:bg-gray-100">

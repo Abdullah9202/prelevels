@@ -9,39 +9,45 @@ import PricingSection from "@/components/main/pricingsection";
 import Footer from "@/components/main/footer";
 import Belowfooter from "@/components/main/belowfooter";
 import { useUser } from "@clerk/nextjs";
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
   const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
-  
-   // Destructure to get both isSignedIn and user
-  const [requestSent, setRequestSent] = useState(false);  // Track if the request has been sent
 
   useEffect(() => {
     const sendUserIdToBackend = async () => {
-      if (isSignedIn && user && !requestSent) {
-        try {
-          const body = JSON.stringify({ user_id: user.id });
+      if (isSignedIn && user) {
+        const sessionInitialized = localStorage.getItem("sessionInitialized");
 
-          const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: body,
-          });
+        if (!sessionInitialized) {
+          try {
+            const body = JSON.stringify({ user_id: user.id });
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: body,
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("User ID sent successfully:", data);
+
+            if (data.session_active) {
+              // Updating the local storage to indicate that the session has been initialized
+              localStorage.setItem("sessionInitialized", "true");
+            } else {
+              // If session is not active, remove the sessionInitialized flag
+              localStorage.removeItem("sessionInitialized");
+            }
+          } catch (error) {
+            console.error("Error sending user ID:", error);
           }
-
-          const data = await response.json();
-          console.log("User ID sent successfully:", data);
-
-          // Set the state to true to prevent duplicate requests
-          setRequestSent(true);
-        } catch (error) {
-          console.error("Error sending user ID:", error);
         }
       }
     };
@@ -49,25 +55,25 @@ export default function Home() {
     // Send the userId if signed in
     sendUserIdToBackend();
 
-    // Reset requestSent to false when the user logs out
-    if (!isSignedIn) {
-      setRequestSent(false);
-    }
-  }, [isSignedIn, user, requestSent]);    // Effect runs when isSignedIn or user changes
-  
+    // Cleanup function to remove session when user logs out
+    return () => {
+      if (!isSignedIn) {
+        localStorage.removeItem("sessionInitialized");
+      }
+    };
+  }, [isSignedIn, user]);
+
   return (
-    <div>
-      <Timeline/>
-      <div className="bg-[#F4F4F4] min-h-screen">
-        <Navbar/>
-        <Hero/>
-        <Service/>
-        <TestimonialsSection/>
-        <ServicesSection/>
-        <PricingSection/>
-        <Footer/>
-        <Belowfooter/>
-      </div>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <Service />
+      <TestimonialsSection />
+      <ServicesSection />
+      <PricingSection />
+      <Timeline />
+      <Footer />
+      <Belowfooter />
+    </>
   );
 }

@@ -12,7 +12,7 @@ import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useCallback } from "react";
 
-
+export default function Home() {
 // V1
 // const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
 
@@ -110,7 +110,7 @@ const LoginHandler = () => {
   return <div>Initializing Django Session...</div>;
 };
 
-export default function Home() {
+
   return (
     <>
       <Navbar />

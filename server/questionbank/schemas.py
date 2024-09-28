@@ -11,6 +11,7 @@ class QuestionBankSchema(Schema):
     question_bank_image: Optional[str] = None
     description: str = None
     additional_details: Optional[str]
+    question_file: Optional[str] = None
     price: int
     discount: Optional[int] = None
     validity: Optional[int] = None

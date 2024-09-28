@@ -1,5 +1,6 @@
 # Python imports
 import os
+import jwt
 import logging
 import json
 from uuid import UUID
@@ -105,92 +106,40 @@ def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # AZAK
 # Login and logout are being managed by Clerk
 # =============================================================================================
-# Helper function to map clerk user data on django
-def map_clerk_user_to_django(user_id, email):
-    try:
-        student = Student.objects.get(email=email)
-    except Student.DoesNotExist:
-        raise HttpError(404, "Student not found.")
-    return student
-
-# Session initialization Router
-@auth_router.post("/init-session/", response={200: dict, 401: dict, 500: dict})
-def initialize_django_session(request, *args, **kwargs):
+# Session init Router
+@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
+def init_session(request, *args, **kwargs):
+    # Getting the clerk public key
+    CLERK_PUBLIC_KEY = os.getenv('CLERK_PEM_PUBLIC_KEY')
+    
+    # Auth header
     auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        raise HttpError(401, "Authorization header is missing or invalid.")
     
-    if not auth_header:
-        return JsonResponse({"error": "Authorization header is missing."}, status=401)
+    token = auth_header.split(' ')[1] # Token
     
-    token = auth_header.split('Bearer ')[-1]
-    
-    # Calling clerk api to verify token
-    response = request.get(
-        f"{os.getenv('CLERK_API_URL')}/{token}",
-        headers={"Authorization": f"Bearer {os.getenv('CLERK_API_KEY')}"}
-    )
-
-    if response.status_code == 200:
-        session_data = response.json()
-        user_id = session_data["user_id"]
-        email = session_data["email"]
+    try:
+        # Decoding the token
+        decode_token = jwt.decode(token, CLERK_PUBLIC_KEY, algorithms=['RS256'])
         
-        # Mapping clerk user to django user
-        student = map_clerk_user_to_django(user_id, email)
+        # Getting the clerk user id from decoded token
+        clerk_user_id = decode_token.get("sub")
         
-        # Login
-        login(request, student)
+        # Finding the student using the clerk_id
+        student = Student.objects.get(clerk_id=clerk_user_id)
         
-        return JsonResponse({"message": "Django session initialized successfully."}, status=200)
-    
-    return JsonResponse({"error": "Invalid token."}, status=401)
+        # Setting up the session for student
+        request.session["student_id"] = student.id
 
-# @auth_router.post("/init-session/", response={200: dict, 401: dict, 500: dict})
-# def init_session(request, *args, **kwargs):
-#     # Check for sessions
-#     if 'clerk_user_id' in request.session:
-#         print("Session Data:", dict(request.session))  # Print all session data
-#         return JsonResponse({"message": "Session already active", "session_active": True}, status=200)
-
-#     print("Session Data before Clerk ID:", dict(request.session))
-
-#     # Getting Clerk user data from the request and parsing it
-#     user_data = json.loads(request.body.decode('utf-8'))
-#     clerk_id = user_data.get('user_id')
-
-#     if clerk_id:
-#         try:
-#             # Getting user details from Clerk using Clerk ID
-#             clerk_user = cc.users.getUser(user_id=clerk_id)
-
-#             if not clerk_user:
-#                 raise HttpError(401, "User doesn't exist")
-
-#             # Getting the student using clerk id
-#             student = get_object_or_404(Student, clerk_id=clerk_id)
-
-#             # Storing the Clerk user ID in session for authentication tracking
-#             request.session['clerk_user_id'] = clerk_id  # This line is initializing the session
-
-#             data_dict = {
-#                 "user_id": clerk_id,
-#                 "clerk_user": clerk_user,
-#                 "student": student,
-#                 "first_name": student.first_name,
-#                 "last_name": student.last_name,
-#                 "email": student.email,
-#                 "password": student.password
-#             }
-
-#             print(data_dict)
-
-#             if 'clerk_user_id' in request.session:
-#                 print("Session Data after Clerk ID:", dict(request.session))
-#                 return JsonResponse({"message": "Student logged in successfully", "session_active": True}, status=200)
-
-#         except Student.DoesNotExist:
-#             raise HttpError(401, "Student does not exist.")
-#     return JsonResponse({"error": "An unexpected error occurred. Please try again later"}, status=500)
-
+        # Returning
+        return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
+    except jwt.ExpiredSignatureError:
+        raise HttpError(401, "Token has expired.", status=401)
+    except jwt.InvalidTokenError:
+        raise HttpError(401, "Invalid token.", status=401)
+    except Exception as e:
+        raise HttpError(500, f"An unexpected error occured: {e}")
 
 
 # Session closing Router

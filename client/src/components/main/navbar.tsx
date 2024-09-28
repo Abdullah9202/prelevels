@@ -77,7 +77,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
               <UserButton />
               <button
-                className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700"
+                className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}
               >
                 My dashboard

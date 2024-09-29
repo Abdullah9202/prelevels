@@ -36,7 +36,7 @@ export default function SolveQuestion() {
             <div key={index} className="px-14 pb-4">
                 <div className="flex justify-between items-center">
                     <p>202{index}</p>
-                    <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">Start Test</button>
+                    <button onClick={()=> router.push('/dashboard/question-bank/solve/mode')} className="bg-red-600 text-white px-4 py-1 rounded-3xl">Start Test</button>
                 </div>
                 <hr className="border-1 border-gray-400 w-full mt-2" />
             </div>
@@ -54,7 +54,7 @@ export default function SolveQuestion() {
             <div key={index} className="px-14 pb-4">
                 <div className="flex justify-between items-center">
                     <p>202{index}</p>
-                    <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">Start Test</button>
+                    <button onClick={()=> router.push('/dashboard/question-bank/solve/mode')} className="bg-red-600 text-white px-4 py-1 rounded-3xl">Start Test</button>
                 </div>
                 <hr className="border-1 border-gray-400 w-full mt-2" />
             </div>

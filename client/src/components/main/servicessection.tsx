@@ -79,7 +79,7 @@ export default function ServicesSection() {
             <p className="text-gray-600  mb-6">
               We don’t like to brag, but we don’t mind letting our students do it for us. Here are a few nice things folks have said about our service over the years.
             </p>
-            <button className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
+            <button className="bg-red-500 text-white py-2 px-5 rounded-3xl hover:bg-red-600">
               Explore More
             </button>
           </div>

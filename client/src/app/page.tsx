@@ -11,6 +11,7 @@ import Belowfooter from "@/components/main/belowfooter";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useCallback } from "react";
+import React from "react";
 
 export default function Home() {
 // V1

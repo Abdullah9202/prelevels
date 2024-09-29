@@ -40,9 +40,9 @@ export default function Footer() {
           </p>
           <a
             href="#"
-            className="inline-flex items-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+            className="inline-flex items-center bg-green-500 text-white py-2 px-5 rounded-3xl hover:bg-green-600"
           >
-            <FaWhatsapp className="mr-2 text-xs" /> Join WhatsApp Community
+            <FaWhatsapp className="mr-2 text-xl" /> Join WhatsApp Community
           </a>
         </div>
       </div>

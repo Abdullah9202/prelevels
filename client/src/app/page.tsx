@@ -127,51 +127,6 @@ const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn a
       };
     }, [initializeSession, isSignedIn]);
 
-
-// V2
-// const LoginHandler = () => {
-//   const { getToken } = useAuth();
-
-//   const initializeSession = useCallback(async () => {
-//     try {
-//       // Get the Clerk session token
-//       const token = await getToken();
-//       if (!token) {
-//         console.log("No token found, user is not authenticated.");
-//         return;
-//       }
-
-//       console.log("Token retrieved:", token);
-
-//       // Send the token to your Django backend to initialize the session
-//       const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-//         method: "POST",
-//         headers: {
-//           "Authorization": `Bearer ${token}`,
-//           "Content-Type": "application/json",
-//         },
-//       });
-
-//       console.log("Request sent to backend");
-
-//       const data = await response.json();
-//       if (response.ok) {
-//         console.log("Django session initialized:", data.message);
-//       } else {
-//         console.log("Error initializing session:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Failed to initialize session:", error);
-//     }
-//   }, [getToken]);
-
-//   useEffect(() => {
-//     initializeSession();
-//   }, [initializeSession]);
-
-// };
-
-
   return (
     <>
       <Timeline />

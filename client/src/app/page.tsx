@@ -14,8 +14,9 @@ import { useEffect, useCallback } from "react";
 import React from "react";
 
 export default function Home() {
+  const { getToken } = useAuth();
 // V1
-// const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
+const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
 
 // useEffect(() => {
 //   const sendUserIdToBackend = async () => {
@@ -66,61 +67,120 @@ export default function Home() {
 //   };
 // }, [isSignedIn, user]);
 
+    const initializeSession = useCallback(async () => {
+      try {
+        // Get the Clerk session token
+        const token = await getToken();
+        if (!token) {
+          console.log("No token found, user is not authenticated.");
+          return;
+        }
+
+        if (!user) {
+          console.log("No user found, user is not authenticated.");
+          return;
+        }
+
+        // Check if session has already been initialized
+        const sessionInitialized = localStorage.getItem("sessionInitialized");
+        if (!sessionInitialized) {
+          // Proceed with session initialization if not already initialized
+          console.log("Token retrieved:", token);
+          const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user_id: user.id }),
+          });
+          console.log("Request sent to backend");
+
+          const data = await response.json();
+
+          if (response.ok) {
+            console.log("Django session initialized:", data.message);
+
+            // Set session initialization status in local storage
+            if (data.session_active) {
+              localStorage.setItem("sessionInitialized", "true");
+            } else {
+              localStorage.removeItem("sessionInitialized");
+            }
+          } else {
+            console.log("Error initializing session:", data.error);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing session:", error);
+      }
+    }, [getToken, user]);
+
+    useEffect(() => {
+      initializeSession();
+
+      // Cleanup when the user signs out
+      return () => {
+        if (!isSignedIn) {
+          localStorage.removeItem("sessionInitialized");
+        }
+      };
+    }, [initializeSession, isSignedIn]);
+
 
 // V2
-const LoginHandler = () => {
-  const { getToken } = useAuth();
+// const LoginHandler = () => {
+//   const { getToken } = useAuth();
 
-  const initializeSession = useCallback(async () => {
-    try {
-      // Get the Clerk session token
-      const token = await getToken();
-      if (!token) {
-        console.log("No token found, user is not authenticated.");
-        return;
-      }
+//   const initializeSession = useCallback(async () => {
+//     try {
+//       // Get the Clerk session token
+//       const token = await getToken();
+//       if (!token) {
+//         console.log("No token found, user is not authenticated.");
+//         return;
+//       }
 
-      console.log("Token retrieved:", token);
+//       console.log("Token retrieved:", token);
 
-      // Send the token to your Django backend to initialize the session
-      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+//       // Send the token to your Django backend to initialize the session
+//       const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+//         method: "POST",
+//         headers: {
+//           "Authorization": `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       });
 
-      console.log("Request sent to backend");
+//       console.log("Request sent to backend");
 
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Django session initialized:", data.message);
-      } else {
-        console.log("Error initializing session:", data.error);
-      }
-    } catch (error) {
-      console.error("Failed to initialize session:", error);
-    }
-  }, [getToken]);
+//       const data = await response.json();
+//       if (response.ok) {
+//         console.log("Django session initialized:", data.message);
+//       } else {
+//         console.log("Error initializing session:", data.error);
+//       }
+//     } catch (error) {
+//       console.error("Failed to initialize session:", error);
+//     }
+//   }, [getToken]);
 
-  useEffect(() => {
-    initializeSession();
-  }, [initializeSession]);
+//   useEffect(() => {
+//     initializeSession();
+//   }, [initializeSession]);
 
-  return <div>Initializing Django Session...</div>;
-};
+// };
 
 
   return (
     <>
+      <Timeline />
       <Navbar />
       <Hero />
       <Service />
       <TestimonialsSection />
       <ServicesSection />
       <PricingSection />
-      <Timeline />
       <Footer />
       <Belowfooter />
     </>

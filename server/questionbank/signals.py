@@ -36,7 +36,7 @@ def process_excel_file(question_bank, file_extension):
     for sheet in sheets_in_file:
         for _, row in df.iterrows():
             # Creating the question
-            Question.objects.create(
+            question = Question.objects.create(
                 question_bank=question_bank,
                 year=sheet,
                 category="Yearly" if sheet.startswith('20') else "Topical",
@@ -52,10 +52,17 @@ def process_excel_file(question_bank, file_extension):
                 if option in ['A', 'B', 'C', 'D', 'E']:
                     # Creating the options
                     Option.objects.create(
-                        question="Current Question",
+                        question=question,
                         option_text=row[option],
                         is_correct=True if row['Correct Option'] == option else False,
-                        why_correct_option=row['Why Correct Option']
+                        is_active=True,
                     )
                 else:
                     raise ValidationError('Invalid format for options.')
+            
+            # Creating why correct option
+            WhyCorrectOption.objects.create(
+                question=question,
+                why_correct_option_text=row['Why Correct Option'],
+                is_active=True,
+            )

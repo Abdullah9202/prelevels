@@ -17,7 +17,7 @@ class QuestionBank(models.Model):
     question_bank_image = models.URLField(_("Question bank image"), null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    question_file = models.FileField(_("Question File"), upload_to="upload_question_file/question_files/", null=True, blank=True)
+    question_file = models.FileField(_("Question File"), upload_to="questionbank/Uploaded question files/Excel sheets/", null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
     validity = models.IntegerField(_("Validity"), null=True, blank=True)

@@ -54,7 +54,7 @@ class Question(models.Model):
     # Foreign Key for question bank (One to Many)
     question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
                                         on_delete=models.CASCADE)
-    year = models.IntegerField(_("Year"), null=False)
+    year = models.CharField(_("Year"), null=False)
     category = models.CharField(_("Category"), max_length=50, null=False)
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)

@@ -31,7 +31,7 @@ def process_question_file(sender, instance, created, **kwargs):
                 # Creating the question
                 question = Question.objects.create(
                     question_bank=instance,
-                    year=sheet if sheet else 2022,  # Default year if no sheet name
+                    year=sheet if sheet else "2000+",  # Default year if no sheet name
                     category="Yearly" if sheet and sheet.startswith('20') else "Topical",
                     subject=row['Subject'],
                     topic=row['Topic'],

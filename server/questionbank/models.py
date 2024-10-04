@@ -17,7 +17,7 @@ class QuestionBank(models.Model):
     question_bank_image = models.URLField(_("Question bank image"), null=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    question_file = models.FileField(_("Question File"), upload_to="upload_question_file/question_files/", null=True, blank=True)
+    question_file = models.FileField(_("Question File"), upload_to="questionbank/Uploaded question files/Excel sheets/", null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
     validity = models.IntegerField(_("Validity"), null=True, blank=True)
@@ -54,7 +54,7 @@ class Question(models.Model):
     # Foreign Key for question bank (One to Many)
     question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
                                         on_delete=models.CASCADE)
-    year = models.IntegerField(_("Year"), null=False)
+    year = models.CharField(_("Year"), null=False)
     category = models.CharField(_("Category"), max_length=50, null=False)
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)
@@ -95,9 +95,6 @@ class Option(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
-    # One-to-one relationship with WhyCorrectOption (Each why correct statement will be unique to each option)
-    why_correct_option = models.OneToOneField("questionbank.WhyCorrectOption", verbose_name=_("Why Correct Option"),
-                                                on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Option")
@@ -113,6 +110,9 @@ class Option(models.Model):
 # Why Correct Option Model
 class WhyCorrectOption(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
+    # Foreign key for question
+    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="why_correct_option",
+                                                on_delete=models.CASCADE, null=True, blank=True)
     why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)

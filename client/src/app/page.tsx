@@ -15,58 +15,59 @@ import React from "react";
 
 export default function Home() {
   const { getToken } = useAuth();
-// V1
-const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
+  // V1
+  const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
 
-// useEffect(() => {
-//   const sendUserIdToBackend = async () => {
-//     if (isSignedIn && user) {
-//       const sessionInitialized = localStorage.getItem("sessionInitialized");
+  // useEffect(() => {
+  //   const sendUserIdToBackend = async () => {
+  //     if (isSignedIn && user) {
+  //       const sessionInitialized = localStorage.getItem("sessionInitialized");
 
-//       if (!sessionInitialized) {
-//         try {
-//           const body = JSON.stringify({ user_id: user.id });
+  //       if (!sessionInitialized) {
+  //         try {
+  //           const body = JSON.stringify({ user_id: user.id });
 
-//           const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-//             method: "POST",
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//             body: body,
-//           });
+  //           const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: body,
+  //           });
 
-//           if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//           }
+  //           if (!response.ok) {
+  //             throw new Error(`HTTP error! status: ${response.status}`);
+  //           }
 
-//           const data = await response.json();
-//           console.log("User ID sent successfully:", data);
+  //           const data = await response.json();
+  //           console.log("User ID sent successfully:", data);
 
-//           if (data.session_active) {
-//             // Updating the local storage to indicate that the session has been initialized
-//             localStorage.setItem("sessionInitialized", "true");
-//           } else {
-//             // If session is not active, remove the sessionInitialized flag
-//             localStorage.removeItem("sessionInitialized");
-//           }
-//         } catch (error) {
-//           console.error("Error sending user ID:", error);
-//         }
-//       }
-//     }
-//   };
+  //           if (data.session_active) {
+  //             // Updating the local storage to indicate that the session has been initialized
+  //             localStorage.setItem("sessionInitialized", "true");
+  //           } else {
+  //             // If session is not active, remove the sessionInitialized flag
+  //             localStorage.removeItem("sessionInitialized");
+  //           }
+  //         } catch (error) {
+  //           console.error("Error sending user ID:", error);
+  //         }
+  //       }
+  //     }
+  //   };
 
-//   // Send the userId if signed in
-//   sendUserIdToBackend();
+  //   // Send the userId if signed in
+  //   sendUserIdToBackend();
 
-//   // Cleanup function to remove session when user logs out
-//   return () => {
-//     if (!isSignedIn) {
-//       localStorage.removeItem("sessionInitialized");
-//     }
-//   };
-// }, [isSignedIn, user]);
+  //   // Cleanup function to remove session when user logs out
+  //   return () => {
+  //     if (!isSignedIn) {
+  //       localStorage.removeItem("sessionInitialized");
+  //     }
+  //   };
+  // }, [isSignedIn, user]);
 
+    // V2
     const initializeSession = useCallback(async () => {
       try {
         // Get the Clerk session token
@@ -126,51 +127,6 @@ const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn a
         }
       };
     }, [initializeSession, isSignedIn]);
-
-
-// V2
-// const LoginHandler = () => {
-//   const { getToken } = useAuth();
-
-//   const initializeSession = useCallback(async () => {
-//     try {
-//       // Get the Clerk session token
-//       const token = await getToken();
-//       if (!token) {
-//         console.log("No token found, user is not authenticated.");
-//         return;
-//       }
-
-//       console.log("Token retrieved:", token);
-
-//       // Send the token to your Django backend to initialize the session
-//       const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-//         method: "POST",
-//         headers: {
-//           "Authorization": `Bearer ${token}`,
-//           "Content-Type": "application/json",
-//         },
-//       });
-
-//       console.log("Request sent to backend");
-
-//       const data = await response.json();
-//       if (response.ok) {
-//         console.log("Django session initialized:", data.message);
-//       } else {
-//         console.log("Error initializing session:", data.error);
-//       }
-//     } catch (error) {
-//       console.error("Failed to initialize session:", error);
-//     }
-//   }, [getToken]);
-
-//   useEffect(() => {
-//     initializeSession();
-//   }, [initializeSession]);
-
-// };
-
 
   return (
     <>

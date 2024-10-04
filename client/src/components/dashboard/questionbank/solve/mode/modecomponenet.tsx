@@ -45,7 +45,7 @@ export default function ModeComponent() {
               </select>
             </div>
             <div className="text-center">
-              <button className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+              <button onClick={()=> router.push('/dashboard/question-bank/solve/mode/Test')} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
                 Start Solving
               </button>
             </div>
@@ -70,7 +70,7 @@ export default function ModeComponent() {
               Test information: <br /> Full parts (32 minutes - 4 parts - 40 questions)
             </p>
             <div className="text-center">
-              <button className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+              <button onClick={()=> router.push('/dashboard/question-bank/solve/mode/Test')} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
                 Start Solving
               </button>
             </div>

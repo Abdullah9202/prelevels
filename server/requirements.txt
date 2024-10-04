@@ -1,6 +1,9 @@
 django
 django-cors-headers
 django-ninja
+djangorestframework
+markdown
+django-filter
 clerk-django
 rav
 python-dotenv

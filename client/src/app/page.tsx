@@ -17,9 +17,9 @@ import React from "react";
 export default function Home() {
   const { getToken } = useAuth();
   
-  // V1
   const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
-
+  
+  // V1
   // useEffect(() => {
   //   const sendUserIdToBackend = async () => {
   //     if (isSignedIn && user) {

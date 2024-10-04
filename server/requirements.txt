@@ -16,3 +16,4 @@ phonenumbers
 pandas
 openpyxl
 cryptography
+requests

@@ -35,7 +35,7 @@ load_dotenv()
 auth_router = Router()
 
 # Clerk Client Init
-cc = ClerkClient()
+clerk_client = ClerkClient()
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -112,7 +112,7 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Login and logout are being managed by Clerk
 # =============================================================================================
 # Session init Router
-# Session init Router
+# V1
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
     try:
@@ -122,33 +122,37 @@ async def init_session(request, *args, **kwargs):
         pem_file_path = os.path.join(root_dir_path, 'auth.pem')
         with open(pem_file_path, 'r') as pem_file:
             CLERK_PUBLIC_KEY = pem_file.read()
-        
-        if not CLERK_PUBLIC_KEY:
-            logger.error("Public key is not found in the PEM file.")
-            raise HttpError(500, "Internal server error. Contact customer support.")
-        
+
+        print(CLERK_PUBLIC_KEY)
+
+        # Ensure the public key is valid
+        if not CLERK_PUBLIC_KEY.startswith("-----BEGIN PUBLIC KEY-----"):
+            raise ValueError("Invalid public key format.")
+
+        clerk_public_key = CLERK_PUBLIC_KEY
+
         # Auth header
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
             raise HttpError(401, "Authorization header is missing or invalid.")
-        
+
         token = auth_header.split(' ')[1]  # Extract the token from the header
-        
+
         # Decode the token using the public key from the PEM file
-        decode_token = jwt.decode(token, CLERK_PUBLIC_KEY, algorithms=['RS256'])
-        
+        decode_token = jwt.decode(token, clerk_public_key, algorithms=['RS256'])
+
         # Get the Clerk user ID from the decoded token
         clerk_user_id = decode_token.get("sub")
-        
+
         # Find the student using the clerk_id
-        student = await Student.objects.agetget(clerk_id=clerk_user_id)
-        
+        student = await Student.objects.aget(clerk_id=clerk_user_id)
+
         # Set up the session for the student
         request.session["student_id"] = student.id
-        
+
         # Return a success response
         return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
-    
+
     except jwt.ExpiredSignatureError:
         raise HttpError(401, "Token has expired.")
     except jwt.InvalidTokenError:
@@ -158,6 +162,7 @@ async def init_session(request, *args, **kwargs):
     except Exception as e:
         logger.error(f"Unexpected error occurred: {e}")
         raise HttpError(500, f"An unexpected error occurred: {e}")
+
 
 
 # Session closing Router

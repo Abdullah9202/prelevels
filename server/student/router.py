@@ -113,66 +113,66 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # =============================================================================================
 # Session init Router
 # V1
-# @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-# async def init_session(request, *args, **kwargs):
-#     try:
-#         # Finding the root dir path
-#         root_dir_path = Path(__file__).resolve().parent.parent.parent
-#         # Reading the public key from the PEM file
-#         pem_file_path = os.path.join(root_dir_path, 'auth.pem')
-#         with open(pem_file_path, 'r') as pem_file:
-#             CLERK_PUBLIC_KEY = pem_file.read()
+@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
+async def init_session(request, *args, **kwargs):
+    try:
+        # Finding the root dir path
+        root_dir_path = Path(__file__).resolve().parent.parent.parent
+        # Reading the public key from the PEM file
+        pem_file_path = os.path.join(root_dir_path, 'auth.pem')
+        with open(pem_file_path, 'r') as pem_file:
+            CLERK_PUBLIC_KEY = pem_file.read()
 
-#         print(CLERK_PUBLIC_KEY)
+        print(CLERK_PUBLIC_KEY)
 
-#         # Ensure the public key is valid
-#         if not CLERK_PUBLIC_KEY.startswith("-----BEGIN PUBLIC KEY-----"):
-#             raise ValueError("Invalid public key format.")
+        # Ensure the public key is valid
+        if not CLERK_PUBLIC_KEY.startswith("-----BEGIN PUBLIC KEY-----"):
+            raise ValueError("Invalid public key format.")
 
-#         clerk_public_key = CLERK_PUBLIC_KEY
+        clerk_public_key = CLERK_PUBLIC_KEY
 
-#         # Auth header
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             raise HttpError(401, "Authorization header is missing or invalid.")
+        # Auth header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            raise HttpError(401, "Authorization header is missing or invalid.")
 
-#         token = auth_header.split(' ')[1]  # Extract the token from the header
+        token = auth_header.split(' ')[1]  # Extract the token from the header
 
-#         # Decode the token using the public key from the PEM file
-#         decode_token = jwt.decode(token, clerk_public_key, algorithms=['RS256'])
+        # Decode the token using the public key from the PEM file
+        decode_token = jwt.decode(token, clerk_public_key, algorithms=['RS256'])
 
-#         # Get the Clerk user ID from the decoded token
-#         clerk_user_id = decode_token.get("sub")
+        # Get the Clerk user ID from the decoded token
+        clerk_user_id = decode_token.get("sub")
 
-#         # Find the student using the clerk_id
-#         student = await Student.objects.aget(clerk_id=clerk_user_id)
+        # Find the student using the clerk_id
+        student = await Student.objects.aget(clerk_id=clerk_user_id)
 
-#         # Set up the session for the student
-#         request.session["student_id"] = student.id
+        # Set up the session for the student
+        request.session["student_id"] = student.id
 
-#         # Return a success response
-#         return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
+        # Return a success response
+        return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
 
-#     except jwt.ExpiredSignatureError:
-#         raise HttpError(401, "Token has expired.")
-#     except jwt.InvalidTokenError:
-#         raise HttpError(401, "Invalid token.")
-#     except Student.DoesNotExist:
-#         raise HttpError(404, "Student not found.")
-#     except Exception as e:
-#         logger.error(f"Unexpected error occurred: {e}")
-#         raise HttpError(500, f"An unexpected error occurred: {e}")
+    except jwt.ExpiredSignatureError:
+        raise HttpError(401, "Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HttpError(401, "Invalid token.")
+    except Student.DoesNotExist:
+        raise HttpError(404, "Student not found.")
+    except Exception as e:
+        logger.error(f"Unexpected error occurred: {e}")
+        raise HttpError(500, f"An unexpected error occurred: {e}")
 
 
 # V2
-@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-def init_session(request, *args, **kwargs):
-    user_details = clerk_client.users.getUser(user_id=request.user_id)
+# @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
+# def init_session(request, *args, **kwargs):
+#     user_details = clerk_client.users.getUser(user_id=request.user_id)
 
-    # Auth Token
-    print("Auth Token: ", request.auth_token)
-    # User details
-    print(user_details)
+#     # Auth Token
+#     print("Auth Token: ", request.auth_token)
+#     # User details
+#     print(user_details)
 
 
 # Session closing Router

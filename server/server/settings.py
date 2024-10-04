@@ -30,7 +30,7 @@ SECRET_KEY = '=61fzdfndd)secure-!^svmd)-django-1h&zlol!z*tg88e=prelevels^^ygj4&z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # (AZAK)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd party apps
-    'rest_framework',
     'corsheaders',
+    'rest_framework',
     'ninja_extra',
     # Main App
     'server',
@@ -57,6 +57,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Cors Middleware
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -64,8 +66,6 @@ MIDDLEWARE = [
     'clerk_django.middlewares.clerk.ClerkAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Cors Middleware
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -150,6 +150,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -176,4 +177,5 @@ CORS_ALLOW_HEADERS = (
 ALLOWED_PARTIES = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
 ]

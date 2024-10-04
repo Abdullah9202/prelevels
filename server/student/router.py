@@ -164,17 +164,6 @@ async def init_session(request, *args, **kwargs):
         raise HttpError(500, f"An unexpected error occurred: {e}")
 
 
-# V2
-# @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-# def init_session(request, *args, **kwargs):
-#     user_details = clerk_client.users.getUser(user_id=request.user_id)
-
-#     # Auth Token
-#     print("Auth Token: ", request.auth_token)
-#     # User details
-#     print(user_details)
-
-
 # Session closing Router
 @auth_router.post("/close-session/")
 async def close_session(request, *args, **kwargs):

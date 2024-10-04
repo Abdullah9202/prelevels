@@ -5,7 +5,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import AbstractBaseUser
 # My Files
 from questionbank.models import QuestionBank
 from course.models import Course

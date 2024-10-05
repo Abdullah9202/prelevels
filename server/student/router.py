@@ -13,7 +13,6 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from django.contrib.sessions.models import Session
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
@@ -116,14 +115,15 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
     try:
+        if "student_id" in request.session:
+            return JsonResponse({"message": "Session already initialized"}, status=200)
+        
         # Finding the root dir path
         root_dir_path = Path(__file__).resolve().parent.parent.parent
         # Reading the public key from the PEM file
         pem_file_path = os.path.join(root_dir_path, 'auth.pem')
         with open(pem_file_path, 'r') as pem_file:
             CLERK_PUBLIC_KEY = pem_file.read()
-
-        print(CLERK_PUBLIC_KEY)
 
         # Ensure the public key is valid
         if not CLERK_PUBLIC_KEY.startswith("-----BEGIN PUBLIC KEY-----"):

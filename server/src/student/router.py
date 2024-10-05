@@ -112,65 +112,28 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # =============================================================================================
 # Session init Router
 # V1
-@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-async def init_session(request, *args, **kwargs):
-    try:
-        # Getting the public key from .env
-        CLERK_PUBLIC_KEY = os.getenv("CLERK_PEM_PUBLIC_KEY")
-
-        # Ensure the public key is valid
-        if not CLERK_PUBLIC_KEY.startswith("-----BEGIN PUBLIC KEY-----"):
-            raise ValueError("Invalid public key format.")
-
-        # Auth header
-        auth_header = request.headers.get('Authorization')
-        if not auth_header or not auth_header.startswith('Bearer '):
-            raise HttpError(401, "Authorization header is missing or invalid.")
-
-        token = auth_header.split(' ')[1]  # Extract the token from the header
-
-        # Decode the token using the public key from the PEM file
-        decode_token = jwt.decode(token, CLERK_PUBLIC_KEY, algorithms=['RS256'])
-
-        # Get the Clerk user ID from the decoded token
-        clerk_user_id = decode_token.get("sub")
-
-        # Find the student using the clerk_id
-        student = await Student.objects.aget(clerk_id=clerk_user_id)
-
-        # Set up the session for the student
-        request.session["student_id"] = student.id
-
-        # Return a success response
-        return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
-
-    except jwt.ExpiredSignatureError:
-        raise HttpError(401, "Token has expired.")
-    except jwt.InvalidTokenError:
-        raise HttpError(401, "Invalid token.")
-    except Student.DoesNotExist:
-        raise HttpError(404, "Student not found.")
-    except Exception as e:
-        logger.error(f"Unexpected error occurred: {e}")
-        raise HttpError(500, f"An unexpected error occurred: {e}")
-
-# V2
 # @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 # async def init_session(request, *args, **kwargs):
 #     try:
-#         # Check if a session already exists for the student
-#         if "student_id" in request.session:
-#             student_id = request.session["student_id"]
-#             student = await Student.objects.aget(id=student_id)
-#             return JsonResponse({"message": "Session already initialized", "student_id": student.id}, status=200)
+#         # Getting the public key from clerk client
+#         clerk_public_key = clerk_client.public_pem_key
 
-#         # Get Clerk user data from the request (assuming Clerk middleware adds this to the request)
-#         clerk_user = request.clerk_user
-#         if not clerk_user:
-#             raise HttpError(401, "User is not authenticated.")
+#         # Ensure the public key is valid
+#         if not clerk_public_key.startswith("-----BEGIN PUBLIC KEY-----"):
+#             raise ValueError("Invalid public key format.")
 
-#         # Get the Clerk user ID from the Clerk user data
-#         clerk_user_id = clerk_user.get("id")
+#         # Auth header
+#         auth_header = request.headers.get('Authorization')
+#         if not auth_header or not auth_header.startswith('Bearer '):
+#             raise HttpError(401, "Authorization header is missing or invalid.")
+
+#         token = auth_header.split(' ')[1]  # Extract the token from the header
+
+#         # Decode the token using the public key from the PEM file
+#         decode_token = jwt.decode(token, clerk_public_key, algorithms=['RS256'], leeway=5)
+
+#         # Get the Clerk user ID from the decoded token
+#         clerk_user_id = decode_token.get("sub")
 
 #         # Find the student using the clerk_id
 #         student = await Student.objects.aget(clerk_id=clerk_user_id)
@@ -181,11 +144,50 @@ async def init_session(request, *args, **kwargs):
 #         # Return a success response
 #         return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
 
+#     except jwt.ExpiredSignatureError:
+#         raise HttpError(401, "Token has expired.")
+#     except jwt.ImmatureSignatureError:
+#         raise HttpError(401, "The token is not yet valid (iat).")
+#     except jwt.InvalidTokenError:
+#         raise HttpError(401, "Invalid token.")
 #     except Student.DoesNotExist:
 #         raise HttpError(404, "Student not found.")
 #     except Exception as e:
 #         logger.error(f"Unexpected error occurred: {e}")
 #         raise HttpError(500, f"An unexpected error occurred: {e}")
+
+# V2
+@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
+async def init_session(request, *args, **kwargs):
+    try:
+        # Check if a session already exists for the student
+        if "student_id" in request.session:
+            student_id = request.session["student_id"]
+            student = await Student.objects.aget(id=student_id)
+            return JsonResponse({"message": "Session already initialized", "student_id": student.id}, status=200)
+
+        # Get Clerk user data from the request (assuming Clerk middleware adds this to the request)
+        clerk_user = request.clerk_user
+        if not clerk_user:
+            raise HttpError(401, "User is not authenticated.")
+
+        # Get the Clerk user ID from the Clerk user data
+        clerk_user_id = clerk_user.get("id")
+
+        # Find the student using the clerk_id
+        student = await Student.objects.aget(clerk_id=clerk_user_id)
+
+        # Set up the session for the student
+        request.session["student_id"] = student.id
+
+        # Return a success response
+        return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
+
+    except Student.DoesNotExist:
+        raise HttpError(404, "Student not found.")
+    except Exception as e:
+        logger.error(f"Unexpected error occurred: {e}")
+        raise HttpError(500, f"An unexpected error occurred: {e}")
 
 
 # Session closing Router

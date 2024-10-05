@@ -115,9 +115,6 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
     try:
-        if "student_id" in request.session:
-            return JsonResponse({"message": "Session already initialized"}, status=200)
-        
         # Finding the root dir path
         root_dir_path = Path(__file__).resolve().parent.parent.parent
         # Reading the public key from the PEM file

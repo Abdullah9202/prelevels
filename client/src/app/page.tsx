@@ -86,34 +86,38 @@ export default function Home() {
 
         // Check if session has already been initialized
         const sessionInitialized = localStorage.getItem("sessionInitialized");
-        if (!sessionInitialized) {
-          // Proceed with session initialization if not already initialized
-          console.log("Token retrieved:", token);
-          const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ user_id: user.id }),
-          });
-          console.log("Request sent to backend");
-
-          const data = await response.json();
-
-          if (response.ok) {
-            console.log("Django session initialized:", data.message);
-
-            // Set session initialization status in local storage
-            if (data.session_active) {
-              localStorage.setItem("sessionInitialized", "true");
-            } else {
-              localStorage.removeItem("sessionInitialized");
-            }
-          } else {
-            console.log("Error initializing session:", data.error);
-          }
+        if (sessionInitialized === "true") {
+          console.log("Session already initialized, skipping backend request.")
+          return;
         }
+
+      // Proceed with session initialization if not already initialized
+      console.log("Token retrieved:", token);
+      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+          body: JSON.stringify({ user_id: user.id }),
+        });
+        console.log("Request sent to backend");
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log("Django response:", data.message);
+
+          // Set session initialization status in local storage
+          if (data.session_active) {
+            localStorage.setItem("sessionInitialized", "true");
+          } else {
+            localStorage.removeItem("sessionInitialized");
+          }
+        } else {
+          console.log("Error initializing session:", data.error);
+        }
+        
       } catch (error) {
         console.error("Error initializing session:", error);
       }

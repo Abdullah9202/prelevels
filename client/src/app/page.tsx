@@ -21,7 +21,7 @@ export default function Home() {
 
   const initializeSession = useCallback(async () => {
     try {
-      // Check if session has already been initialized
+      // Checking if session has already been initialized
       const sessionInitialized = localStorage.getItem("sessionInitialized");
       if (sessionInitialized === "true") {
         console.log("Session already initialized, skipping backend request.")
@@ -41,7 +41,6 @@ export default function Home() {
       }
 
       // Proceed with session initialization if not already initialized
-      console.log("Token retrieved:", token);
       const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
         method: "POST",
         headers: {

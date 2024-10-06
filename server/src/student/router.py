@@ -50,28 +50,28 @@ async def hello(request, *args, **kwargs):
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
 async def register_student(request, payload: RegisterSchema, *args, **kwargs):
     logger.info(f"Registering student with data: {payload.dict()}")
-    
+
     try:
         # Checking for existing user
-        if Student.objects.filter(email=payload.email).exists():
+        if await Student.objects.filter(email=payload.email).aexists():
             logger.warning("Registration failed: Email already exists.")
             raise HttpError(400, "Email address is already in use.")
-        if Student.objects.filter(username=payload.username).exists():
+        if await Student.objects.filter(username=payload.username).aexists():
             logger.warning("Registration failed: Username already exists.")
             raise HttpError(400, "Username is already taken.")
-        if Student.objects.filter(phone_number=payload.phone_number).exists():
+        if await Student.objects.filter(phone_number=payload.phone_number).aexists():
             logger.warning("Registration failed: Phone number already exists.")
             raise HttpError(400, "Phone number is already registered.")
-        
+
         # Using the serializer to validate the input data
         serializer = StudentSerializer(data=payload.dict())
         if not serializer.is_valid():
             logger.error(f"Validation error: {serializer.errors}")
             raise HttpError(400, "Invalid input data.")
-        
+
         # Hashing the password
         hashed_password = make_password(payload.password)
-        
+
         # Registering the new student
         new_student = Student(
             clerk_id=payload.clerk_id,
@@ -80,11 +80,10 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
             email=payload.email,
             username=payload.username,
             avatar_url=payload.avatar_url,
-            phone_number=payload.phone_number,
-            password=payload.password, # AZAK: Should be hashed_password
+            password=hashed_password,
         )
-        new_student.save()
-        
+        await new_student.asave()
+
         # Serializing the newly created student and returning it
         serialized_student = StudentSerializer(new_student)
         return JsonResponse(serialized_student.data)
@@ -99,7 +98,7 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
         logger.error(f"HttpError: {err}")
         raise err
     except Exception as e:
-        logger.error(f"Unexpected error: {str(err)}")
+        logger.error(f"Unexpected error: {str(e)}")
         return JsonResponse({"error": f"An unexpected error occurred. Please try again later"}, status=500)
 
 

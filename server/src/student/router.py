@@ -104,59 +104,48 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Update Student Router
-# @auth_router.put("/update/", response={200: StudentSchema, codes_4xx: dict})
+@auth_router.put("/update/", response={200: StudentSchema, codes_4xx: dict, codes_5xx: dict})
+async def update_student(request, *args, **kwargs):
+    try:
+        # Geting Clerk user data from the request
+        clerk_user = request.clerk_user
+        if not clerk_user:
+            raise HttpError(401, "User is not authenticated.")
+
+        # Geting the Clerk user ID from the Clerk user data
+        clerk_user_id = clerk_user.get("id")
+
+        # Finding the student using the clerk_id
+        student = await Student.objects.aget(clerk_id=clerk_user_id)
+
+        # Update student details with the data from Clerk
+        student.first_name = clerk_user.get("first_name", student.first_name)
+        student.last_name = clerk_user.get("last_name", student.last_name)
+        student.email = clerk_user.get("email", student.email)
+        student.username = clerk_user.get("username", student.username)
+        student.avatar_url = clerk_user.get("avatar_url", student.avatar_url)
+        student.phone_number = clerk_user.get("phone_number", student.phone_number)
+
+        # Save the updated student details
+        await student.asave()
+
+        # Serialize the updated student details
+        serialized_student = StudentSerializer(student).data
+
+        # Return the serialized data
+        return JsonResponse(serialized_student, status=200)
+
+    except Student.DoesNotExist:
+        raise HttpError(404, "Student not found.")
+    except Exception as e:
+        logger.error(f"Unexpected error occurred: {e}")
+        raise HttpError(500, f"An unexpected error occurred: {e}")
 
 
 # AZAK
 # Login and logout are being managed by Clerk
 # =============================================================================================
 # Session init Router
-# V1
-# @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-# async def init_session(request, *args, **kwargs):
-#     try:
-#         # Getting the public key from clerk client
-#         clerk_public_key = clerk_client.public_pem_key
-
-#         # Ensure the public key is valid
-#         if not clerk_public_key.startswith("-----BEGIN PUBLIC KEY-----"):
-#             raise ValueError("Invalid public key format.")
-
-#         # Auth header
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             raise HttpError(401, "Authorization header is missing or invalid.")
-
-#         token = auth_header.split(' ')[1]  # Extract the token from the header
-
-#         # Decode the token using the public key from the PEM file
-#         decode_token = jwt.decode(token, clerk_public_key, algorithms=['RS256'], leeway=5)
-
-#         # Get the Clerk user ID from the decoded token
-#         clerk_user_id = decode_token.get("sub")
-
-#         # Find the student using the clerk_id
-#         student = await Student.objects.aget(clerk_id=clerk_user_id)
-
-#         # Set up the session for the student
-#         request.session["student_id"] = student.id
-
-#         # Return a success response
-#         return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
-
-#     except jwt.ExpiredSignatureError:
-#         raise HttpError(401, "Token has expired.")
-#     except jwt.ImmatureSignatureError:
-#         raise HttpError(401, "The token is not yet valid (iat).")
-#     except jwt.InvalidTokenError:
-#         raise HttpError(401, "Invalid token.")
-#     except Student.DoesNotExist:
-#         raise HttpError(404, "Student not found.")
-#     except Exception as e:
-#         logger.error(f"Unexpected error occurred: {e}")
-#         raise HttpError(500, f"An unexpected error occurred: {e}")
-
-# V2
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
     try:

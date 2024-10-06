@@ -81,7 +81,7 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
             username=payload.username,
             avatar_url=payload.avatar_url,
             phone_number=payload.phone_number,
-            password=hashed_password,
+            password=payload.password, # AZAK: Should be hashed_password
         )
         new_student.save()
         
@@ -118,18 +118,19 @@ async def update_student(request, *args, **kwargs):
         # Finding the student using the clerk_id
         student = await Student.objects.aget(clerk_id=clerk_user_id)
 
-        # Update student details with the data from Clerk
+        # Updating student details with the data from Clerk
         student.first_name = clerk_user.get("first_name", student.first_name)
         student.last_name = clerk_user.get("last_name", student.last_name)
         student.email = clerk_user.get("email", student.email)
         student.username = clerk_user.get("username", student.username)
         student.avatar_url = clerk_user.get("avatar_url", student.avatar_url)
         student.phone_number = clerk_user.get("phone_number", student.phone_number)
+        student.password = clerk_user.get("password", student.password)
 
-        # Save the updated student details
+        # Saving the updated student details
         await student.asave()
 
-        # Serialize the updated student details
+        # Serializing the updated student details
         serialized_student = StudentSerializer(student).data
 
         # Return the serialized data

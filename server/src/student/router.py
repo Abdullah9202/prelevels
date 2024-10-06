@@ -181,7 +181,8 @@ async def init_session(request, *args, **kwargs):
         request.session["student_id"] = student.id
 
         # Return a success response
-        return JsonResponse({"message": "Session initialized", "student_id": student.id}, status=200)
+        return JsonResponse({"message": "Session initialized", "session_active": True, 
+                            "student_id": student.id}, status=200)
 
     except Student.DoesNotExist:
         raise HttpError(404, "Student not found.")

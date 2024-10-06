@@ -72,6 +72,13 @@ export default function Home() {
   // V2
   const initializeSession = useCallback(async () => {
     try {
+      // Check if session has already been initialized
+      const sessionInitialized = localStorage.getItem("sessionInitialized");
+      if (sessionInitialized === "true") {
+        console.log("Session already initialized, skipping backend request.")
+        return;
+      }
+
       // Get the Clerk session token
       const token = await getToken();
       if (!token) {
@@ -84,39 +91,32 @@ export default function Home() {
         return;
       }
 
-      // Check if session has already been initialized
-      const sessionInitialized = localStorage.getItem("sessionInitialized");
-      if (sessionInitialized === "true") {
-        console.log("Session already initialized, skipping backend request.")
-        return;
-      }
+      // Proceed with session initialization if not already initialized
+      console.log("Token retrieved:", token);
+      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+          body: JSON.stringify({ user_id: user.id }),
+        });
+        console.log("Request sent to backend");
 
-    // Proceed with session initialization if not already initialized
-    console.log("Token retrieved:", token);
-    const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-        body: JSON.stringify({ user_id: user.id }),
-      });
-      console.log("Request sent to backend");
+        const data = await response.json();
 
-      const data = await response.json();
+        if (response.ok) {
+          console.log("Django response:", data.message);
 
-      if (response.ok) {
-        console.log("Django response:", data.message);
-
-        // Set session initialization status in local storage
-        if (data.session_active) {
-          localStorage.setItem("sessionInitialized", "true");
+          // Set session initialization status in local storage
+          if (data.session_active === true) {
+            localStorage.setItem("sessionInitialized", "true");
+          } else {
+            localStorage.removeItem("sessionInitialized");
+          }
         } else {
-          localStorage.removeItem("sessionInitialized");
+          console.log("Error initializing session:", data.error);
         }
-      } else {
-        console.log("Error initializing session:", data.error);
-      }
       
     } catch (error) {
       console.error("Error initializing session:", error);

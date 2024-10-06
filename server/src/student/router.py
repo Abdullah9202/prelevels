@@ -106,16 +106,16 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Update Student Router
-@auth_router.put("/update/", response={200: StudentSchema, codes_4xx: dict, codes_5xx: dict})
+@auth_router.put("/update/", response={200: StudentSchema, 400: dict, 500: dict})
 async def update_student(request, *args, **kwargs):
     print("Inside update_student")
     try:
-        # Geting Clerk user data from the request
+        # Getting Clerk user data from the request
         clerk_user = request.clerk_user
         if not clerk_user:
             raise HttpError(401, "User is not authenticated.")
 
-        # Geting the Clerk user ID from the Clerk user data
+        # Getting the Clerk user ID from the Clerk user data
         clerk_user_id = clerk_user.get("id")
 
         # Finding the student using the clerk_id
@@ -128,16 +128,17 @@ async def update_student(request, *args, **kwargs):
         student.username = clerk_user.get("username", student.username)
         student.avatar_url = clerk_user.get("avatar_url", student.avatar_url)
         student.phone_number = clerk_user.get("phone_number", student.phone_number)
-        student.password = clerk_user.get("password", student.password)
+        student.password = await sync_to_async(make_password)(clerk_user.get("password", student.password))
 
         # Saving the updated student details
         await student.asave()
 
         # Serializing the updated student details
-        serialized_student = StudentSerializer(student).data
+        serialized_student = await sync_to_async(StudentSerializer)(student)
+        serialized_data = await sync_to_async(lambda: serialized_student.data)()
 
         # Return the serialized data
-        return JsonResponse(serialized_student, status=200)
+        return JsonResponse(serialized_data, status=200)
 
     except Student.DoesNotExist:
         raise HttpError(404, "Student not found.")

@@ -6,6 +6,7 @@ from pathlib import Path
 import json
 from uuid import UUID
 from dotenv import load_dotenv
+from asgiref.sync import sync_to_async
 # Django imports
 from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
@@ -47,8 +48,9 @@ async def hello(request, *args, **kwargs):
 
 
 # Register Router
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict})
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
 async def register_student(request, payload: RegisterSchema, *args, **kwargs):
+    print("Inside register_student")
     logger.info(f"Registering student with data: {payload.dict()}")
 
     try:
@@ -65,12 +67,12 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 
         # Using the serializer to validate the input data
         serializer = StudentSerializer(data=payload.dict())
-        if not serializer.is_valid():
+        if not await sync_to_async(serializer.is_valid)():
             logger.error(f"Validation error: {serializer.errors}")
             raise HttpError(400, "Invalid input data.")
 
         # Hashing the password
-        hashed_password = make_password(payload.password)
+        hashed_password = await sync_to_async(make_password)(payload.password)
 
         # Registering the new student
         new_student = Student(
@@ -80,6 +82,7 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
             email=payload.email,
             username=payload.username,
             avatar_url=payload.avatar_url,
+            phone_number=payload.phone_number,
             password=hashed_password,
         )
         await new_student.asave()
@@ -99,12 +102,13 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
         raise err
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
-        return JsonResponse({"error": f"An unexpected error occurred. Please try again later"}, status=500)
+        return JsonResponse({"error": "An unexpected error occurred. Please try again later"}, status=500)
 
 
 # Update Student Router
 @auth_router.put("/update/", response={200: StudentSchema, codes_4xx: dict, codes_5xx: dict})
 async def update_student(request, *args, **kwargs):
+    print("Inside update_student")
     try:
         # Geting Clerk user data from the request
         clerk_user = request.clerk_user
@@ -192,6 +196,7 @@ async def update_student(request, *args, **kwargs):
 # V2
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
+    print("Inside init-session")
     try:
         # Check if a session already exists for the student
         if "student_id" in request.session:

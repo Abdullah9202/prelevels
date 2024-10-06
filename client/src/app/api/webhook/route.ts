@@ -81,7 +81,7 @@ export async function POST(req: Request) {
       username:`${first_name}${last_name}`,
       avatar_url: image_url || null,
       phone_number: "+923355566939", 
-      password: "No password",
+      password: "No_password",
 
     };
 

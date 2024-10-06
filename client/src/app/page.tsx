@@ -69,70 +69,70 @@ export default function Home() {
   //   };
   // }, [isSignedIn, user]);
 
-    // V2
-    const initializeSession = useCallback(async () => {
-      try {
-        // Get the Clerk session token
-        const token = await getToken();
-        if (!token) {
-          console.log("No token found, user is not authenticated.");
-          return;
-        }
-
-        if (!user) {
-          console.log("No user found, user is not authenticated.");
-          return;
-        }
-
-        // Check if session has already been initialized
-        const sessionInitialized = localStorage.getItem("sessionInitialized");
-        if (sessionInitialized === "true") {
-          console.log("Session already initialized, skipping backend request.")
-          return;
-        }
-
-      // Proceed with session initialization if not already initialized
-      console.log("Token retrieved:", token);
-      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-          body: JSON.stringify({ user_id: user.id }),
-        });
-        console.log("Request sent to backend");
-
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log("Django response:", data.message);
-
-          // Set session initialization status in local storage
-          if (data.session_active) {
-            localStorage.setItem("sessionInitialized", "true");
-          } else {
-            localStorage.removeItem("sessionInitialized");
-          }
-        } else {
-          console.log("Error initializing session:", data.error);
-        }
-        
-      } catch (error) {
-        console.error("Error initializing session:", error);
+  // V2
+  const initializeSession = useCallback(async () => {
+    try {
+      // Get the Clerk session token
+      const token = await getToken();
+      if (!token) {
+        console.log("No token found, user is not authenticated.");
+        return;
       }
-    }, [getToken, user]);
 
-    useEffect(() => {
-      initializeSession();
+      if (!user) {
+        console.log("No user found, user is not authenticated.");
+        return;
+      }
 
-      // Cleanup when the user signs out
-      return () => {
-        if (!isSignedIn) {
+      // Check if session has already been initialized
+      const sessionInitialized = localStorage.getItem("sessionInitialized");
+      if (sessionInitialized === "true") {
+        console.log("Session already initialized, skipping backend request.")
+        return;
+      }
+
+    // Proceed with session initialization if not already initialized
+    console.log("Token retrieved:", token);
+    const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+        body: JSON.stringify({ user_id: user.id }),
+      });
+      console.log("Request sent to backend");
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Django response:", data.message);
+
+        // Set session initialization status in local storage
+        if (data.session_active) {
+          localStorage.setItem("sessionInitialized", "true");
+        } else {
           localStorage.removeItem("sessionInitialized");
         }
-      };
-    }, [initializeSession, isSignedIn]);
+      } else {
+        console.log("Error initializing session:", data.error);
+      }
+      
+    } catch (error) {
+      console.error("Error initializing session:", error);
+    }
+  }, [getToken, user]);
+
+  useEffect(() => {
+    initializeSession();
+
+    // Cleanup when the user signs out
+    return () => {
+      if (!isSignedIn) {
+        localStorage.removeItem("sessionInitialized");
+      }
+    };
+  }, [initializeSession, isSignedIn]);
 
   return (
     <>

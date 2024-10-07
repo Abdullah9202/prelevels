@@ -16,6 +16,7 @@ interface User {
 
 }
 
+// Register student router
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
 
@@ -69,7 +70,7 @@ export async function POST(req: Request) {
     if (!id || !email_addresses) {
       return new Response('Error occurred -- missing data', {
         status: 400
-      })
+      });
     }
 
     const user: User = {
@@ -80,13 +81,13 @@ export async function POST(req: Request) {
       email: email_addresses[0].email_address,
       username:`${first_name}${last_name}`,
       avatar_url: image_url || null,
-      phone_number: "+923355566939", 
-      password: "cda23@_2341d8h3",
+      phone_number: "+923355566939", // AZAK
+      password: "No_password", // AZAK
 
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/student/register/', {
+      const response = await fetch('http://127.0.0.1:8000/api/student/register/', { // AZAK
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,5 +108,50 @@ export async function POST(req: Request) {
 
   return new Response('', { status: 200 })
 }
+
+
+// Update student router
+export async function PUT(req: Request) {
+  const {id, first_name, last_name, email, username, avatar_url, phone_number, password} = await req.json();
+
+  if (!id || !email || email.length === 0) {
+    return new Response('Error occurred -- missing data', {
+      status: 400
+    });
+  }
+
+  const user: User = {
+    clerk_id: id,
+    first_name: first_name || null,
+    last_name: last_name || null,
+    email: email,
+    username: username,
+    avatar_url: avatar_url || null,
+    phone_number: phone_number || null,
+    password: password || null,
+  };
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/student/update/', { // AZAK
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user), // Sending the updated user data
+    });
+    console.log(JSON.stringify(user))
+  
+    if (!response.ok) {
+      console.error('Failed to send data to Python backend');
+    } else {
+      console.log('Data sent successfully');
+    }
+  } catch (error) {
+    console.log('Error occurred:', error);
+  }
+
+  return new Response('', { status: 200 });
+}
+
 
 // ngrok http --domain=stunning-highly-gnu.ngrok-free.app 3000

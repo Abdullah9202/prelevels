@@ -124,10 +124,13 @@ export default function Home() {
   }, [getToken, user]);
 
   useEffect(() => {
-    initializeSession();
+    const timeoutId = setTimeout(() => {
+      initializeSession();
+    }, 2000); 
 
     // Cleanup when the user signs out
     return () => {
+      clearTimeout(timeoutId);
       if (!isSignedIn) {
         localStorage.removeItem("sessionInitialized");
       }

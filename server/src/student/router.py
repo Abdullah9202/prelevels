@@ -88,8 +88,10 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
         await new_student.asave()
 
         # Serializing the newly created student and returning it
-        serialized_student = StudentSerializer(new_student)
-        return JsonResponse(serialized_student.data)
+        serialized_student = await sync_to_async(StudentSerializer)(new_student)
+        serialized_data = await sync_to_async(lambda: serialized_student.data)()
+
+        return JsonResponse(serialized_data)
 
     except IntegrityError as err:
         logger.error(f"IntegrityError: {str(err)}")
@@ -234,12 +236,12 @@ async def init_session(request, *args, **kwargs):
 @auth_router.post("/close-session/")
 async def close_session(request, *args, **kwargs):
     try:
-        logout(request)
+        await sync_to_async(logout)(request)
         return JsonResponse({"message": "Student logged out successfully"}, status=200)
     except ValidationError as err:
-        raise HttpError(400, f"Validation error occured: {err}")
+        raise HttpError(400, f"Validation error occurred: {err}")
     except Exception as e:
-        return JsonResponse({"error": f"An unexpected error occured: {e}"}, status=500)
+        return JsonResponse({"error": f"An unexpected error occurred: {e}"}, status=500)
 # =============================================================================================
 
 
@@ -250,15 +252,15 @@ async def get_student_details(request, *args, **kwargs):
     clerk_user = request.clerk_user
     if clerk_user:
         try:
-            # Fetch the student using the clerk_id
-            student = await Student.objects.aget(clerk_id=clerk_user['id'])
-            # Serialize student details
-            serialized_student = StudentSerializer(student).data
-            # Return the serialized data
-            return JsonResponse(serialized_student, status=200)
+            clerk_user_id = clerk_user.get("id")
+            student = await Student.objects.aget(clerk_id=clerk_user_id)
+            serialized_student = await sync_to_async(StudentSerializer)(student)
+            serialized_data = await sync_to_async(lambda: serialized_student.data)()
+            return JsonResponse(serialized_data, status=200)
         except Student.DoesNotExist:
             raise HttpError(404, "Student not found.")
         except Exception as e:
-            return JsonResponse({"error": f"Unexpected error: {e}"}, status=500)
+            logger.error(f"Unexpected error occurred: {e}")
+            raise HttpError(500, f"An unexpected error occurred: {e}")
     else:
         raise HttpError(401, "User is not authenticated.")

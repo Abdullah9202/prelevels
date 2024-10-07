@@ -47,7 +47,7 @@ async def hello(request, *args, **kwargs):
     return JsonResponse({"msg": "Hello World!"}, status=200)
 
 
-# Register Router
+# Register Student Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
 async def register_student(request, payload: RegisterSchema, *args, **kwargs):
     print("Inside register_student")

@@ -29,7 +29,7 @@ export default function Home() {
   //         try {
   //           const body = JSON.stringify({ user_id: user.id });
 
-  //           const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+  //           const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", { // AZAK
   //             method: "POST",
   //             headers: {
   //               "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export default function Home() {
 
       // Proceed with session initialization if not already initialized
       console.log("Token retrieved:", token);
-      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", {
+      const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", { // AZAK
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

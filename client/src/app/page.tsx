@@ -72,9 +72,9 @@ export default function Home() {
   }, [getToken, user]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(() => { // Intentional time delay to allow clerk to register user and then initialize session
       initializeSession();
-    }, 2000); 
+    }, 5000); 
 
     // Cleanup when the user signs out
     return () => {

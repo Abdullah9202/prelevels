@@ -75,19 +75,19 @@ export default function Home() {
       // Check if session has already been initialized
       const sessionInitialized = localStorage.getItem("sessionInitialized");
       if (sessionInitialized === "true") {
-        console.log("Session already initialized, skipping backend request.")
+        console.log("Session already initialized, skipping backend request.") // AZAK
         return;
       }
 
       // Get the Clerk session token
       const token = await getToken();
       if (!token) {
-        console.log("No token found, user is not authenticated.");
+        console.log("No token found, user is not authenticated."); // AZAK
         return;
       }
 
       if (!user) {
-        console.log("No user found, user is not authenticated.");
+        console.log("No user found, user is not authenticated."); // AZAK
         return;
       }
 
@@ -101,14 +101,12 @@ export default function Home() {
         },
           body: JSON.stringify({ user_id: user.id }),
         });
-        console.log("Request sent to backend");
+        console.log("Request sent to backend"); // AZAK
 
         const data = await response.json();
 
-        console.log(response)
-
         if (response.ok) {
-          console.log("Django response:", data.message);
+          console.log("Django response:", data.message); // AZAK
 
           // Set session initialization status in local storage
           if (data.session_active === true) {

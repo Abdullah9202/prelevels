@@ -2,9 +2,7 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 
-
 interface User {
-
   clerk_id: string;
   first_name: string | null;
   last_name: string | null;
@@ -13,7 +11,6 @@ interface User {
   avatar_url: string | null;
   phone_number: string | null;
   password: string | null;
-
 }
 
 // Register student router
@@ -74,16 +71,14 @@ export async function POST(req: Request) {
     }
 
     const user: User = {
-      
       clerk_id: id,
       first_name: first_name || null,
       last_name: last_name || null,
       email: email_addresses[0].email_address,
-      username:`${first_name}${last_name}`,
+      username: `${first_name}${last_name}`,
       avatar_url: image_url || null,
       phone_number: "+923355566939", // AZAK
       password: "No_password", // AZAK
-
     };
 
     try {
@@ -109,10 +104,9 @@ export async function POST(req: Request) {
   return new Response('', { status: 200 })
 }
 
-
 // Update student router
 export async function PUT(req: Request) {
-  const {id, first_name, last_name, email, username, avatar_url, phone_number, password} = await req.json();
+  const { id, first_name, last_name, email, username, avatar_url, phone_number, password } = await req.json();
 
   if (!id || !email || email.length === 0) {
     return new Response('Error occurred -- missing data', {
@@ -152,6 +146,5 @@ export async function PUT(req: Request) {
 
   return new Response('', { status: 200 });
 }
-
 
 // ngrok http --domain=stunning-highly-gnu.ngrok-free.app 3000

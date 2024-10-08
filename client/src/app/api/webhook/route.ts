@@ -99,11 +99,14 @@ export async function POST(req: Request) {
     } catch (error) {
       console.error('Error occurred:', error);
     }
+  } else if (eventType === 'user.updated') {
+    // Update logic here
   }
 
   return new Response('', { status: 200 })
 }
 
+// ========================================================================================================
 // Update student router
 export async function PUT(req: Request) {
   const { id, first_name, last_name, email, username, avatar_url, phone_number, password } = await req.json();
@@ -146,5 +149,7 @@ export async function PUT(req: Request) {
 
   return new Response('', { status: 200 });
 }
+// ========================================================================================================
+
 
 // ngrok http --domain=stunning-highly-gnu.ngrok-free.app 3000

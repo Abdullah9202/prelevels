@@ -21,7 +21,7 @@ from ninja.responses import codes_4xx, codes_5xx
 # Clerk imports
 from clerk_django.client import ClerkClient
 # My Files
-from student.models import Student
+from .models import Student
 from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
     RegisterSchema, GetStudentDetailSchema, HelloSchema

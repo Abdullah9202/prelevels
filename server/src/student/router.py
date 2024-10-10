@@ -50,7 +50,6 @@ async def hello(request, *args, **kwargs):
 # Register Student Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
 async def register_student(request, payload: RegisterSchema, *args, **kwargs):
-    print("Inside register_student")
     logger.info(f"Registering student with data: {payload.dict()}")
 
     try:
@@ -110,7 +109,6 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 # Update Student Router
 @auth_router.put("/update/", response={200: StudentSchema, 400: dict, 500: dict})
 async def update_student(request, *args, **kwargs):
-    print("Inside update_student")
     try:
         # Getting Clerk user data from the request
         clerk_user = request.clerk_user
@@ -155,7 +153,6 @@ async def update_student(request, *args, **kwargs):
 # Session init Router
 @auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
 async def init_session(request, *args, **kwargs):
-    print("Inside init-session")
     try:
         # Check if a session already exists for the student
         if "student_id" in request.session:

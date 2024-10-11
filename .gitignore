@@ -124,6 +124,6 @@ question_images/
 
 # My File Ignores
 info.ipynb
-modelInfo.ipynb
+server/src/modelInfo.ipynb
 
 # End of Python ignores

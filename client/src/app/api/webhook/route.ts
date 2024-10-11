@@ -13,6 +13,10 @@ interface User {
   password: string | null;
 }
 
+interface UserId{
+  clerk_id: string;
+}
+
 // Register student router
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
@@ -100,7 +104,76 @@ export async function POST(req: Request) {
       console.error('Error occurred:', error);
     }
   } else if (eventType === 'user.updated') {
+    // thi is for updating the user
     // Update logic here
+    const { id, email_addresses, first_name, last_name, image_url } = evt.data
+
+    if (!id || !email_addresses) {
+      return new Response('Error occurred -- missing data', {
+        status: 400
+      });
+    }
+
+    const updatedUser: User = {
+      clerk_id: id,
+      first_name: first_name || null,
+      last_name: last_name || null,
+      email: email_addresses[0].email_address,
+      username: `${first_name}${last_name}`,
+      avatar_url: image_url || null,
+      phone_number: "+923355566939", // Optional phone number logic
+      password: "No_password", // Placeholder, adapt based on your data
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/student/update/', { // Send to backend update route
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUser), // Send updated user data
+      });
+  
+      if (!response.ok) {
+        console.error('Failed to update user data in backend');
+      } else {
+        console.log('User updated successfully');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+
+  } else if (eventType === 'user.deleted') {
+    // Delete logic here
+    const { id } = evt.data
+    if (!id || id.length === 0) {
+      return new Response('Error occurred -- missing data', {
+        status: 400
+      });
+    }
+
+    const updatedUser: UserId = {
+      clerk_id: id,
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/student/update/', { // Send to backend update route
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUser), // Send updated user data
+      });
+  
+      if (!response.ok) {
+        console.error('Failed to update user data in backend');
+      } else {
+        console.log('User updated successfully');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+
   }
 
   return new Response('', { status: 200 })

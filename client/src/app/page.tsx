@@ -87,14 +87,16 @@ export default function Home() {
   return (
     <>
       <Timeline />
-      <Navbar />
-      <Hero />
-      <Service />
-      <TestimonialsSection />
-      <ServicesSection />
-      <PricingSection />
-      <Footer />
-      <Belowfooter />
+      <div className="bg-[#F4F4F4] min-h-screen">
+        <Navbar />
+        <Hero />
+        <Service />
+        <TestimonialsSection />
+        <ServicesSection />
+        <PricingSection />
+        <Footer />
+        <Belowfooter />
+      </div>
     </>
   );
 }

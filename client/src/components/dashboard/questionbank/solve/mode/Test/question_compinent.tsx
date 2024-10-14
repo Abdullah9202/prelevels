@@ -1,5 +1,6 @@
 // components/QuestionComponent.js
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
 
 interface QuestionData {
   question: string;
@@ -14,14 +15,39 @@ interface QuestionComponentProps {
   totalQuestions: number;
   onNext: () => void;
   onPrevious: () => void;
+  isHighlighterActive: boolean;
 }
 
-const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, currentQuestionIndex, totalQuestions, onNext, onPrevious }) => {
+const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, currentQuestionIndex, totalQuestions, onNext, onPrevious ,isHighlighterActive }) => {
   const [selectedOption, setSelectedOption] = useState('');
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOption(optionId);
   };
+
+  const highlightText = useCallback(() => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0 && isHighlighterActive) {
+      const range = selection.getRangeAt(0);
+      const span = document.createElement('span');
+      span.style.backgroundColor = 'yellow';
+      range.surroundContents(span);
+      selection.removeAllRanges(); // clear selection after highlighting
+    }
+  }, [isHighlighterActive]);
+
+  useEffect(() => {
+    if (isHighlighterActive) {
+      document.addEventListener('mouseup', highlightText);
+    } else {
+      document.removeEventListener('mouseup', highlightText);
+    }
+
+    // Cleanup the event listener when component unmounts
+    return () => {
+      document.removeEventListener('mouseup', highlightText);
+    };
+  }, [isHighlighterActive, highlightText]);
 
   return (
     <div className="max-w-4xl mx-auto">

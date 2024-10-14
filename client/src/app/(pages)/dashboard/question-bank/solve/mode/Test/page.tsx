@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { questions } from '@/components/dashboard/questionbank/solve/mode/Test/mockQuestion'; // Import dummy data
 import QuestionComponent from '@/components/dashboard/questionbank/solve/mode/Test/question_compinent'; // Import the QuestionComponent
+import QuestionModal from '@/components/dashboard/questionbank/solve/mode/Test/QuestionModal';
 
 export default function Home() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [countdown, setCountdown] = useState(1800); // 30 min countdown
+  const [isHighlighterActive, setHighlighter] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -16,11 +19,28 @@ export default function Home() {
     }
   };
 
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
+
+  const ToggleHighlighter = () => {
+    setHighlighter(!isHighlighterActive);
+  }
+
+  const handleQuestionSelect = (index: number) => {
+    setCurrentQuestionIndex(index);
+    setIsModalOpen(false);
+  }
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -50,13 +70,15 @@ export default function Home() {
         <aside className="w-1/10 md:w-1/7 bg-white p-4 flex flex-col items-center">
         <h1 className="font-bold text-red-500">Logo</h1>
             <div className="mt-24 mb-40 flex space-y-2 flex-col mx-auto">
-                <button className="hover:bg-[#F5D5D5] active:bg-[#F5D5D5] px-4 md:px-5 py-6 rounded-r-lg" aria-label="Highlighter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="red" className="bi bi-highlighter" viewBox="0 0 16 16">
+                <button onClick={ToggleHighlighter} className={`px-4 md:px-5 py-6 rounded-r-lg ${
+                  isHighlighterActive ? 'bg-brown-500' : 'hover:bg-[#F5D5D5] active:bg-[#F5D5D5]'
+                }`} aria-label="Highlighter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill={isHighlighterActive ? "brown" : "red"} className="bi bi-highlighter" viewBox="0 0 16 16">
                         <path fillRule="evenodd" d="M11.096.644a2 2 0 0 1 2.791.036l1.433 1.433a2 2 0 0 1 .035 2.791l-.413.435-8.07 8.995a.5.5 0 0 1-.372.166h-3a.5.5 0 0 1-.234-.058l-.412.412A.5.5 0 0 1 2.5 15h-2a.5.5 0 0 1-.354-.854l1.412-1.412A.5.5 0 0 1 1.5 12.5v-3a.5.5 0 0 1 .166-.372l8.995-8.07zm-.115 1.47L2.727 9.52l3.753 3.753 7.406-8.254zm3.585 2.17.064-.068a1 1 0 0 0-.017-1.396L13.18 1.387a1 1 0 0 0-1.396-.018l-.068.065zM5.293 13.5 2.5 10.707v1.586L3.707 13.5z"/>
                     </svg>
                 </button>
                 
-                <button className="hover:bg-[#F5D5D5] active:bg-[#F5D5D5] px-4 md:px-5 py-6 rounded-r-lg" aria-label="More options">
+                <button onClick={handleModalOpen} className="hover:bg-[#F5D5D5] active:bg-[#F5D5D5] px-4 md:px-5 py-6 rounded-r-lg" aria-label="More options">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                     </svg>
@@ -91,11 +113,18 @@ export default function Home() {
               
             </div>
           </div>
+          <QuestionModal
+            isOpen={isModalOpen}
+            onClose={handleModalClose}
+            onQuestionSelect={handleQuestionSelect}
+            totalQuestions={questions.length}
+          />
           <QuestionComponent
             questionData={currentQuestion}
             currentQuestionIndex={currentQuestionIndex}
             totalQuestions={questions.length}
             onNext={handleNext}
+            isHighlighterActive={isHighlighterActive} 
             onPrevious={handlePrevious}
           />
         </main>

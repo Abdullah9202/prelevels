@@ -15,7 +15,7 @@ import React from "react";
 
 
 export default function Home() {
-  const { getToken } = useAuth();
+  const { getToken, signOut } = useAuth();
   const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
   
   useEffect(() => {
@@ -83,6 +83,19 @@ export default function Home() {
       }
     };
   }, [getToken, user, isSignedIn]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.removeItem("sessionInitialized");
+      signOut(); // Sign out the user from Clerk
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [signOut]);
 
   return (
     <>

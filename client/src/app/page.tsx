@@ -85,9 +85,24 @@ export default function Home() {
   }, [getToken, user, isSignedIn]);
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
+    const handleBeforeUnload = async () => {
       localStorage.removeItem("sessionInitialized");
-      signOut(); // Sign out the user from Clerk
+
+      // Calling the backend to close the session
+      try {
+        await fetch("http://127.0.0.1:8000/api/student/close-session/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("Session closed on backend");
+      } catch (error) {
+        console.error("Error closing session on backend:", error);
+      }
+
+      // Sign out the user from Clerk
+      signOut();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);

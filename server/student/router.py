@@ -24,7 +24,7 @@ from clerk_django.client import ClerkClient
 from .models import Student
 from .schemas import (
     QuestionBankSchema, CourseSchema, BundleSchema, StudentSchema,
-    RegisterSchema, GetStudentDetailSchema, HelloSchema
+    RegisterSchema, UpdateSchema, GetStudentDetailSchema, HelloSchema
 )
 from .serializers import StudentSerializer
 
@@ -107,7 +107,7 @@ async def register_student(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Update Student Router
-@auth_router.put("/update/", response={200: StudentSchema, 400: dict, 500: dict})
+@auth_router.put("/update/", response={200: UpdateSchema, 400: dict, 500: dict})
 async def update_student(request, *args, **kwargs):
     try:
         # Getting Clerk user data from the request

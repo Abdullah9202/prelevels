@@ -36,6 +36,16 @@ class RegisterSchema(Schema):
     # Validating the phone number 
     _phone_number_validator = phone_number_validator
 
+# Update Schema
+class UpdateSchema(Schema):
+    clerk_id: str
+    first_name: str
+    last_name: str
+    email: EmailStr
+    username: str
+    avatar_url: Optional[str]
+    phone_number: str
+    password: str
 
 # Question bank, courses and bundle schema
 class QuestionBankSchema(Schema):

@@ -104,8 +104,6 @@ export async function POST(req: Request) {
       console.error('Error occurred:', error);
     }
   } else if (eventType === 'user.updated') {
-    // thi is for updating the user
-    // Update logic here
     const { id, email_addresses, first_name, last_name, image_url } = evt.data
 
     if (!id || !email_addresses) {
@@ -144,7 +142,6 @@ export async function POST(req: Request) {
     }
 
   } else if (eventType === 'user.deleted') {
-    // Delete logic here
     const { id } = evt.data
     if (!id || id.length === 0) {
       return new Response('Error occurred -- missing data', {

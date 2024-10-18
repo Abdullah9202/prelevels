@@ -30,7 +30,7 @@ SECRET_KEY = '=61fzdfndd)secure-!^svmd)-django-1h&zlol!z*tg88e=prelevels^^ygj4&z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # (AZAK)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # AZAK
 
 # Application definition
 INSTALLED_APPS = [
@@ -140,6 +140,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Media Files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -147,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [ # AZAK
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
@@ -174,7 +178,7 @@ CORS_ALLOW_HEADERS = (
 )
 
 # Clerk Settings
-ALLOWED_PARTIES = [
+ALLOWED_PARTIES = [ # AZAK
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",

@@ -14,10 +14,15 @@ from cart.models import Cart, CartItem
 class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
-    question_bank_image = models.URLField(_("Question bank image"), null=True)
+    question_bank_image = models.ImageField(_("Question Bank Image"), 
+                                            upload_to="questionbank/Uploads/Question Banks/Images/", 
+                                            height_field=None, width_field=None, max_length=None, 
+                                            null=True, blank=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    question_file = models.FileField(_("Question File"), upload_to="questionbank/Uploaded question files/Excel sheets/", null=True, blank=True)
+    question_file = models.FileField(_("Question File"), 
+                                    upload_to="questionbank/Uploads/Question Banks/Excel Sheets/", 
+                                    null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
     validity = models.IntegerField(_("Validity"), null=True, blank=True)
@@ -59,7 +64,10 @@ class Question(models.Model):
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
-    question_image = models.URLField(_("Question image"), null=True, blank=True)
+    question_image = models.ImageField(_("Question Image"), 
+                                    upload_to="questionbank/Uploads/Questions/Images/", 
+                                    height_field=None, width_field=None, max_length=None, 
+                                    null=True, blank=True)
     question_text = models.TextField(_("Question Text"), null=False)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     unique_identifier = models.CharField(_("Unique Identifier"), max_length=100, unique=True, blank=True)

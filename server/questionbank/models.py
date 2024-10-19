@@ -15,13 +15,13 @@ class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Question Bank")
     question_bank_image = models.ImageField(_("Question Bank Image"), 
-                                            upload_to="questionbank/Uploads/Question Banks/Images/", 
+                                            upload_to="QuestionBank/Images/", 
                                             height_field=None, width_field=None, max_length=None, 
                                             null=True, blank=True)
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     question_file = models.FileField(_("Question File"), 
-                                    upload_to="questionbank/Uploads/Question Banks/Excel Sheets/", 
+                                    upload_to="QuestionBank/ExcelFiles/", 
                                     null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
@@ -65,7 +65,7 @@ class Question(models.Model):
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
     question_image = models.ImageField(_("Question Image"), 
-                                    upload_to="questionbank/Uploads/Questions/Images/", 
+                                    upload_to="Questions/Images/", 
                                     height_field=None, width_field=None, max_length=None, 
                                     null=True, blank=True)
     question_text = models.TextField(_("Question Text"), null=False)

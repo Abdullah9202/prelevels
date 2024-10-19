@@ -4,7 +4,6 @@ django-ninja
 djangorestframework
 markdown
 django-filter
-clerk-django
 rav
 python-dotenv
 psycopg2
@@ -17,3 +16,4 @@ pandas
 openpyxl
 cryptography
 requests
+pyjwt

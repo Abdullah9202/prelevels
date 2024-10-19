@@ -141,7 +141,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Media Files (Question bank images, question files, etc.)
-MEDIA_URL = 'Uploads/'
+MEDIA_URL = 'uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 
 # Default primary key field type

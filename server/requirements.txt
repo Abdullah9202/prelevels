@@ -1,15 +1,9 @@
-django
-django-cors-headers
-django-ninja
-djangorestframework
+# Python dependencies
 markdown
-django-filter
 rav
 python-dotenv
 psycopg2
 pydantic[email]
-django-ninja-jwt[crypto]
-django-phonenumber-field[phonenumbers]
 Pillow
 phonenumbers
 pandas
@@ -17,3 +11,13 @@ openpyxl
 cryptography
 requests
 pyjwt
+python3-saml
+
+# Django dependencies
+django
+django-cors-headers
+django-ninja
+djangorestframework
+django-filter
+django-ninja-jwt[crypto]
+django-phonenumber-field[phonenumbers]

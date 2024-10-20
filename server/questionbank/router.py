@@ -145,8 +145,6 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
     response_data = {
         "id": UUID(str(question.id)),
         "question_bank_id": UUID(str(question_bank.id)),
-        "year": question.year,
-        "category": question.category,
         "subject": question.subject,
         "topic": question.topic,
         "question_number": question.question_number,

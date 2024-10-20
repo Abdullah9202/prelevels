@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'ninja_extra',
+    'allauth',
+    'allauth.account',
     # Main App
     'server',
     # My Apps
@@ -65,6 +67,8 @@ MIDDLEWARE = [
     # Clerk Middleware
     'clerk_django.middlewares.clerk.ClerkAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    # Django Allauth Middleware (Account Middleware)
+    "allauth.account.middleware.AccountMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -148,6 +152,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django Allauth Settings
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = ('allauth.account.auth_backends.AuthenticationBackend',)
 
 
 # CORS Settings

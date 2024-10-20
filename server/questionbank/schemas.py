@@ -4,6 +4,15 @@ from ninja import Schema
 from typing import List, Optional
 
 
+# Schema for Category model
+class CategorySchema(Schema):
+    id: UUID
+    name: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
+
+
 # Schema for QuestionBank model
 class QuestionBankSchema(Schema):
     id: UUID

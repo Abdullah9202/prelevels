@@ -15,7 +15,9 @@ class Course(models.Model):
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course")
     description = models.TextField(_("Description"), null=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    course_image = models.URLField(_("Course image"), null=True)
+    course_image = models.ImageField(_("Course Image"),
+                                    upload_to="images/", 
+                                    height_field=None, width_field=None, max_length=None)
     whatsapp_link = models.URLField(_("Whatsapp Link"), null=True)
     resource_link = models.URLField(_("Resource Link"), null=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)

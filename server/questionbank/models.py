@@ -83,6 +83,9 @@ class QuestionBank(models.Model):
 # Question Model
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
+    # Foreign Key for question bank (One to Many)
+    question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
+                                        on_delete=models.CASCADE)
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
@@ -96,9 +99,6 @@ class Question(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
-    # Foreign Key for question bank (One to Many)
-    question_bank = models.ForeignKey(QuestionBank, verbose_name=_("Question Bank"), related_name="questions",
-                                        on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Question")

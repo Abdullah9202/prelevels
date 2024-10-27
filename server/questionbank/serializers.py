@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from .models import (
-    Category, QuestionBank, Question, Option, WhyCorrectOption,
+    QuestionBankCategory, QuestionBank, Question, Option, WhyCorrectOption,
     SaveQuestion, Report
 )
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    model = Category
+    model = QuestionBankCategory
     fields = [
         'id', 'name', 'created_at', 'updated_at', 'is_active',
     ]

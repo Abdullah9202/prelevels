@@ -1,7 +1,7 @@
 from django.contrib import admin
 # My Files
 from .models import (
-    Category, QuestionBank, Question, Option, WhyCorrectOption,
+    QuestionBankCategory, QuestionBank, Question, Option, WhyCorrectOption,
     SaveQuestion, Report
 )
 
@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('is_active',)
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(QuestionBankCategory, CategoryAdmin)
 
 # Question Bank with Admin
 class QuestionBankAdmin(admin.ModelAdmin):

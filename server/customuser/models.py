@@ -44,25 +44,25 @@ class User(AbstractUser):
         verbose_name=_('groups'),
         blank=True,
         help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
-        related_name='student_set'
+        related_name='user_set'
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name=_('user permissions'),
         blank=True,
         help_text=_('Specific permissions for this user.'),
-        related_name='student_set'
+        related_name='user_set'
     )
 
     class Meta:
-        verbose_name = _("Student")
-        verbose_name_plural = _("Students")
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     def get_absolute_url(self):
-        return reverse("Student_detail", kwargs={"id": self.id})
+        return reverse("User_detail", kwargs={"id": self.id})
 
 
 # Model for Topical Progress
@@ -71,7 +71,7 @@ class TopicalProgress(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     # Relationship with User model
-    student = models.ForeignKey(User, verbose_name=_("Student"), related_name="topical_progress", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_("User"), related_name="topical_progress", on_delete=models.CASCADE)
 
     # Progress details
     progress = models.JSONField(_("Topical Progress"), default=dict, blank=True)
@@ -81,7 +81,7 @@ class TopicalProgress(models.Model):
         verbose_name_plural = _("Topical Progresses")
 
     def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} - Topical Progress"
+        return f"{self.user.first_name} {self.user.last_name} - Topical Progress"
 
     def get_absolute_url(self):
         return reverse("topical_progress_detail", kwargs={"id": self.id})
@@ -93,7 +93,7 @@ class YearlyProgress(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     # Relationship with User model
-    student = models.ForeignKey(User, verbose_name=_("Student"), related_name="yearly_progress", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_("User"), related_name="yearly_progress", on_delete=models.CASCADE)
 
     # Progress details
     progress = models.JSONField(_("Yearly Progress"), default=dict, blank=True)
@@ -103,7 +103,7 @@ class YearlyProgress(models.Model):
         verbose_name_plural = _("Yearly Progresses")
 
     def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} - Yearly Progress"
+        return f"{self.user.first_name} {self.user.last_name} - Yearly Progress"
 
     def get_absolute_url(self):
         return reverse("yearly_progress_detail", kwargs={"id": self.id})

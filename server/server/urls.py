@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # My Files
-from student import api as std_api
+from customuser import api as cuser_api
 from questionbank import api as questionbank_api
 from course import api as course_api
 from bundle import api as bundle_api
@@ -27,8 +27,8 @@ from cart import api as cart_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Student API URLs
-    path('api/student/', std_api.api.urls),
+    # Custom User API URLs
+    path('api/customuser/', cuser_api.api.urls),
     # Question Bank API URLs
     path('api/questionbank/', questionbank_api.api.urls),
     # Course API URLs

@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     # Main App
     'server',
     # My Apps
-    'student',
+    'customuser',
     'questionbank',
     'course',
     'bundle',
@@ -124,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # User model for authentication
-AUTH_USER_MODEL = 'student.User'
+AUTH_USER_MODEL = 'customuser.User'
 
 
 # Internationalization

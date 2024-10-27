@@ -166,16 +166,16 @@ class WhyCorrectOption(models.Model):
 class SaveQuestion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     saved_at = models.DateField(_("Saved at"), auto_now_add=True)
-    student = models.ForeignKey("student.User", verbose_name=_("Student"), on_delete=models.CASCADE)
+    user = models.ForeignKey("customuser.User", verbose_name=_("User"), on_delete=models.CASCADE)
     question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
                                     on_delete=models.CASCADE, default=None)
-    question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_student",
+    question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_user",
                                 on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("SaveQuestion")
         verbose_name_plural = _("SaveQuestions")
-        unique_together = ("student", "question") # Ensuring that student can only save the question once
+        unique_together = ("user", "question") # Ensuring that user can only save the question once
 
     def __str__(self):
         return f"{self.student.username} - {self.question.question_text}"

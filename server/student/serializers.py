@@ -1,11 +1,11 @@
 from rest_framework import serializers
 # My Files
-from .models import Student, TopicalProgress, YearlyProgress
+from .models import User, TopicalProgress, YearlyProgress
 
-class StudentSerializer(serializers.ModelSerializer):
-    # Serializer for Student model
+class UserSerializer(serializers.ModelSerializer):
+    # Serializer for User model
     class Meta:
-        model = Student
+        model = User
         fields = [
             'id', 'clerk_id', 'first_name', 'last_name', 'avatar_url', 
             'email', 'username', 'phone_number', 'taking_questionBanks', 

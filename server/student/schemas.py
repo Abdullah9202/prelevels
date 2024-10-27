@@ -76,7 +76,7 @@ class BundleSchema(Schema):
 
 
 # Student Schema
-class StudentSchema(Schema):
+class UserSchema(Schema):
     id: UUID
     # Student identity and details
     first_name: str = None
@@ -96,7 +96,7 @@ class StudentSchema(Schema):
     updated_at: datetime
 
 
-class GetStudentDetailSchema(Schema):
+class GetUserDetailSchema(Schema):
     id: UUID
     first_name: str = None
     last_name: str = None

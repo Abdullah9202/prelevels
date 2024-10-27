@@ -27,7 +27,7 @@ class BundleCategory(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("questionbank:BundleCategory-detail", kwargs={"id": self.id})
+        return reverse("bundle:BundleCategory_detail", kwargs={"id": self.id})
 
 
 # Bundle model

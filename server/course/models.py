@@ -25,7 +25,7 @@ class CourseCategory(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("questionbank:CourseCategory-detail", kwargs={"id": self.id})
+        return reverse("course:CourseCategory_detail", kwargs={"id": self.id})
 
 
 # Course model

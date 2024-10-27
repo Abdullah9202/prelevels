@@ -9,14 +9,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 # My Files
 from cart.models import Cart, CartItem
-# from student.models import Student
-
-# Getting the user model
-Student = get_user_model()
 
 
 # Category model
-class Category(models.Model):
+class QuestionBankCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Category")
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -31,14 +27,14 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("questionbank:Category-detail", kwargs={"id": self.id})
+        return reverse("questionbank:QuestionBankCategory_detail", kwargs={"id": self.id})
 
 
 # Question bank model
 class QuestionBank(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     # Foreign key (One to many relation with category)
-    category = models.ForeignKey(Category, verbose_name=_("Category"), related_name="question_banks",
+    category = models.ForeignKey(QuestionBankCategory, verbose_name=_("Category"), related_name="question_banks",
                                     on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Question Bank")
     question_bank_image = models.ImageField(_("Question Bank Image"), 
@@ -77,7 +73,7 @@ class QuestionBank(models.Model):
         cart.save()
 
     def get_absolute_url(self):
-        return reverse("questionbank:QuestionBank-detail", kwargs={"id": self.id})
+        return reverse("questionbank:QuestionBank_detail", kwargs={"id": self.id})
 
 
 # Question Model
@@ -114,7 +110,7 @@ class Question(models.Model):
         return f"{self.question_number} - {self.question_text} - {self.subject} - {self.question_bank.name}"
 
     def get_absolute_url(self):
-        return reverse("questionbank:Question-detail", kwargs={"id": self.id})
+        return reverse("questionbank:Question_detail", kwargs={"id": self.id})
 
 
 # Options Model
@@ -170,7 +166,7 @@ class WhyCorrectOption(models.Model):
 class SaveQuestion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     saved_at = models.DateField(_("Saved at"), auto_now_add=True)
-    student = models.ForeignKey(Student, verbose_name=_("Student"), on_delete=models.CASCADE)
+    student = models.ForeignKey("student.User", verbose_name=_("Student"), on_delete=models.CASCADE)
     question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
                                     on_delete=models.CASCADE, default=None)
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_student",
@@ -185,7 +181,7 @@ class SaveQuestion(models.Model):
         return f"{self.student.username} - {self.question.question_text}"
 
     def get_absolute_url(self):
-        return reverse("SaveQuestion_detail", kwargs={"id": self.id})
+        return reverse("questionbank:SaveQuestion_detail", kwargs={"id": self.id})
 
 
 # Report Model

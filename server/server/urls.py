@@ -27,8 +27,6 @@ from cart import api as cart_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Django all auth URLs
-    path('accounts/', include('allauth.urls')),
     # Student API URLs
     path('api/student/', std_api.api.urls),
     # Question Bank API URLs

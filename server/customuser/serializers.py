@@ -15,16 +15,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TopicalProgressSerializer(serializers.ModelSerializer):
     # Serializer for TopicalProgress model
-    student = serializers.StringRelatedField()  # To represent the student as a string
+    user = serializers.StringRelatedField()  # To represent the user as a string
 
     class Meta:
         model = TopicalProgress
-        fields = ['id', 'student', 'progress']
+        fields = ['id', 'user', 'progress']
 
 class YearlyProgressSerializer(serializers.ModelSerializer):
     # Serializer for YearlyProgress model
-    student = serializers.StringRelatedField()  # To represent the student as a string
+    user = serializers.StringRelatedField()  # To represent the user as a string
 
     class Meta:
         model = YearlyProgress
-        fields = ['id', 'student', 'progress']
+        fields = ['id', 'user', 'progress']

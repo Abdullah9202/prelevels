@@ -178,7 +178,7 @@ class SaveQuestion(models.Model):
         unique_together = ("user", "question") # Ensuring that user can only save the question once
 
     def __str__(self):
-        return f"{self.student.username} - {self.question.question_text}"
+        return f"{self.user.username} - {self.question.question_text}"
 
     def get_absolute_url(self):
         return reverse("questionbank:SaveQuestion_detail", kwargs={"id": self.id})

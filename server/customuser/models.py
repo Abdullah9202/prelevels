@@ -31,7 +31,7 @@ class User(AbstractUser):
     questionSolved = models.IntegerField(_("Question Solved"), default=0)
     questionRemained = models.IntegerField(_("Question Remained"), default=0)
     
-    # Timestamps for student creation and update
+    # Timestamps for user creation and update
     createdAt = models.DateTimeField(_("Created At"), auto_now_add=True, null=True)
     updatedAt = models.DateTimeField(_("Updated At"), auto_now=True, null=True)
 

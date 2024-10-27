@@ -75,23 +75,23 @@ class BundleSchema(Schema):
     updated_at: datetime
 
 
-# Student Schema
+# User Schema
 class UserSchema(Schema):
     id: UUID
-    # Student identity and details
+    # User identity and details
     first_name: str = None
     last_name: str = None
-    student_image: str = None
+    user_image: str = None
     email: str = None
     username: str
     password: str
     # Authentication status
     is_authenticated: bool = False
-    # Student buying history
+    # User buying history
     taking_questionBanks: list[QuestionBankSchema]  = []
     taking_courses: list[CourseSchema] = []
     taking_bundles: list[BundleSchema] = []
-    # Student creation and update timestamps
+    # User creation and update timestamps
     created_at: datetime
     updated_at: datetime
 
@@ -100,7 +100,7 @@ class GetUserDetailSchema(Schema):
     id: UUID
     first_name: str = None
     last_name: str = None
-    student_image: Optional[str] = None
+    user_image: Optional[str] = None
     email: str = None
     username: str
     password: str

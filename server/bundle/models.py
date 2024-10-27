@@ -11,9 +11,31 @@ from questionbank.models import QuestionBank
 from cart.models import Cart, CartItem
 
 
+# Category model
+class BundleCategory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
+    name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Category")
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
+    is_active = models.BooleanField(_("Is Active"), default=True)
+    
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse("questionbank:BundleCategory-detail", kwargs={"id": self.id})
+
+
 # Bundle model
 class Bundle(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
+    # Foreign key (One to many relation with category)
+    category = models.ForeignKey(BundleCategory, verbose_name=_("Category"), related_name="bundles",
+                                    on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Bundle")
     bundle_image = models.ImageField(_("Bundle Image"), 
                                     upload_to="images/", 

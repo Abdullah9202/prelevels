@@ -18,6 +18,7 @@ django
 django-cors-headers
 django-ninja
 djangorestframework
+djangorestframework-simplejwt
 django-filter
 django-ninja-jwt[crypto]
 django-phonenumber-field[phonenumbers]

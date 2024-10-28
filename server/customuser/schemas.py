@@ -18,27 +18,21 @@ def phone_number_validator(cls, value):
     return value
 
 
-class HelloSchema(Schema):
-    msg: Optional[str]
-
-
 # Register Schema
 class RegisterSchema(Schema):
-    clerk_id: str
     first_name: str
     last_name: str
     email: EmailStr
     username: str
-    avatar_url: Optional[str]
     phone_number: str
     password: str
+    password2: str
     
     # Validating the phone number 
     _phone_number_validator = phone_number_validator
 
 # Update Schema
 class UpdateSchema(Schema):
-    clerk_id: str
     first_name: str
     last_name: str
     email: EmailStr

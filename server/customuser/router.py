@@ -1,32 +1,25 @@
 # Python imports
 import os
-import jwt
 import logging
-from pathlib import Path
-import json
-from uuid import UUID
 from dotenv import load_dotenv
-from asgiref.sync import sync_to_async
 # Django imports
+from asgiref.sync import sync_to_async
 from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
-from django.contrib.auth.hashers import make_password, check_password
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
-# Ninja Imports
-from ninja import Router
+# Ninja imports
+from ninja_extra import Router
+from ninja_extra.security import django_auth
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx, codes_5xx
-# Clerk imports
-from clerk_django.client import ClerkClient
 # My Files
 from .models import User
 from .schemas import (
-    QuestionBankSchema, CourseSchema, BundleSchema, UserSchema,
-    RegisterSchema, UpdateSchema, GetUserDetailSchema, HelloSchema
+    RegisterSchema, UpdateSchema, GetUserDetailSchema
 )
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegisterSerializer
+
 
 # Loading the env
 load_dotenv()
@@ -34,187 +27,80 @@ load_dotenv()
 # Router Init
 auth_router = Router()
 
-# Clerk Client Init
-clerk_client = ClerkClient()
-
-# Set up logging
 logger = logging.getLogger(__name__)
 
-
-# Test route
-@auth_router.get("/hello/", response={200: HelloSchema, codes_4xx: dict})
-async def hello(request, *args, **kwargs):
-    return JsonResponse({"msg": "Hello World!"}, status=200)
+@auth_router.get("/set-csrf-token")
+def get_csrf_token(request):
+    return JsonResponse({"csrftoken": request.META["CSRF_COOKIE"]})
 
 
 # Register User Router
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
-async def register_User(request, payload: RegisterSchema, *args, **kwargs):
-    logger.info(f"Registering User with data: {payload.dict()}")
-
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict}, auth=django_auth)
+def register_user(request, payload: RegisterSchema, *args, **kwargs):
     try:
-        # Checking for existing user
-        if await User.objects.filter(email=payload.email).aexists():
-            logger.warning("Registration failed: Email already exists.")
+        if User.objects.filter(email=payload.email).exists():
+            logger.warning("Email already in use: %s", payload.email)
             raise HttpError(400, "Email address is already in use.")
-        if await User.objects.filter(username=payload.username).aexists():
-            logger.warning("Registration failed: Username already exists.")
+        
+        if User.objects.filter(username=payload.username).exists():
+            logger.warning("Username already taken: %s", payload.username)
             raise HttpError(400, "Username is already taken.")
-        if await User.objects.filter(phone_number=payload.phone_number).aexists():
-            logger.warning("Registration failed: Phone number already exists.")
+        
+        if User.objects.filter(phone_number=payload.phone_number).exists():
+            logger.warning("Phone number already registered: %s", payload.phone_number)
             raise HttpError(400, "Phone number is already registered.")
+        
+        # Attempt to serialize and save the user
+        serializer = RegisterSerializer(data=payload.dict())
+        if not serializer.is_valid():
+            logger.error("Serializer validation failed: %s", serializer.errors)
+            raise HttpError(400, serializer.errors)
 
-        # Using the serializer to validate the input data
-        serializer = UserSerializer(data=payload.dict())
-        if not await sync_to_async(serializer.is_valid)():
-            logger.error(f"Validation error: {serializer.errors}")
-            raise HttpError(400, "Invalid input data.")
+        user = serializer.save()
+        serialized_data = UserSerializer(user).data
+        
+        logger.info("User registered successfully: %s", serialized_data)
+        return JsonResponse(serialized_data, status=200)
 
-        # Hashing the password
-        hashed_password = await sync_to_async(make_password)(payload.password)
-
-        # Registering the new User
-        new_User = User(
-            clerk_id=payload.clerk_id,
-            first_name=payload.first_name,
-            last_name=payload.last_name,
-            email=payload.email,
-            username=payload.username,
-            avatar_url=payload.avatar_url,
-            phone_number=payload.phone_number,
-            password=hashed_password,
-        )
-        await new_User.asave()
-
-        # Serializing the newly created User and returning it
-        serialized_User = await sync_to_async(UserSerializer)(new_User)
-        serialized_data = await sync_to_async(lambda: serialized_User.data)()
-
-        return JsonResponse(serialized_data)
-
-    except IntegrityError as err:
-        logger.error(f"IntegrityError: {str(err)}")
+    except IntegrityError as e:
+        logger.error("Database Integrity Error: %s", str(e))
         raise HttpError(400, "Database error. Please ensure your data is unique.")
-    except ValidationError as err:
-        logger.error(f"ValidationError: {str(err)}")
+    except ValidationError as e:
+        logger.error("Validation Error: %s", str(e))
         raise HttpError(400, "Validation error.")
     except HttpError as err:
-        logger.error(f"HttpError: {err}")
+        logger.error("HTTP Error: %s", str(err))
         raise err
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
+        logger.exception("Unexpected error occurred")
         return JsonResponse({"error": "An unexpected error occurred. Please try again later"}, status=500)
 
 
-# Update User Router
-@auth_router.put("/update/", response={200: UpdateSchema, 400: dict, 500: dict})
-async def update_User(request, *args, **kwargs):
-    try:
-        # Getting Clerk user data from the request
-        clerk_user = request.clerk_user
-        if not clerk_user:
-            raise HttpError(401, "User is not authenticated.")
-
-        # Getting the Clerk user ID from the Clerk user data
-        clerk_user_id = clerk_user.get("id")
-
-        # Finding the User using the clerk_id
-        User = await User.objects.aget(clerk_id=clerk_user_id)
-
-        # Updating User details with the data from Clerk
-        User.first_name = clerk_user.get("first_name", User.first_name)
-        User.last_name = clerk_user.get("last_name", User.last_name)
-        User.email = clerk_user.get("email", User.email)
-        User.username = clerk_user.get("username", User.username)
-        User.avatar_url = clerk_user.get("avatar_url", User.avatar_url)
-        User.phone_number = clerk_user.get("phone_number", User.phone_number)
-        User.password = await sync_to_async(make_password)(clerk_user.get("password", User.password))
-
-        # Saving the updated User details
-        await User.asave()
-
-        # Serializing the updated User details
-        serialized_User = await sync_to_async(UserSerializer)(User)
-        serialized_data = await sync_to_async(lambda: serialized_User.data)()
-
-        # Return the serialized data
-        return JsonResponse(serialized_data, status=200)
-
-    except User.DoesNotExist:
-        raise HttpError(404, "User not found.")
-    except Exception as e:
-        logger.error(f"Unexpected error occurred: {e}")
-        raise HttpError(500, f"An unexpected error occurred: {e}")
+# Login router
+@auth_router.post("/login/", response={200: dict, codes_4xx: dict}, auth=django_auth)
+async def login_user(request, payload: RegisterSchema, *args, **kwargs):
+    user = await sync_to_async(authenticate)(username=payload.username, password=payload.password)
+    if user is not None:
+        await sync_to_async(login)(request, user)
+        return JsonResponse({"message": "Login successful"}, status=200)
+    else:
+        raise HttpError(400, "Invalid credentials or user does not exists.")
 
 
-# AZAK
-# Login and logout are being managed by Clerk
-# =============================================================================================
-# Session init Router
-@auth_router.post("/init-session/", response={200: dict, codes_4xx: dict, codes_5xx: dict})
-async def init_session(request, *args, **kwargs):
-    try:
-        # Check if a session already exists for the User
-        if "User_id" in request.session:
-            User_id = request.session["User_id"]
-            User = await User.objects.aget(id=User_id)
-            return JsonResponse({"message": "Session already initialized", "session_active": True, 
-                                "User_id": User.id}, status=200)
-
-        # Get Clerk user data from the request (assuming Clerk middleware adds this to the request)
-        clerk_user = request.clerk_user
-        if not clerk_user:
-            raise HttpError(401, "User is not authenticated.")
-
-        # Get the Clerk user ID from the Clerk user data
-        clerk_user_id = clerk_user.get("id")
-
-        # Find the User using the clerk_id
-        User = await User.objects.aget(clerk_id=clerk_user_id)
-
-        # Set up the session for the User
-        request.session["User_id"] = User.id
-
-        # Return a success response
-        return JsonResponse({"message": "Session initialized", "session_active": True,
-                            "User_id": User.id}, status=200)
-
-    except User.DoesNotExist:
-        raise HttpError(404, "User not found.")
-    except Exception as e:
-        logger.error(f"Unexpected error occurred: {e}")
-        raise HttpError(500, f"An unexpected error occurred: {e}")
-
-
-# Session closing Router
-@auth_router.post("/close-session/")
-async def close_session(request, *args, **kwargs):
-    try:
-        await sync_to_async(logout)(request)
-        return JsonResponse({"message": "User logged out successfully"}, status=200)
-    except ValidationError as err:
-        raise HttpError(400, f"Validation error occurred: {err}")
-    except Exception as e:
-        return JsonResponse({"error": f"An unexpected error occurred: {e}"}, status=500)
-# =============================================================================================
+# Logout router
+@auth_router.post("/logout/", response={200: dict}, auth=django_auth)
+async def logout_user(request, *args, **kwargs):
+    await sync_to_async(logout)(request)
+    return JsonResponse({"message": "User logged out successfully"}, status=200)
 
 
 # User detail router
-@auth_router.get("/me/", response={200: GetUserDetailSchema, codes_4xx: dict})
-async def get_User_details(request, *args, **kwargs):
-    # Get Clerk user data from the request
-    clerk_user = request.clerk_user
-    if clerk_user:
-        try:
-            clerk_user_id = clerk_user.get("id")
-            User = await User.objects.aget(clerk_id=clerk_user_id)
-            serialized_User = await sync_to_async(UserSerializer)(User)
-            serialized_data = await sync_to_async(lambda: serialized_User.data)()
-            return JsonResponse(serialized_data, status=200)
-        except User.DoesNotExist:
-            raise HttpError(404, "User not found.")
-        except Exception as e:
-            logger.error(f"Unexpected error occurred: {e}")
-            raise HttpError(500, f"An unexpected error occurred: {e}")
+@auth_router.get("/me/", response={200: GetUserDetailSchema, codes_4xx: dict}, auth=django_auth)
+async def get_user_details(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        user = request.user
+        serialized_user = await sync_to_async(UserSerializer)(user)
+        serialized_data = await sync_to_async(lambda: serialized_user.data)()
+        return JsonResponse(serialized_data, status=200)
     else:
         raise HttpError(401, "User is not authenticated.")

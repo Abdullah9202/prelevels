@@ -50,7 +50,7 @@ def register_user(request, payload: RegisterSchema, *args, **kwargs):
             logger.warning("Phone number already registered: %s", payload.phone_number)
             raise HttpError(400, "Phone number is already registered.")
         
-        # Attempt to serialize and save the user
+        # Attempting to serialize and save the user
         serializer = RegisterSerializer(data=payload.dict())
         if not serializer.is_valid():
             logger.error("Serializer validation failed: %s", serializer.errors)

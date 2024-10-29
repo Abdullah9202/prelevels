@@ -2,9 +2,10 @@
 import os
 import logging
 from dotenv import load_dotenv
-from asgiref.sync import sync_to_async
 # Django imports
+from asgiref.sync import sync_to_async
 from django.contrib.auth import login, logout, authenticate
+from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
@@ -46,25 +47,19 @@ def get_csrf_token(request):
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict}) # atuh=django_auth
 async def register_user(request, payload: RegisterSchema, *args, **kwargs):
     try:
-        if await sync_to_async(User.objects.filter(email=payload.email).exists)():
+        # Optimize existence check by using sync_to_async for database I/O only
+        exists = await sync_to_async(lambda: User.objects.filter(email=payload.email).exists())()
+        if exists:
             logger.warning("Email already in use: %s", payload.email)
             raise HttpError(400, "Email address is already in use.")
         
-        if await sync_to_async(User.objects.filter(username=payload.username).exists)():
-            logger.warning("Username already taken: %s", payload.username)
-            raise HttpError(400, "Username is already taken.")
-        
-        if await sync_to_async(User.objects.filter(phone_number=payload.phone_number).exists)():
-            logger.warning("Phone number already registered: %s", payload.phone_number)
-            raise HttpError(400, "Phone number is already registered.")
-        
         # Attempting to serialize and save the user
         serializer = RegisterSerializer(data=payload.dict())
-        if not await sync_to_async(serializer.is_valid)():
+        if not serializer.is_valid():
             logger.error("Serializer validation failed: %s", serializer.errors)
             raise HttpError(400, str(serializer.errors))
 
-        user = await sync_to_async(serializer.save)()
+        user = serializer.save()
         serialized_data = await sync_to_async(lambda: UserSerializer(user).data)()
         
         logger.info("User registered successfully: %s", serialized_data)
@@ -86,17 +81,21 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 # Login router
 @auth_router.post("/login/", response={200: dict, codes_4xx: dict}) # auth=django_auth
+@ratelimit(key="ip", rate="5/m", method="POST", block=True) # Rate limiting
 async def login_user(request, payload: LoginSchema, *args, **kwargs):
     # Checking if the user is already logged in
     if request.user.is_authenticated:
         return JsonResponse({"message": "User already logged in"}, status=409)
+    
     # Authenticating the user
     user = await sync_to_async(authenticate)(request, username=payload.username, password=payload.password)
+    
     # Checking if the user exists
     if user is not None:
         await sync_to_async(login)(request, user)
         return JsonResponse({"message": "Login successful"}, status=200)
     else:
+        logger.warning("Failed login attempt for username: %s", payload.username)
         raise HttpError(400, "Invalid credentials or user does not exist.")
 
 

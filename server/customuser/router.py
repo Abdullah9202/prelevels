@@ -43,7 +43,7 @@ def get_csrf_token(request):
 
 
 # Register User Router
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict}) # atuh=django_auth
 async def register_user(request, payload: RegisterSchema, *args, **kwargs):
     try:
         if await sync_to_async(User.objects.filter(email=payload.email).exists)():
@@ -85,7 +85,7 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Login router
-@auth_router.post("/login/", response={200: dict, codes_4xx: dict}, auth=django_auth)
+@auth_router.post("/login/", response={200: dict, codes_4xx: dict}) # auth=django_auth
 async def login_user(request, payload: LoginSchema, *args, **kwargs):
     user = await sync_to_async(authenticate)(request, username=payload.username, password=payload.password)
     if user is not None:
@@ -96,14 +96,14 @@ async def login_user(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout router
-@auth_router.post("/logout/", response={200: dict}, auth=django_auth)
+@auth_router.post("/logout/", response={200: dict}) # auth=django_auth
 async def logout_user(request, *args, **kwargs):
     await sync_to_async(logout)(request)
     return JsonResponse({"message": "User logged out successfully"}, status=200)
 
 
 # User detail router
-@auth_router.get("/me/", response={200: GetUserDetailSchema, codes_4xx: dict}, auth=django_auth)
+@auth_router.get("/me/", response={200: GetUserDetailSchema, codes_4xx: dict}) # auth=django_auth
 async def get_user_details(request, *args, **kwargs):
     if request.user.is_authenticated:
         user = request.user

@@ -31,6 +31,11 @@ class RegisterSchema(Schema):
     # Validating the phone number 
     _phone_number_validator = phone_number_validator
 
+# Login Schema
+class LoginSchema(Schema):
+    username: str
+    password: str
+
 # Update Schema
 class UpdateSchema(Schema):
     first_name: str

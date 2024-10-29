@@ -21,9 +21,12 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-red-500 mr-4 lg:px-12 lg:pr-52">
+              <Link
+                href="/"
+                className="text-2xl font-bold text-red-500 mr-4 lg:px-12 lg:pr-52"
+              >
                 Prelevels
-              </span>
+              </Link>
             </div>
             <div className="hidden md:flex space-x-4 lg:items-center lg:justify-center">
               <Link

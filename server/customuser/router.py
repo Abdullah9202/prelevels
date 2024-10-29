@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.middleware.csrf import get_token
 # Ninja imports
 from ninja_extra import Router
 from ninja_extra.security import django_auth
@@ -30,9 +31,15 @@ logger = logging.getLogger(__name__)
 
 @auth_router.get("/set-csrf-token")
 def get_csrf_token(request):
-    csrf_token = request.META.get("CSRF_COOKIE", None)
-    logger.debug(f"CSRF Token: {csrf_token}")
-    return JsonResponse({"csrftoken": csrf_token})
+    csrf_token_meta = request.META.get("CSRF_COOKIE", None)
+    csrf_token = get_token(request)
+    logger.debug(f"CSRF Token Meta: {csrf_token_meta}, CSRF Token: {csrf_token}")
+    return JsonResponse(
+        {
+            "csrf_token_meta": csrf_token_meta,
+            "csrf_token": csrf_token
+        }
+    )
 
 
 # Register User Router

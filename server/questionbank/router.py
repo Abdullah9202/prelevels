@@ -33,6 +33,10 @@ logger = logging.getLogger(__name__)
 # Get all question banks
 @question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict})
 def get_all_question_banks(request, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     try:
         # Getting all question banks
         question_banks = QuestionBank.objects.all()
@@ -60,6 +64,10 @@ def get_all_question_banks(request, *args, **kwargs):
 # Get the details of specific Question bank
 @question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankDetailSchema, codes_4xx: dict})
 def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     try:
         # Getting the question bank
         question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
@@ -86,6 +94,10 @@ def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
 # Get all questions in a question bank
 @question_bank_router.get("/{question_bank_id}/all-questions/", response={200: QuestionSchema, codes_4xx: dict})
 def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     # Getting the question banks using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
 
@@ -128,6 +140,10 @@ def get_questions_in_question_bank(request, question_bank_id, *args, **kwargs):
 @question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionDetailSchema,
                                                                                     codes_4xx: dict})
 def get_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     # Getting the question bank using id
     question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
     # Getting the specific question along with it's options and why correct option from question bank
@@ -165,6 +181,10 @@ def get_question_in_question_bank(request, question_bank_id, question_id, *args,
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
                         response={200: SaveQuestionSchema, codes_4xx: dict})
 def save_question(request, question_bank_id, question_id, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     # Verifying the UUIDs
     try:
         question_bank_id = UUID(str(question_bank_id))
@@ -212,6 +232,10 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
                             response={200: ReportQuestionSchema, codes_4xx: dict})
 def report_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
+    # Checking if the user is logged in or not
+    if not request.user.is_authenticated:
+        raise HttpError(401, "User is not authenticated")
+    
     # Verifying the UUIDs
     try:
         question_bank_id = UUID(str(question_bank_id))

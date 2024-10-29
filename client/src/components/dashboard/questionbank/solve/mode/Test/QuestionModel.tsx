@@ -7,7 +7,7 @@ interface QuestionModalProps {
   onQuestionSelect: (questionIndex: number) => void;
 }
 
-const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, totalQuestions, onQuestionSelect }) => {
+const QuestionModel: React.FC<QuestionModalProps> = ({ isOpen, onClose, totalQuestions, onQuestionSelect }) => {
   if (!isOpen) return null;
 
   const questionDots = Array.from({ length: totalQuestions }, (_, index) => index + 1);
@@ -35,4 +35,4 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, totalQue
   );
 };
 
-export default QuestionModal;
+export default QuestionModel;

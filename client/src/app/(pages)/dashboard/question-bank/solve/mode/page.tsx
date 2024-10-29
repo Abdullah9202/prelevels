@@ -1,5 +1,5 @@
 import Sidebar from "@/components/dashboard/sidebar"
-import ModeComponent from "@/components/dashboard/questionbank/solve/mode/modecomponenet";
+import ModeComponent from "@/components/dashboard/questionbank/solve/mode/modecomponent";
 
 export default function Mode() {
     return (

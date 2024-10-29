@@ -2,8 +2,8 @@
 // pages/index.js
 import { useState } from 'react';
 import { questions } from '@/components/dashboard/questionbank/solve/mode/Test/mockQuestion'; // Import dummy data
-import QuestionComponent from '@/components/dashboard/questionbank/solve/mode/Test/question_compinent'; // Import the QuestionComponent
-import QuestionModal from '@/components/dashboard/questionbank/solve/mode/Test/QuestionModal';
+import QuestionComponent from '@/components/dashboard/questionbank/solve/mode/Test/question_component'; // Import the QuestionComponent
+import QuestionModal from '@/components/dashboard/questionbank/solve/mode/Test/QuestionModel';
 import ReportModel from '@/components/dashboard/questionbank/solve/mode/Test/report_model';
 
 export default function Home() {

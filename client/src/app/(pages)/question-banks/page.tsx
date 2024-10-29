@@ -36,7 +36,7 @@ export default function QuestionBankPage() {
       <SeasonSale />
       <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar />
-        <Banner src={BannerImage} alt="banner Image" />
+        <Banner src={BannerImage} alt="banner Image" text="Question bank"/>
         <Sidebar />
         <div className="py-48 hidden sm:block">
           <Footer />

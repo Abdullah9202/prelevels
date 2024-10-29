@@ -3,9 +3,10 @@ import Image, { StaticImageData } from "next/image";
 interface BannerProps {
   src: StaticImageData;
   alt: string;
+  text: string;
 }
 
-const Banner = ({ src, alt }: BannerProps) => {
+const Banner = ({ src, alt, text }: BannerProps) => {
   return (
     <div className="flex justify-center items-center py-5 px-0 sm:px-6 md:px-0 lg:px-0 xl:px-0 mx-auto w-full max-w-screen-lg lg:max-w-[1760px] xl:max-w-[2000px]">
       <Image
@@ -18,6 +19,9 @@ const Banner = ({ src, alt }: BannerProps) => {
         sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, (max-width: 1280px) 70vw, (max-width: 2000px) 60vw, 50vw" 
         // Adjust sizes for small, medium, large, extra-large, and 2xl screens
       />
+      <div className="absolute insert-0 flex justify-center items-center">
+        <span className="text-white text-3xl font-bold">{text}</span>
+      </div>
     </div>
   );
 };

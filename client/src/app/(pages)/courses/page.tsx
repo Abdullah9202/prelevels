@@ -5,7 +5,7 @@ import Banner from "@/components/questionbank/banner";
 import Sidebar from "@/components/ui/sidebar";
 import Footer from "@/components/main/footer";
 import Belowfooter from "@/components/main/belowfooter";
-import Courses from "@/assets/Courses.png"
+import Courses from "@/assets/Banner.png"
 import { useEffect, useState } from "react";
 
 export default function CoursesPage() {
@@ -34,7 +34,7 @@ export default function CoursesPage() {
         <SeasonSale />
         <div className="bg-[#F4F4F4] min-h-screen">
           <Navbar />
-          <Banner src={Courses} alt="Bundle Image" />
+          <Banner src={Courses} alt="Bundle Image" text="Courses" />
           <Sidebar />
           <div className="py-48 hidden sm:block">
             <Footer />

@@ -2,8 +2,8 @@
 import os
 import logging
 from dotenv import load_dotenv
-# Django imports
 from asgiref.sync import sync_to_async
+# Django imports
 from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
 from django.db import IntegrityError
@@ -16,10 +16,9 @@ from ninja.responses import codes_4xx, codes_5xx
 # My Files
 from .models import User
 from .schemas import (
-    RegisterSchema, UpdateSchema, GetUserDetailSchema
+    RegisterSchema, LoginSchema, UpdateSchema, GetUserDetailSchema
 )
 from .serializers import UserSerializer, RegisterSerializer
-
 
 # Loading the env
 load_dotenv()
@@ -31,33 +30,35 @@ logger = logging.getLogger(__name__)
 
 @auth_router.get("/set-csrf-token")
 def get_csrf_token(request):
-    return JsonResponse({"csrftoken": request.META["CSRF_COOKIE"]})
+    csrf_token = request.META.get("CSRF_COOKIE", None)
+    logger.debug(f"CSRF Token: {csrf_token}")
+    return JsonResponse({"csrftoken": csrf_token})
 
 
 # Register User Router
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict}, auth=django_auth)
-def register_user(request, payload: RegisterSchema, *args, **kwargs):
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
+async def register_user(request, payload: RegisterSchema, *args, **kwargs):
     try:
-        if User.objects.filter(email=payload.email).exists():
+        if await sync_to_async(User.objects.filter(email=payload.email).exists)():
             logger.warning("Email already in use: %s", payload.email)
             raise HttpError(400, "Email address is already in use.")
         
-        if User.objects.filter(username=payload.username).exists():
+        if await sync_to_async(User.objects.filter(username=payload.username).exists)():
             logger.warning("Username already taken: %s", payload.username)
             raise HttpError(400, "Username is already taken.")
         
-        if User.objects.filter(phone_number=payload.phone_number).exists():
+        if await sync_to_async(User.objects.filter(phone_number=payload.phone_number).exists)():
             logger.warning("Phone number already registered: %s", payload.phone_number)
             raise HttpError(400, "Phone number is already registered.")
         
         # Attempting to serialize and save the user
         serializer = RegisterSerializer(data=payload.dict())
-        if not serializer.is_valid():
+        if not await sync_to_async(serializer.is_valid)():
             logger.error("Serializer validation failed: %s", serializer.errors)
-            raise HttpError(400, serializer.errors)
+            raise HttpError(400, str(serializer.errors))
 
-        user = serializer.save()
-        serialized_data = UserSerializer(user).data
+        user = await sync_to_async(serializer.save)()
+        serialized_data = await sync_to_async(lambda: UserSerializer(user).data)()
         
         logger.info("User registered successfully: %s", serialized_data)
         return JsonResponse(serialized_data, status=200)
@@ -78,13 +79,13 @@ def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 # Login router
 @auth_router.post("/login/", response={200: dict, codes_4xx: dict}, auth=django_auth)
-async def login_user(request, payload: RegisterSchema, *args, **kwargs):
-    user = await sync_to_async(authenticate)(username=payload.username, password=payload.password)
+async def login_user(request, payload: LoginSchema, *args, **kwargs):
+    user = await sync_to_async(authenticate)(request, username=payload.username, password=payload.password)
     if user is not None:
         await sync_to_async(login)(request, user)
         return JsonResponse({"message": "Login successful"}, status=200)
     else:
-        raise HttpError(400, "Invalid credentials or user does not exists.")
+        raise HttpError(400, "Invalid credentials or user does not exist.")
 
 
 # Logout router

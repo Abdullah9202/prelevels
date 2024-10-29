@@ -87,7 +87,12 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 # Login router
 @auth_router.post("/login/", response={200: dict, codes_4xx: dict}) # auth=django_auth
 async def login_user(request, payload: LoginSchema, *args, **kwargs):
+    # Checking if the user is already logged in
+    if request.user.is_authenticated:
+        return JsonResponse({"message": "User already logged in"}, status=409)
+    # Authenticating the user
     user = await sync_to_async(authenticate)(request, username=payload.username, password=payload.password)
+    # Checking if the user exists
     if user is not None:
         await sync_to_async(login)(request, user)
         return JsonResponse({"message": "Login successful"}, status=200)

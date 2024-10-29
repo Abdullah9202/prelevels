@@ -233,3 +233,6 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "x-requested-with",
 )
+
+# Custom settings
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

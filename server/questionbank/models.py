@@ -125,7 +125,7 @@ class Option(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
-    # Foreign key for question (Each option can occur in only one question)
+    # Foreign key for question
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="options",
                                     on_delete=models.CASCADE)
 
@@ -143,13 +143,13 @@ class Option(models.Model):
 # Why Correct Option Model
 class WhyCorrectOption(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
-    why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True)
+    why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)
-    # Foreign key for question
-    question = models.ForeignKey("questionbank.Question", verbose_name=_("Question"), related_name="why_correct_option",
-                                                on_delete=models.CASCADE)
+    # One to One relation with question
+    question = models.OneToOneField("questionbank.Question", verbose_name=_("Question"), related_name="why_correct_option",
+                                    on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("WhyCorrectOption")
@@ -192,7 +192,7 @@ class Report(models.Model):
     question_bank_id = models.ForeignKey("questionbank.QuestionBank", on_delete=models.CASCADE,
                                             verbose_name=_("Question bank of reported question"),
                                             related_name="reports", default=None)
-    question_id = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,
+    question = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,
                                     verbose_name=_("Reported Question"), related_name="reports")
 
     class Meta:

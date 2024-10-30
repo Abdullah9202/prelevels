@@ -13,11 +13,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class QuestionBankSerializer(serializers.ModelSerializer):
+    question_count = serializers.IntegerField(read_only=True) # Custom field to get question count (Not in DB)
+    
     class Meta:
         model = QuestionBank
         fields = [
-            'id', 'name', 'question_bank_image', 'description', 'additional_details', 'question_file', 'price', 
-            'discount', 'validity', 'created_at', 'updated_at', 'is_active',
+            'id', 'category', 'name', 'question_bank_image', 'description', 'additional_details', 
+            'question_file', 'question_count', 'price', 'discount', 'validity', 'created_at', 
+            'updated_at', 'is_active',
         ]
 
 
@@ -25,9 +28,9 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = [
-            'id', 'question_bank_id', 'subject', 'topic', 'question_number',
-            'question_text', 'question_image', 'additional_details', 'unique_identifier', 'created_at',
-            'updated_at', 'is_active',
+            'id', 'question_bank', 'subject', 'topic', 'question_number',
+            'question_image', 'question_text', 'additional_details', 'unique_identifier', 
+            'created_at', 'updated_at', 'is_active'
         ]
 
 
@@ -35,8 +38,8 @@ class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
         fields = [
-            'id', 'question_id', 'option_text', 'is_correct', 'created_at', 'updated_at', 'is_active',
-            'why_correct_option_id',
+            'id', 'option_text', 'option_image', 'is_correct', 'created_at', 'updated_at', 
+            'is_active', 'question'
         ]
 
 
@@ -45,6 +48,7 @@ class WhyCorrectOptionSerializer(serializers.ModelSerializer):
         model = WhyCorrectOption
         fields = [
             'id', 'why_correct_option_text', 'created_at', 'updated_at', 'is_active',
+            'question'
         ]
 
 
@@ -52,7 +56,7 @@ class SaveQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaveQuestion
         fields = [
-            'id', 'user', 'question_bank', 'question', 'saved_at',
+            'id', 'saved_at', 'user', 'question_bank', 'question'
         ]
 
 
@@ -60,5 +64,5 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = [
-            'id', 'question_bank_id', 'question_id', 'question_text', 'comment', 'created_at',
+            'id', 'comment', 'created_at', 'question_bank', 'question'
         ]

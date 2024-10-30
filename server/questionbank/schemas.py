@@ -16,12 +16,13 @@ class CategorySchema(Schema):
 # Schema for QuestionBank model
 class QuestionBankSchema(Schema):
     id: UUID
+    category: UUID
     name: str
     question_bank_image: Optional[str] = None
-    description: str = None
-    additional_details: Optional[str]
+    description: Optional[str] = None
+    additional_details: Optional[str] = None
     question_file: Optional[str] = None
-    price: int
+    price: int = None
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None
@@ -31,11 +32,12 @@ class QuestionBankSchema(Schema):
 
 class QuestionBankDetailSchema(Schema):
     id: UUID
+    category: UUID
     name: str
     question_bank_image: Optional[str] = None
-    description: str = None
-    additional_details: Optional[str]
-    price: float = None
+    description: Optional[str] = None
+    additional_details: Optional[str] = None
+    price: int = None
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None
@@ -46,57 +48,57 @@ class QuestionBankDetailSchema(Schema):
 # Schema for Question model
 class QuestionSchema(Schema):
     id: UUID
-    question_bank_id: UUID
-    year: int
-    category: str
+    question_bank: UUID
     subject: str
     topic: str
     question_number: int
-    question_text: str
-    question_image: Optional[str]
-    additional_details: Optional[str]
+    question_image: Optional[str] = None
+    question_text: Optional[str] = None
+    additional_details: Optional[str] = None
     unique_identifier: Optional[str]
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
 
 
 class QuestionDetailSchema(Schema):
     id: UUID
-    question_bank_id: UUID
-    year: int
-    category: str
+    question_bank: UUID
     subject: str
     topic: str
     question_number: int
-    question_text: str
-    question_image: Optional[str]
-    additional_details: Optional[str]
+    question_image: Optional[str] = None
+    question_text: Optional[str] = None
+    additional_details: Optional[str] = None
     unique_identifier: Optional[str]
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
 
 
 # Schema for Option model
 class OptionSchema(Schema):
     id: UUID
-    question_id: UUID
-    option_text: str
+    option_text: Optional[str] = None
+    option_image: Optional[str] = None
     is_correct: bool
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool
-    why_correct_option_id: Optional[UUID]
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
+    question: UUID
+    
+    class config:
+        orm_mode = True
 
 
 # Schema for WhyCorrectOption model
 class WhyCorrectOptionSchema(Schema):
     id: UUID
-    why_correct_option_text: Optional[str]
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool
+    why_correct_option_text: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
+    question: UUID
 
 
 # Composite Schema for detailed Question including options
@@ -112,17 +114,16 @@ class DetailedQuestionBankSchema(QuestionBankSchema):
 # Save question Schema
 class SaveQuestionSchema(Schema):
     id: UUID
+    saved_at: datetime
     user: UUID
     question_bank: UUID
     question: UUID
-    saved_at: datetime
 
 
 # Schema for Report Question
 class ReportQuestionSchema(Schema):
     id: UUID
-    question_bank_id: UUID
-    question_id: UUID
-    question_text: str
-    comment: Optional[str]
+    comment: Optional[str] = None
     created_at: datetime
+    question_bank: UUID
+    question: UUID

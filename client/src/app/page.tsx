@@ -15,74 +15,74 @@ import React from "react";
 
 
 export default function Home() {
-  const { getToken, signOut } = useAuth();
-  const { isSignedIn, user } = useUser();  // Destructure to get both isSignedIn and user
   
-  useEffect(() => {
-    const initializeSession = async () => {
-      try {
-        const token = await getToken();
-        const sessionInitialized = localStorage.getItem("sessionInitialized");
   
-        if (!token) {
-          console.log("No token found, user is not authenticated."); // AZAK
-          return;
-        }
   
-        if (!user) {
-          console.log("No user found, user is not authenticated."); // AZAK
-          return;
-        }
+  // useEffect(() => {
+  //   const initializeSession = async () => {
+  //     try {
+  //       const token = await getToken();
+  //       const sessionInitialized = localStorage.getItem("sessionInitialized");
   
-        // Check if session is already initialized
-        if (sessionInitialized === "true") {
-          console.log("Session already initialized.");
-          return;
-        }
+  //       if (!token) {
+  //         console.log("No token found, user is not authenticated."); // AZAK
+  //         return;
+  //       }
   
-        // Proceed with session initialization if not already initialized
-        console.log("Token retrieved:", token);
-        const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", { // AZAK
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user_id: user.id }),
-        });
-        console.log("Request sent to backend"); // AZAK
+  //       if (!user) {
+  //         console.log("No user found, user is not authenticated."); // AZAK
+  //         return;
+  //       }
   
-        const data = await response.json();
+  //       // Check if session is already initialized
+  //       if (sessionInitialized === "true") {
+  //         console.log("Session already initialized.");
+  //         return;
+  //       }
   
-        if (response.ok) {
-          console.log("Django response:", data.message); // AZAK
+  //       // Proceed with session initialization if not already initialized
+  //       console.log("Token retrieved:", token);
+  //       const response = await fetch("http://127.0.0.1:8000/api/student/init-session/", { // AZAK
+  //         method: "POST",
+  //         headers: {
+  //           "Authorization": `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ user_id: user.id }),
+  //       });
+  //       console.log("Request sent to backend"); // AZAK
   
-          // Set session initialization status in local storage
-          if (data.session_active === true) {
-            localStorage.setItem("sessionInitialized", "true");
-          } else {
-            localStorage.removeItem("sessionInitialized");
-          }
-        } else {
-          console.log("Error initializing session:", data.error);
-        }
-      } catch (error) {
-        console.error("Error initializing session:", error);
-      }
-    };
+  //       const data = await response.json();
   
-    const timeoutId = setTimeout(() => { // Intentional time delay to allow clerk to register user and then initialize session
-      initializeSession();
-    }, 5000);
+  //       if (response.ok) {
+  //         console.log("Django response:", data.message); // AZAK
   
-    // Cleanup when the user signs out
-    return () => {
-      clearTimeout(timeoutId);
-      if (!isSignedIn) {
-        localStorage.removeItem("sessionInitialized");
-      }
-    };
-  }, [getToken, user, isSignedIn]);
+  //         // Set session initialization status in local storage
+  //         if (data.session_active === true) {
+  //           localStorage.setItem("sessionInitialized", "true");
+  //         } else {
+  //           localStorage.removeItem("sessionInitialized");
+  //         }
+  //       } else {
+  //         console.log("Error initializing session:", data.error);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error initializing session:", error);
+  //     }
+  //   };
+  
+  //   const timeoutId = setTimeout(() => { // Intentional time delay to allow clerk to register user and then initialize session
+  //     initializeSession();
+  //   }, 5000);
+  
+  //   // Cleanup when the user signs out
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //     if (!isSignedIn) {
+  //       localStorage.removeItem("sessionInitialized");
+  //     }
+  //   };
+  // }, [getToken, user, isSignedIn]);
 
   // useEffect(() => {
   //   const handleBeforeUnload = async () => {

@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
-  const { isSignedIn, user } = useUser();
+  // const { isSignedIn, user } = useUser();
+  const [isSignedIn, user] = [false, { id: 1 }];
   const router = useRouter();
 
   const handleViewProfile = () => {
@@ -78,7 +79,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <UserButton />
+              {/* <UserButton /> */}
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}

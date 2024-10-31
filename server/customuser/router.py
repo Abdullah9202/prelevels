@@ -44,7 +44,7 @@ def get_csrf_token(request):
 
 
 # Register User Router
-@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict}) # atuh=django_auth
+@auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
 async def register_user(request, payload: RegisterSchema, *args, **kwargs):
     try:
         # Optimize existence check by using sync_to_async for database I/O only
@@ -80,7 +80,7 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Login router
-@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict}, auth=django_auth) # auth=django_auth
+@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
 @ratelimit(key="ip", rate="5/m", method="POST", block=True) # Rate limiting
 def login_user(request, payload: LoginSchema, *args, **kwargs):
     # Checking if the user is already logged in
@@ -100,7 +100,7 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout router
-@auth_router.post("/logout/", response={200: dict}) # auth=django_auth
+@auth_router.post("/logout/", response={200: dict}, auth=django_auth)
 async def logout_user(request, *args, **kwargs):
     await sync_to_async(logout)(request)
     return JsonResponse({"message": "User logged out successfully"}, status=200)

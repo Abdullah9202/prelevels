@@ -8,15 +8,14 @@ from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 # Ninja Imports
 from ninja import Router
+from ninja_extra.security import django_auth
 from ninja.responses import codes_4xx
 # My Files
 from .models import Cart, CartItem
 from .schemas import CartResponseSchema, CartItemSchema
 
-
 # Router Init
 cart_router = Router()
-
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -30,7 +29,7 @@ MODEL_MAP = {
 
 
 # Get all items in cart
-@cart_router.get("/cart-item/list/", response={200: List[CartResponseSchema], codes_4xx: dict})
+@cart_router.get("/cart-item/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=django_auth)
 def list_cart_items(request, *args, **kwargs):
     cart_items = CartItem.objects.filter(cart__user=request.user)
     data = [{
@@ -47,7 +46,8 @@ def list_cart_items(request, *args, **kwargs):
 
 
 # Add items in cart
-@cart_router.post("/cart-item/add/", response={200: CartResponseSchema, 201: CartResponseSchema, codes_4xx: dict})
+@cart_router.post("/cart-item/add/", response={200: CartResponseSchema, 201: CartResponseSchema, 
+                                            codes_4xx: dict}, auth=django_auth)
 def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     try:
         # Validate the UUID format for item_id
@@ -109,7 +109,8 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
 
 
 # Update item quantity in cart
-@cart_router.put("/cart-item/{cart_item_id}/update/", response={200: CartResponseSchema, codes_4xx: dict})
+@cart_router.put("/cart-item/{cart_item_id}/update/", response={200: CartResponseSchema, 
+                                                            codes_4xx: dict}, auth=django_auth)
 def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *args, **kwargs):
     # Getting the cart item
     try:
@@ -147,7 +148,8 @@ def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *
 
 
 # Remove item from cart
-@cart_router.delete("/cart-item/{cart_item_id}/delete/", response={200: dict, codes_4xx: dict})
+@cart_router.delete("/cart-item/{cart_item_id}/delete/", response={200: dict, 
+                                                                codes_4xx: dict}, auth=django_auth)
 def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
     try:
         # Getting the cart item

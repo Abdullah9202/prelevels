@@ -26,7 +26,6 @@ class RegisterSchema(Schema):
     username: str
     phone_number: str
     password: str
-    password2: str
     
     # Validating the phone number 
     _phone_number_validator = phone_number_validator

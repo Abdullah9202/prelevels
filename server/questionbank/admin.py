@@ -43,7 +43,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
     # Display Fields and Filters
     list_display = ('question_text', 'question_bank', 'subject', 'topic', 'is_active')
-    search_fields = ('question_text', 'question_bank__name', 'category', 'subject')
+    search_fields = ('question_text', 'question_bank__name', 'subject')
     list_filter = ('question_bank', 'subject', 'topic')
 
 admin.site.register(Question, QuestionAdmin)

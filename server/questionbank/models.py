@@ -187,9 +187,8 @@ class SaveQuestion(models.Model):
 # Report Model
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
-    comment = models.CharField(_("Comment"), max_length=250, null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
-    question_bank_id = models.ForeignKey("questionbank.QuestionBank", on_delete=models.CASCADE,
+    question_bank = models.ForeignKey("questionbank.QuestionBank", on_delete=models.CASCADE,
                                             verbose_name=_("Question bank of reported question"),
                                             related_name="reports", default=None)
     question = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,

@@ -32,7 +32,7 @@ class RegisterSchema(Schema):
 
 # Login Schema
 class LoginSchema(Schema):
-    username: str
+    phone_number: str
     password: str
 
 # Update Schema

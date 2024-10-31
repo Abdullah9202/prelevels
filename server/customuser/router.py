@@ -88,14 +88,14 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
         return JsonResponse({"message": "User already logged in"}, status=409)
     
     # Authenticating the user
-    user = authenticate(request, username=payload.username, password=payload.password)
+    user = authenticate(request, phone_number=payload.phone_number, password=payload.password)
     
     # Checking if the user exists
     if user is not None:
         login(request, user)
         return JsonResponse({"message": "Login successful"}, status=200)
     else:
-        logger.warning("Failed login attempt for username: %s", payload.username)
+        logger.warning("Failed login attempt for user with phone number: %s", payload.phone_number)
         raise HttpError(400, "Invalid credentials or user does not exist.")
 
 

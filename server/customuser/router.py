@@ -81,15 +81,15 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 # Login router
 @auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
-@ratelimit(key="ip", rate="5/m", method="POST", block=True) # Rate limiting
+@ratelimit(key="ip", rate="5/m", method="POST", block=True)  # Rate limiting
 def login_user(request, payload: LoginSchema, *args, **kwargs):
     # Checking if the user is already logged in
     if request.user.is_authenticated:
         return JsonResponse({"message": "User already logged in"}, status=409)
-    
-    # Authenticating the user
+
+    # Authenticating the user using the custom backend
     user = authenticate(request, phone_number=payload.phone_number, password=payload.password)
-    
+
     # Checking if the user exists
     if user is not None:
         login(request, user)

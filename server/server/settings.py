@@ -243,3 +243,8 @@ CSRF_TRUSTED_ORIGINS = [ # AZAK
 
 # Custom settings
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
+AUTHENTICATION_BACKENDS = [
+    'customuser.backends.PhoneNumberBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+]

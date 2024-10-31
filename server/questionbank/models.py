@@ -199,7 +199,10 @@ class Report(models.Model):
         verbose_name_plural = _("Reports")
 
     def __str__(self):
-        return f"{self.question_bank_id.name} - {self.question_text}"
+        return f"{self.question_bank.name} - {self.question.question_number}: {self.question.question_text}"
 
     def get_absolute_url(self):
         return reverse("questionbank:Report_detail", kwargs={"id": self.id})
+
+# 7d097f77-9224-4f9e-9955-19a292341637
+# eb90e433-b649-40f9-bc39-321cf6798582

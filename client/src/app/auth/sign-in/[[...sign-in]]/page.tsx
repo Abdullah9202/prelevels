@@ -1,3 +1,4 @@
+"use client"
 import React, { use, useState } from "react";
 
 
@@ -14,6 +15,7 @@ export default function Page() {
         ...formData,
         [name]: value,
     });
+    
   }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,26 +32,28 @@ export default function Page() {
       if (res.ok) {
         console.log("server responded")
       }
+      console.log(formData)
     };
     
     
     // return value
 
     return (
-      <section className="bg-black w-full min-h-screen flex items-center justify-center">
+      <section className="w-full min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
             <input
-              type="number"
-              name="phone Number"
+              type="tel"
+              name="phoneNumber"
               id="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="name@company.com"
+              placeholder="+92319"
               value={formData.phoneNumber}
               onChange={handleChange}
+              
               required
             />
           </div>
@@ -72,6 +76,9 @@ export default function Page() {
           >
             Login
           </button>
+          <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              Dont have an account? <a href="/auth/sign-up" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign Up here</a>
+          </p>
         </form>
       </div>
     </section>

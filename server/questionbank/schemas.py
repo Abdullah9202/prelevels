@@ -123,7 +123,6 @@ class SaveQuestionSchema(Schema):
 # Schema for Report Question
 class ReportQuestionSchema(Schema):
     id: UUID
-    comment: Optional[str] = None
     created_at: datetime
     question_bank: UUID
     question: UUID

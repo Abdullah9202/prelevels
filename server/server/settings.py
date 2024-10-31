@@ -234,5 +234,12 @@ CORS_ALLOW_HEADERS = (
     "x-requested-with",
 )
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [ # AZAK
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+]
+
 # Custom settings
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

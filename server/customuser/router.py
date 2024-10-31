@@ -30,7 +30,7 @@ auth_router = Router()
 
 logger = logging.getLogger(__name__)
 
-@auth_router.get("/set-csrf-token")
+@auth_router.get("/set-csrf-token/")
 def get_csrf_token(request):
     csrf_token_meta = request.META.get("CSRF_COOKIE", None)
     csrf_token = get_token(request)

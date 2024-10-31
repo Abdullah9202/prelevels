@@ -10,8 +10,9 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 # Ninja Imports
-from ninja import Router
+from ninja_extra import Router
 from ninja.errors import HttpError
+from ninja_extra.security import django_auth
 from ninja.responses import codes_4xx
 # My Files
 from .models import (
@@ -34,12 +35,9 @@ logger = logging.getLogger(__name__)
 
 
 # Get all question banks
-@question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict}) # auth=django_auth
+@question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict}, 
+                        auth=django_auth)
 async def get_all_question_banks(request, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-
     try:
         # Fetching all question banks with question count annotation
         question_banks = await sync_to_async(
@@ -60,12 +58,9 @@ async def get_all_question_banks(request, *args, **kwargs):
 
 
 # Get the details of specific Question bank
-@question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankDetailSchema, codes_4xx: dict}) # auth=django_auth
+@question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankDetailSchema, codes_4xx: dict},
+                        auth=django_auth)
 async def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-    
     try:
         # Getting the question bank
         question_bank = await sync_to_async(
@@ -87,12 +82,9 @@ async def get_question_bank_details(request, question_bank_id: UUID, *args, **kw
 
 
 # Get all questions in a question bank
-@question_bank_router.get("/{question_bank_id}/all-questions/", response={200: List[QuestionSchema], codes_4xx: dict})
+@question_bank_router.get("/{question_bank_id}/all-questions/", response={200: List[QuestionSchema], codes_4xx: dict},
+                        auth=django_auth)
 async def get_questions_in_question_bank(request, question_bank_id: UUID, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-    
     # Getting the question bank using id
     question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
 
@@ -163,17 +155,11 @@ async def get_questions_in_question_bank(request, question_bank_id: UUID, *args,
 
     return JsonResponse(response_data, status=200)
 
-# 7d097f77-9224-4f9e-9955-19a292341637
-# bda9a2fd-13fe-4f42-b2a2-7caabde43245
 
 # Get the details for specific question in a question bank
 @question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionDetailSchema,
-                                                                                    codes_4xx: dict}) # auth=django_auth
-async def get_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-    
+                                                                            codes_4xx: dict}, auth=django_auth)
+async def get_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
     # Getting the question bank using id
     question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
     # Getting the specific question along with it's options and why correct option from question bank
@@ -226,12 +212,8 @@ async def get_question_in_question_bank(request, question_bank_id, question_id, 
 
 # Save question
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
-                        response={200: SaveQuestionSchema, codes_4xx: dict}) # auth=django_auth
-def save_question(request, question_bank_id, question_id, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-    
+                        response={200: SaveQuestionSchema, codes_4xx: dict}, auth=django_auth)
+async def save_question(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
     # Verifying the UUIDs
     try:
         question_bank_id = UUID(str(question_bank_id))
@@ -240,20 +222,10 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
         return JsonResponse({"error": "Invalid UUID format"}, status=400)
 
     # Getting the question bank using uuid
-    try:
-        question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
-    except QuestionBank.DoesNotExist:
-        return JsonResponse({"error": "Question bank not found"}, status=404)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+    question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
 
     # Getting the question using uuid
-    try:
-        question = get_object_or_404(Question, id=question_id)
-    except Question.DoesNotExist:
-        return JsonResponse({"error": "Question not found"}, status=404)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+    question = await sync_to_async(get_object_or_404)(Question, id=question_id)
     
     # Creating a new save question object
     try:
@@ -277,58 +249,29 @@ def save_question(request, question_bank_id, question_id, *args, **kwargs):
 
 # Report a question in a question bank
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
-                            response={200: ReportQuestionSchema, codes_4xx: dict}) # auth=django_auth
-def report_question_in_question_bank(request, question_bank_id, question_id, *args, **kwargs):
-    # Checking if the user is logged in or not
-    if not request.user.is_authenticated:
-        raise HttpError(401, "User is not authenticated")
-    
-    # Verifying the UUIDs
-    try:
-        question_bank_id = UUID(str(question_bank_id))
-        question_id = UUID(str(question_id))
-    except ValueError:
-        return JsonResponse({"error": "Invalid UUID format"}, status=400)
-
+                            response={200: ReportQuestionSchema, codes_4xx: dict}, auth=django_auth)
+async def report_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
     # Getting the question bank using uuid
-    try:
-        question_bank = get_object_or_404(QuestionBank, id=question_bank_id)
-    except QuestionBank.DoesNotExist:
-        return JsonResponse({"error": "Question bank not found"}, status=404)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+    question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
 
     # Getting the question using uuid
-    try:
-        question = get_object_or_404(Question, id=question_id)
-    except Question.DoesNotExist:
-        return JsonResponse({"error": "Question not found"}, status=404)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
-
-    # Getting the request body
-    try:
-        request_data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occured: {str(e)}"})
+    question = await sync_to_async(get_object_or_404)(Question, id=question_id)
 
     # Creating a new report object
-    try:
-        data = {
-            "question_bank_id": question_bank.id,
-            "question_id": question.id,
-            "question_text": question.question_text,
-            "comment": request_data.get('comment', '')
+    data = {
+        "question_bank": question_bank.id,
+        "question": question.id,
+    }
+    # Serializing the data
+    serializer = ReportSerializer(data=data)
+    # Validation for serializer
+    if serializer.is_valid():
+        report = serializer.save()
+        response_data = {
+            "id": str(report.id),
+            "question_bank": str(report.question_bank),
+            "question": str(report.question)
         }
-        # Serializing the data
-        serializer = ReportSerializer(data=data)
-        # Validation for serializer
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=200)
-        else:
-            return JsonResponse(serializer.errors, status=400)
-    except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+        return JsonResponse(response_data, status=200)
+    else:
+        return JsonResponse(serializer.errors, status=400)

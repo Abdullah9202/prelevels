@@ -5,7 +5,7 @@ import React, { use, useState } from "react";
 export default function Page() {
   const [user, setuser] = useState()
   const [formData,setFormData] = useState({
-    phoneNumber: '',
+    phone_number: "",
     password: ""
   })
 
@@ -35,7 +35,6 @@ export default function Page() {
       console.log(formData)
     };
     
-    
     // return value
 
     return (
@@ -44,14 +43,14 @@ export default function Page() {
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
+            <label htmlFor="phone_number" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
             <input
               type="tel"
-              name="phoneNumber"
-              id="phone"
+              name="phone number"
+              id="phone_number"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="+92319"
-              value={formData.phoneNumber}
+              value={formData.phone_number}
               onChange={handleChange}
               
               required
@@ -84,8 +83,4 @@ export default function Page() {
     </section>
     )
   
-  
-  }
-  
-
-
+}

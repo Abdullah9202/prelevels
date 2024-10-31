@@ -2,7 +2,7 @@
 markdown
 rav
 python-dotenv
-psycopg2
+# psycopg2
 pydantic[email]
 Pillow
 phonenumbers

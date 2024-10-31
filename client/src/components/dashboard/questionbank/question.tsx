@@ -2,6 +2,7 @@
 import { useUser } from "@clerk/nextjs";
 import { FaGoogleDrive, FaWhatsapp } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Question(){
     const {user} = useUser();
@@ -41,7 +42,7 @@ export default function Question(){
 
 const CourseCard = ({ title, status, btnText, question, router }: { title: string, status: string, btnText: string , question:string, router:any}) => (
     <div className="p-4 bg-white shadow-md rounded-lg">
-      <img src="https://via.placeholder.com/150" alt="Course" className="w-full h-32 object-cover rounded-md" />
+      <Image src="https://via.placeholder.com/150" alt="Course" className="w-full h-32 object-cover rounded-md" />
       <h3 className="mt-2 font-bold">{title}</h3>
       <p className="text-sm mt-4 text-gray-500">{status}</p>
       <p className="text-sm  text-gray-500">{question}</p>

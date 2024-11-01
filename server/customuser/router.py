@@ -1,5 +1,6 @@
 # Python imports
 import os
+import random
 import logging
 from dotenv import load_dotenv
 # Django imports
@@ -53,15 +54,21 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
         if exists:
             logger.warning("Email already in use: %s", payload.email)
             raise HttpError(400, "Email address is already in use.")
-        
+
+        # Creating the username
+        username = f"{payload.first_name.capitalize()}{payload.last_name.capitalize()}{random.randint(1000, 9999)}"
+
+        payload_dict = payload.dict()
+        payload_dict['username'] = username
+
         # Attempting to serialize and save the user
-        serializer = RegisterSerializer(data=payload.dict())
+        serializer = RegisterSerializer(data=payload_dict)
         if not serializer.is_valid():
             logger.error("Serializer validation failed: %s", serializer.errors)
             raise HttpError(400, str(serializer.errors))
 
         user = serializer.save()
-        serialized_data = await sync_to_async(lambda: UserSerializer(user).data)()
+        serialized_data = await sync_to_async(lambda: RegisterSerializer(user).data)()
         
         logger.info("User registered successfully: %s", serialized_data)
         return JsonResponse(serialized_data, status=200)
@@ -101,7 +108,7 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
 
 
 # Logout router
-@auth_router.post("/logout/", response={200: dict}, auth=django_auth)
+@auth_router.post("/logout/", response={200: dict})
 async def logout_user(request, *args, **kwargs):
     await sync_to_async(logout)(request)
     return JsonResponse({"message": "User logged out successfully"}, status=200)

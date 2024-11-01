@@ -22,6 +22,7 @@ def phone_number_validator(cls, value):
 class RegisterSchema(Schema):
     first_name: str
     last_name: str
+    username: Optional[str] = None
     email: EmailStr
     phone_number: str
     password: str

@@ -15,7 +15,6 @@ from bundle.models import Bundle
 # User model
 class User(AbstractUser):
     # Overriding the default fields
-    username = models.CharField(_("Username"), max_length=20, unique=True, blank=False, null=False)
     email = models.EmailField(_("Email Address"), max_length=50, unique=True, blank=False, null=False)
     
     # Additional fields

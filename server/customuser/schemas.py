@@ -10,7 +10,7 @@ import phonenumbers
 @field_validator("phone_number")
 def phone_number_validator(cls, value):
     try:
-        phone = phonenumbers.parse(value, None)
+        phone = phonenumbers.parse(value, "PK")
         if not phonenumbers.is_valid_number(phone):
             raise ValueError("Invalid phone number")
     except Exception as e:
@@ -23,7 +23,6 @@ class RegisterSchema(Schema):
     first_name: str
     last_name: str
     email: EmailStr
-    username: str
     phone_number: str
     password: str
     

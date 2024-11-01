@@ -1,7 +1,9 @@
 "use client";
 import React, { use, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter()
   const [user, setuser] = useState();
   const [formData, setFormData] = useState({
     phone_number: "",

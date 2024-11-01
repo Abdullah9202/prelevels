@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -32,6 +34,7 @@ export default function SignUp() {
 
       // const data = await res.json()
       if (res.ok) {
+        router.push('/auth/sign-in')
         alert("Data sent successFully");
       } else {
         alert("There is an error");

@@ -11,6 +11,7 @@ export default function Page() {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -28,6 +29,7 @@ export default function Page() {
 
     const data = await res.json();
     if (res.ok) {
+      router.push('/')
       console.log("server responded");
     }
     console.log(formData);

@@ -35,14 +35,14 @@ class Course(models.Model):
     category = models.ForeignKey(CourseCategory, verbose_name=_("Category"), related_name="courses",
                                     on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course")
-    description = models.TextField(_("Description"), null=True)
+    description = models.TextField(_("Description"), null=True, blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     course_image = models.ImageField(_("Course Image"),
                                     upload_to="images/", 
                                     height_field=None, width_field=None, max_length=None,
                                     null=True, blank=True)
-    whatsapp_link = models.URLField(_("Whatsapp Link"), null=True)
-    resource_link = models.URLField(_("Resource Link"), null=True)
+    whatsapp_link = models.URLField(_("Whatsapp Link"), null=True, blank=True)
+    resource_link = models.URLField(_("Resource Link"), null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
     discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
     validity = models.IntegerField(_("Validity"), null=True, blank=True)

@@ -39,7 +39,8 @@ class Course(models.Model):
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     course_image = models.ImageField(_("Course Image"),
                                     upload_to="images/", 
-                                    height_field=None, width_field=None, max_length=None)
+                                    height_field=None, width_field=None, max_length=None,
+                                    null=True, blank=True)
     whatsapp_link = models.URLField(_("Whatsapp Link"), null=True)
     resource_link = models.URLField(_("Resource Link"), null=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)

@@ -11,8 +11,8 @@ from ninja import Router
 from ninja_extra.security import django_auth
 from ninja.responses import codes_4xx
 # My Files
-from .models import Cart, CartItem
-from .schemas import CartResponseSchema, CartItemSchema
+from .models import Cart
+from .schemas import CartResponseSchema, CartSchema
 
 # Router Init
 cart_router = Router()
@@ -31,9 +31,9 @@ MODEL_MAP = {
 # Get all items in cart
 @cart_router.get("/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=django_auth)
 def list_cart_items(request, *args, **kwargs):
-    cart_items = CartItem.objects.filter(cart__user=request.user)
+    cart_items = Cart.objects.filter(user=request.user)
     data = [{
-        "cart_item_id": str(item.id),  # Assuming CartItem.id is a UUID
+        "cart_item_id": str(item.id),  # Assuming Cart.id is a UUID
         "product_id": str(item.content_object.id),  # Assuming item IDs are UUIDs
         "product_name": item.content_object.name,
         "quantity": item.quantity,
@@ -48,15 +48,12 @@ def list_cart_items(request, *args, **kwargs):
 # Add items in cart
 @cart_router.post("/add/", response={200: CartResponseSchema, 201: CartResponseSchema, 
                                             codes_4xx: dict}, auth=django_auth)
-def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
+def add_to_cart(request, item: CartSchema, *args, **kwargs):
     try:
         # Validate the UUID format for item_id
         product_id = UUID(str(item.product_id))
     except ValueError:
         return JsonResponse({"error": "Invalid UUID format"}, status=400)
-
-    # Get or create the user's cart
-    cart, created = Cart.objects.get_or_create(user=request.user)
 
     # Retrieve the model class path based on the product_model
     model_class_path = MODEL_MAP.get(item.product_model)
@@ -75,21 +72,22 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
     except AttributeError:
         return JsonResponse({"error": "Invalid model class"}, status=400)
 
-    # Try to find an existing CartItem or create a new one without setting the cart first
+    # Try to find an existing Cart item or create a new one
     try:
-        cart_item = CartItem.objects.get(
+        cart_item = Cart.objects.get(
+            user=request.user,
             content_type=content_type,
             object_id=product.id,
         )
         cart_item.quantity += item.quantity
         cart_item.save()
-    except CartItem.DoesNotExist:
-        cart_item = CartItem.objects.create(
+    except Cart.DoesNotExist:
+        cart_item = Cart.objects.create(
+            user=request.user,
             content_type=content_type,
             object_id=product.id,
             quantity=item.quantity,
         )
-        cart.items.add(cart_item)
 
     # Calculating the total price for items in the cart
     total_price = cart_item.quantity * product.price
@@ -105,17 +103,17 @@ def add_to_cart(request, item: CartItemSchema, *args, **kwargs):
         "created_at": cart_item.added_at.isoformat(),
     }
 
-    return JsonResponse(data, status=201 if created else 200)
+    return JsonResponse(data)
 
 
 # Update item quantity in cart
 @cart_router.put("/{cart_item_id}/update/", response={200: CartResponseSchema, 
                                                             codes_4xx: dict}, auth=django_auth)
-def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *args, **kwargs):
+def update_cart_item(request, cart_item_id: UUID, item: CartSchema = None, *args, **kwargs):
     # Getting the cart item
     try:
-        cart_item = get_object_or_404(CartItem, id=cart_item_id)
-    except CartItem.DoesNotExist:
+        cart_item = get_object_or_404(Cart, id=cart_item_id)
+    except Cart.DoesNotExist:
         return JsonResponse({"error": "Cart item not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": f"An error occurred: {str(e)}"})
@@ -123,12 +121,6 @@ def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *
     # Update logic (based on item schema if provided)
     if item:
         cart_item.quantity = item.quantity  # Update quantity if present in body
-
-    # Update the user
-    cart_item.user = request.user
-
-    # Update the cart
-    cart_item.cart.set([request.user.cart])
 
     cart_item.save()
 
@@ -149,14 +141,12 @@ def update_cart_item(request, cart_item_id: UUID, item: CartItemSchema = None, *
 
 # Remove item from cart
 @cart_router.delete("/{cart_item_id}/delete/", response={200: dict, 
-                                                                codes_4xx: dict}, auth=django_auth)
+                                            codes_4xx: dict}, auth=django_auth)
 def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
     try:
         # Getting the cart item
-        cart_item = get_object_or_404(CartItem, id=cart_item_id)
-        # Getting the current user
-        cart_item.user = request.user
-    except CartItem.DoesNotExist:
+        cart_item = get_object_or_404(Cart, id=cart_item_id)
+    except Cart.DoesNotExist:
         return JsonResponse({"error": "Cart item not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": f"An error occurred: {str(e)}"})

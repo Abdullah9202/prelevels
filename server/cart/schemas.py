@@ -2,7 +2,7 @@ from ninja import Schema
 from uuid import UUID
 
 
-class CartItemSchema(Schema):
+class CartSchema(Schema):
     product_id: UUID
     product_model: str
     quantity: int

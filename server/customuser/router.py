@@ -87,24 +87,30 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
         return JsonResponse({"error": "An unexpected error occurred. Please try again later"}, status=500)
 
 
-# Login router
-@auth_router.post("/login/", response={200: LoginSchema, codes_4xx: dict})
+# Login and get the user details router
+@auth_router.post("/login/", response={200: GetUserDetailSchema, codes_4xx: dict})
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)  # Rate limiting
 def login_user(request, payload: LoginSchema, *args, **kwargs):
     # Checking if the user is already logged in
     if request.user.is_authenticated:
-        return JsonResponse({"message": "User already logged in"}, status=409)
-
-    # Authenticating the user using the custom backend
-    user = authenticate(request, phone_number=payload.phone_number, password=payload.password)
-
-    # Checking if the user exists
-    if user is not None:
-        login(request, user)
-        return JsonResponse({"message": "Login successful"}, status=200)
+        user = request.user
     else:
-        logger.warning("Failed login attempt for user with phone number: %s", payload.phone_number)
-        raise HttpError(400, "Invalid credentials or user does not exist.")
+        # Authenticating the user using the custom backend
+        user = authenticate(request, phone_number=payload.phone_number, password=payload.password)
+        
+        # Checking if the user exists
+        if user is not None:
+            login(request, user)
+            return JsonResponse({"message": "Login successful"}, status=200)
+        else:
+            logger.warning("Failed login attempt for user with phone number: %s", payload.phone_number)
+            raise HttpError(400, "Invalid credentials or user does not exist.")
+    
+    # Returning the user details
+    serialized_user = UserSerializer(user)
+    serialized_data = serialized_user.data
+    
+    return JsonResponse(serialized_data, status=200)
 
 
 # Logout router
@@ -112,15 +118,3 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
 async def logout_user(request, *args, **kwargs):
     await sync_to_async(logout)(request)
     return JsonResponse({"message": "User logged out successfully"}, status=200)
-
-
-# User detail router
-@auth_router.get("/me/", response={200: GetUserDetailSchema, codes_4xx: dict}, auth=django_auth)
-async def get_user_details(request, *args, **kwargs):
-    if request.user.is_authenticated:
-        user = request.user
-        serialized_user = await sync_to_async(UserSerializer)(user)
-        serialized_data = await sync_to_async(lambda: serialized_user.data)()
-        return JsonResponse(serialized_data, status=200)
-    else:
-        raise HttpError(401, "User is not authenticated.")

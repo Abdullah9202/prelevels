@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 # My Files
-from cart.models import Cart, CartItem
+from cart.models import Cart
 
 
 # Category model
@@ -64,13 +64,16 @@ class QuestionBank(models.Model):
         return self.questions.count()
 
     def add_to_cart(self, user, quantity=1):
-        cart, created = Cart.objects.get_or_create(user=user)
         content_type = ContentType.objects.get_for_model(self)
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, content_type=content_type, object_id=self.id)
-        cart_item.quantity = quantity
-        cart_item.save()
-        cart.items.add(cart_item)
-        cart.save()
+        cart_item, created = Cart.objects.get_or_create(
+            user=user,
+            content_type=content_type,
+            object_id=self.id,
+            defaults={'quantity': quantity}
+        )
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
 
     def get_absolute_url(self):
         return reverse("questionbank:QuestionBank_detail", kwargs={"id": self.id})

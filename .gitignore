@@ -128,6 +128,5 @@ question_images/
 # My File Ignores
 info.ipynb
 server/src/modelInfo.ipynb
-temp/
 
 # End of Python ignores

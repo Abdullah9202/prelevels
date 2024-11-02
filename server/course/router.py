@@ -55,5 +55,3 @@ def get_course(request, course_id: UUID, *args, **kwargs):
     except Exception as err:
         logger.error(f"Unexpected error: {str(err)}")
         raise HttpError(500, "An unexpected error occurred. Please try again later.")
-
-

@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 # Ninja Imports
-from ninja import Router
+from ninja import Router, Form
 from ninja.errors import HttpError
 from ninja_extra.security import django_auth
 from ninja.responses import codes_4xx
@@ -36,18 +36,16 @@ logger = logging.getLogger(__name__)
 
 
 # Get all question banks
-@question_bank_router.get("/", response={200: List[QuestionBankSchema], codes_4xx: dict})
-async def get_all_question_banks(request, *args, **kwargs):
+@question_bank_router.get("/all/", response={200: List[QuestionBankSchema]})
+async def get_all_question_banks(request):
     try:
         # Fetching all question banks with question count annotation
         question_banks = await sync_to_async(
-            lambda: QuestionBank.objects.annotate(question_count=Count("questions")).all()
+            lambda: list(QuestionBank.objects.annotate(question_count=Count("questions")))
         )()
     
-        # Serializing the question banks
-        serialized_question_banks = await sync_to_async(
-            lambda: QuestionBankSerializer(question_banks, many=True).data
-        )()
+        # Serialize the question banks using Pydantic schema
+        serialized_question_banks = [QuestionBankSchema.from_orm(qb).dict() for qb in question_banks]
 
         # Returning the Json data
         return JsonResponse(serialized_question_banks, status=200, safe=False)
@@ -192,28 +190,35 @@ async def save_question(request, question_bank_id: UUID, question_id: UUID, *arg
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
                             response={200: ReportQuestionSchema, codes_4xx: dict}, auth=django_auth)
 @login_required
-async def report_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
-    # Getting the question bank using uuid
-    question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
+async def report_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, comment: str = Form(...)):
+    try:
+        # Getting the question bank using uuid
+        question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
 
-    # Getting the question using uuid
-    question = await sync_to_async(get_object_or_404)(Question, id=question_id)
+        # Getting the question using uuid
+        question = await sync_to_async(get_object_or_404)(Question, id=question_id)
 
-    # Creating a new report object
-    data = {
-        "question_bank": question_bank.id,
-        "question": question.id,
-    }
-    # Serializing the data
-    serializer = ReportSerializer(data=data)
-    # Validation for serializer
-    if serializer.is_valid():
-        report = serializer.save()
-        response_data = {
-            "id": str(report.id),
-            "question_bank": str(report.question_bank),
-            "question": str(report.question)
+        # Creating a new report object
+        data = {
+            "question_bank": question_bank.id,
+            "question": question.id,
+            "comment": comment,
         }
-        return JsonResponse(response_data, status=200)
-    else:
-        return JsonResponse(serializer.errors, status=400)
+
+        # Serializing the data
+        serializer = ReportSerializer(data=data)
+
+        # Validation for serializer
+        if serializer.is_valid():
+            report = serializer.save()
+            response_data = {
+                "id": str(report.id),
+                "question_bank": str(report.question_bank.id),
+                "question": str(report.question.id),
+                "comment": str(report.comment),
+            }
+            return JsonResponse(response_data, status=200)
+        else:
+            return JsonResponse(serializer.errors, status=400)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)

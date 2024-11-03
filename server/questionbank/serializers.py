@@ -15,6 +15,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class QuestionBankSerializer(serializers.ModelSerializer):
     question_count = serializers.IntegerField(read_only=True) # Custom field to get question count (Not in DB)
+    category = CategorySerializer(read_only=True)
     
     class Meta:
         model = QuestionBank
@@ -76,5 +77,5 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = [
-            'id', 'created_at', 'question_bank', 'question'
+            'id', 'created_at', 'question_bank', 'question', 'comment'
         ]

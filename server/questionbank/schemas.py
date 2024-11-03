@@ -16,18 +16,22 @@ class CategorySchema(Schema):
 # Schema for QuestionBank model
 class QuestionBankSchema(Schema):
     id: UUID
-    category: UUID
+    category: CategorySchema
     name: str
     question_bank_image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
     question_file: Optional[str] = None
-    price: int = None
+    question_count: int
+    price: Optional[int] = None
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
+
+    class Config:
+        orm_mode = True
 
 
 class QuestionBankDetailSchema(Schema):
@@ -126,3 +130,4 @@ class ReportQuestionSchema(Schema):
     created_at: datetime
     question_bank: UUID
     question: UUID
+    comment: Optional[str] = None

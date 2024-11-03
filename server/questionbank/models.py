@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth import get_user_model
 # My Files
 from cart.models import Cart
 
@@ -196,6 +195,7 @@ class Report(models.Model):
                                             related_name="reports", default=None)
     question = models.ForeignKey("questionbank.Question", on_delete=models.CASCADE,
                                     verbose_name=_("Reported Question"), related_name="reports")
+    comment = models.TextField(_("Comment"), max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Report")

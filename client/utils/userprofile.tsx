@@ -2,6 +2,7 @@ import React from "react";
 
 
 
+
 const Profile = ({name } : {name : string}) => {
     const nameParts = name.split(" ");
     const first_name = nameParts[0] ? nameParts[0][0] : ""

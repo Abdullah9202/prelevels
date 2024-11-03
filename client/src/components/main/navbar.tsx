@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useUser, UserButton } from "@clerk/nextjs";
+// import { useUser, UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Profile from "../../../utils/userprofile";
+import { useUser } from "../../../hooks/useUser";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
+  const userData = useUser((state) => state.user)
   // const { isSignedIn, user } = useUser();
   const [isSignedIn, user] = [false, { id: 1 }];
   const router = useRouter();
@@ -80,7 +82,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Profile name="Abdullah Khurram"/>
+              <Profile name={userData.name}/>
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}

@@ -206,6 +206,3 @@ class Report(models.Model):
 
     def get_absolute_url(self):
         return reverse("questionbank:Report_detail", kwargs={"id": self.id})
-
-# 7d097f77-9224-4f9e-9955-19a292341637
-# eb90e433-b649-40f9-bc39-321cf6798582

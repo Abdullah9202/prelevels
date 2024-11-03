@@ -1,8 +1,11 @@
+# Ninja imports
 from ninja_extra import NinjaExtraAPI
+# My Files
+from .router import cart_router
 
 
 # API Init
 api = NinjaExtraAPI(version="1.0.0", urls_namespace="cart", csrf=True)
 
 # Including the router from cart app
-api.add_router("", "cart.router.cart_router")
+api.add_router("", cart_router)

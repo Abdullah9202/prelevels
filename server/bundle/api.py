@@ -2,11 +2,11 @@
 from ninja_extra import NinjaExtraAPI
 # My Files
 from .schemas import BundleSchema
+from .router import bundle_router
 
 
 # API init
-api = NinjaExtraAPI(version="1.0.0", urls_namespace="bundle")
-
+api = NinjaExtraAPI(version="1.0.0", urls_namespace="bundle", csrf=True)
 
 # Including the router from bundle
-api.add_router("", "bundle.router.bundle_router")
+api.add_router("", bundle_router)

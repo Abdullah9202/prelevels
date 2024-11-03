@@ -5,10 +5,12 @@ from typing import List
 # Django imports
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 # Ninja Imports
 from ninja import Router
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx
+from ninja_extra.security import django_auth
 # My Files
 from .models import Bundle
 from .schemas import BundleSchema, BundleDetailSchema
@@ -40,7 +42,8 @@ def get_all_bundles(request, *args, **kwargs):
 
 
 # Get bundle details router
-@bundle_router.get("/{bundle_id}/", response={200: BundleDetailSchema, codes_4xx: dict})
+@bundle_router.get("/{bundle_id}/", response={200: BundleDetailSchema, codes_4xx: dict}, auth=django_auth)
+@login_required
 def get_bundle_details(request, bundle_id: UUID, *args, **kwargs):
     try:
         # Getting the bundle

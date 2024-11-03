@@ -2,11 +2,13 @@
 import React, { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../hooks/useUser";
+import { useSignIn } from "../../../../../hooks/userSignedIn";
 
 export default function Page() {
   const setUser = useUser((state) => state.setUser)
+  const setSignedIn = useSignIn((state) => state.setSignedIn)
   const router = useRouter()
-  const [user, setuser] = useState();
+  // const [user, setuser] = useState();
   const [formData, setFormData] = useState({
     phone_number: "",
     password: "",
@@ -33,6 +35,7 @@ export default function Page() {
     if (res.ok) {
       setUser(data)
       router.push('/')
+      setSignedIn(true)
       console.log("server responded");
     }
     console.log(formData);

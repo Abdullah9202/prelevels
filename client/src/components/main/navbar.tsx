@@ -6,16 +6,18 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Profile from "../../../utils/userprofile";
 import { useUser } from "../../../hooks/useUser";
+import { useSignIn } from "../../../hooks/userSignedIn";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
   const userData = useUser((state) => state.user)
+  const isSignedIn = useSignIn((state) => state.signedIn)
   // const { isSignedIn, user } = useUser();
-  const [isSignedIn, user] = [false, { id: 1 }];
+  // const [isSignedIn, user] = [true, { id: 1 }];
   const router = useRouter();
 
   const handleViewProfile = () => {
-    const id = user?.id; // Get the user's ID
+    const id = userData?.id; // Get the user's ID
     router.push(`/dashboard/${id}`);
   };
 
@@ -82,7 +84,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Profile name={userData.name}/>
+              <Profile name='Abdullah Zulfiqar'/>
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}

@@ -1,8 +1,10 @@
 "use client";
 import React, { use, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "../../../../../hooks/useUser";
 
 export default function Page() {
+  const setUser = useUser((state) => state.setUser)
   const router = useRouter()
   const [user, setuser] = useState();
   const [formData, setFormData] = useState({
@@ -29,6 +31,7 @@ export default function Page() {
 
     const data = await res.json();
     if (res.ok) {
+      setUser(data)
       router.push('/')
       console.log("server responded");
     }

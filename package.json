@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "svix": "^1.32.0"
+    "svix": "^1.32.0",
+    "zustand": "^5.0.1"
   }
 }

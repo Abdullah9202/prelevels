@@ -52,7 +52,7 @@ async def get_all_question_banks(request):
     
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
-        raise HttpError(500, f"An unexpected error occurred. Please try again later. {e}")
+        raise HttpError(500, f"An unexpected error occurred. Please try again later.")
 
 
 # Get Saved Questions
@@ -89,8 +89,8 @@ async def get_question_bank_details(request, question_bank_id: UUID, *args, **kw
             )
         )()
         
-        # Serializing the question bank with question_count included
-        serialized_question_bank = QuestionBankSerializer(question_bank).data
+        # Serializing the question bank using pydantic serializer and question_count included
+        serialized_question_bank = QuestionBankSchema.from_orm(question_bank).dict()
         
         # Returning the Json data
         return JsonResponse(serialized_question_bank, status=200)

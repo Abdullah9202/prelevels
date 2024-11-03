@@ -15,15 +15,15 @@ class CategorySchema(Schema):
 
 # Schema for QuestionBank model
 class QuestionBankSchema(Schema):
-    id: UUID
     category: CategorySchema
+    id: UUID
     name: str
     question_bank_image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
     question_file: Optional[str] = None
     question_count: int
-    price: Optional[int] = None
+    price: int = None
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None
@@ -35,18 +35,23 @@ class QuestionBankSchema(Schema):
 
 
 class QuestionBankDetailSchema(Schema):
+    category: CategorySchema
     id: UUID
-    category: UUID
     name: str
     question_bank_image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
+    question_file: Optional[str] = None
+    question_count: int
     price: int = None
     discount: Optional[int] = None
     validity: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
+
+    class Config:
+        orm_mode = True
 
 
 # Schema for Question model
@@ -82,6 +87,7 @@ class QuestionDetailSchema(Schema):
 
 # Schema for Option model
 class OptionSchema(Schema):
+    question: UUID
     id: UUID
     option_text: Optional[str] = None
     option_image: Optional[str] = None
@@ -89,7 +95,6 @@ class OptionSchema(Schema):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
-    question: UUID
     
     class config:
         orm_mode = True
@@ -97,12 +102,12 @@ class OptionSchema(Schema):
 
 # Schema for WhyCorrectOption model
 class WhyCorrectOptionSchema(Schema):
+    question: UUID
     id: UUID
     why_correct_option_text: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
-    question: UUID
 
 
 # Composite Schema for detailed Question including options

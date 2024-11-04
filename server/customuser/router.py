@@ -105,11 +105,11 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
             logger.warning("Failed login attempt for user with phone number: %s", payload.phone_number)
             raise HttpError(400, "Invalid credentials or user does not exist.")
     
-    # Returning the user details
-    serialized_user = UserSerializer(user)
-    serialized_data = serialized_user.data
+    # Serializing the user data
+    serialized_user = UserSerializer(user).data
     
-    return JsonResponse(serialized_data, status=200)
+    # Returning the user details
+    return JsonResponse(serialized_user, status=200)
 
 
 # Logout router

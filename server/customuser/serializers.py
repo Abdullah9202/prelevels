@@ -4,13 +4,18 @@ from django.contrib.auth.password_validation import validate_password
 from .models import User, TopicalProgress, YearlyProgress
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name', 'email', 'username', 
+            'id', 'first_name', 'last_name', 'full_name', 'email', 'username', 
             'phone_number', 'taking_questionBanks', 'taking_courses', 'taking_bundles', 'daysStreak',
             'questionSolved', 'questionRemained', 'createdAt', 'updatedAt', 'last_login',
         ]
+    
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class RegisterSerializer(serializers.ModelSerializer):

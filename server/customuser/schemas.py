@@ -77,10 +77,11 @@ class BundleSchema(Schema):
 class UserSchema(Schema):
     id: UUID
     # User identity and details
-    first_name: str = None
-    last_name: str = None
+    first_name: str
+    last_name: str
+    full_name: Optional[str] = None
     user_image: str = None
-    email: str = None
+    email: str
     username: str
     password: str
     # Authentication status

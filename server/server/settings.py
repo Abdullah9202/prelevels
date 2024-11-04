@@ -241,10 +241,18 @@ CSRF_TRUSTED_ORIGINS = [ # AZAK
     "http://127.0.0.1:3001",
 ]
 
-# Custom settings
+######## Custom settings ######## 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 AUTHENTICATION_BACKENDS = [
     'customuser.backends.PhoneNumberBackend',
     'django.contrib.auth.backends.ModelBackend',  # Default backend
 ]
+
+# Django session settings
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # AZAK 
+
+# Additionally, you can use Django's built-in session cleanup 
+# management command to periodically clean up expired sessions. 
+# You can set up a cron job or a scheduled task to run this command:
+# python manage.py clearsessions # AZAK

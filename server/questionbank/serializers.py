@@ -74,9 +74,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 # Save Question Serializer
 class SaveQuestionSerializer(serializers.ModelSerializer):
-    # question_bank = QuestionBankSerializer_Short(read_only=True) # Using Short Question Bank Serializer
-    # question = QuestionSerializer(read_only=True)
-    
     class Meta:
         model = SaveQuestion
         fields = [

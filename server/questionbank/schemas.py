@@ -118,11 +118,6 @@ class SaveQuestionSchema(Schema):
     user: UUID
     question_bank: UUID
     question: UUID
-    # question_bank: QuestionBankSchema_Short
-    # question: QuestionSchema_Short
-    
-    # class Config:
-    #     orm_mode = True
 
 
 # Schema for Report Question

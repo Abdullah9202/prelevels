@@ -6,6 +6,7 @@ from .models import (
 )
 
 
+# Category Serializer
 class CategorySerializer(serializers.ModelSerializer):
     model = QuestionBankCategory
     fields = [
@@ -13,6 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
     ]
 
 
+# Question Bank Serializer (Full)
 class QuestionBankSerializer(serializers.ModelSerializer):
     question_count = serializers.IntegerField(read_only=True) # Custom field to get question count (Not in DB)
     category = CategorySerializer(read_only=True)
@@ -25,17 +27,17 @@ class QuestionBankSerializer(serializers.ModelSerializer):
             'updated_at', 'is_active',
         ]
 
-
-class QuestionSerializer(serializers.ModelSerializer):
+# Question Bank Serializer (Short)
+class QuestionBankSerializer_Short(serializers.ModelSerializer):
     class Meta:
-        model = Question
+        model = QuestionBank
         fields = [
-            'id', 'question_bank', 'subject', 'topic', 'question_number',
-            'question_image', 'question_text', 'additional_details', 'unique_identifier', 
-            'created_at', 'updated_at', 'is_active'
+            'id', 'name', 'question_bank_image', 'description', 'additional_details',
+            'is_active',
         ]
 
 
+# Option Serializer
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
@@ -45,6 +47,7 @@ class OptionSerializer(serializers.ModelSerializer):
         ]
 
 
+# Why Correct Option Serializer
 class WhyCorrectOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhyCorrectOption
@@ -54,7 +57,26 @@ class WhyCorrectOptionSerializer(serializers.ModelSerializer):
         ]
 
 
+# Question Serializer (Full)
+class QuestionSerializer(serializers.ModelSerializer):
+    question_bank = QuestionBankSerializer_Short(read_only=True) # Using Short Question Bank Serializer
+    options = OptionSerializer(read_only=True, many=True)
+    why_correct_option = WhyCorrectOptionSerializer(read_only=True)
+
+    class Meta:
+        model = Question
+        fields = [
+            'question_bank', 'id', 'subject', 'topic', 'question_number',
+            'question_image', 'question_text', 'additional_details', 'unique_identifier', 
+            'created_at', 'updated_at', 'is_active', 'options', 'why_correct_option',
+        ]
+
+
+# Save Question Serializer
 class SaveQuestionSerializer(serializers.ModelSerializer):
+    # question_bank = QuestionBankSerializer_Short(read_only=True) # Using Short Question Bank Serializer
+    # question = QuestionSerializer(read_only=True)
+    
     class Meta:
         model = SaveQuestion
         fields = [
@@ -62,8 +84,9 @@ class SaveQuestionSerializer(serializers.ModelSerializer):
         ]
 
 
+# Get Saved Question Serializer
 class GetSavedQuestionSerializer(serializers.ModelSerializer):
-    question_bank = QuestionBankSerializer(read_only=True)
+    question_bank = QuestionBankSerializer_Short(read_only=True) # Using Short Question Bank Serializer
     question = QuestionSerializer(read_only=True)
 
     class Meta:
@@ -73,6 +96,7 @@ class GetSavedQuestionSerializer(serializers.ModelSerializer):
         ]
 
 
+# Report Question Serializer
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report

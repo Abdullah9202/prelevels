@@ -74,7 +74,7 @@ class WhyCorrectOptionSchema(Schema):
         orm_mode = True
 
 
-# Schema for Question model
+# Schema for Question model (Full)
 class QuestionSchema(Schema):
     question_bank: QuestionBankSchema_Short # Using Short Question Bank Schema
     id: UUID
@@ -94,6 +94,22 @@ class QuestionSchema(Schema):
     class Config:
         orm_mode = True
 
+# Schema for Question model (Short)
+class QuestionSchema_Short(Schema):
+    id: UUID
+    subject: str
+    topic: str
+    question_number: int
+    question_image: Optional[str] = None
+    question_text: Optional[str] = None
+    additional_details: Optional[str] = None
+    is_active: bool = True
+    options: List[OptionSchema] = []
+    why_correct_option: Optional[WhyCorrectOptionSchema] = None
+    
+    class Config:
+        orm_mode = True
+
 
 # Save question Schema
 class SaveQuestionSchema(Schema):
@@ -102,6 +118,11 @@ class SaveQuestionSchema(Schema):
     user: UUID
     question_bank: UUID
     question: UUID
+    # question_bank: QuestionBankSchema_Short
+    # question: QuestionSchema_Short
+    
+    # class Config:
+    #     orm_mode = True
 
 
 # Schema for Report Question

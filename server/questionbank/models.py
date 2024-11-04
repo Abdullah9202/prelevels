@@ -170,7 +170,7 @@ class SaveQuestion(models.Model):
     saved_at = models.DateField(_("Saved at"), auto_now_add=True)
     user = models.ForeignKey("customuser.User", verbose_name=_("User"), on_delete=models.CASCADE)
     question_bank = models.ForeignKey("questionbank.QuestionBank", verbose_name=_("Question Bank"), 
-                                    on_delete=models.CASCADE, default=None)
+                                    on_delete=models.CASCADE)
     question = models.ForeignKey("questionbank.Question", verbose_name=_("Saved Question"), related_name="saved_by_user",
                                 on_delete=models.CASCADE)
 

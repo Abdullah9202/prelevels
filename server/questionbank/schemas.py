@@ -13,7 +13,7 @@ class CategorySchema(Schema):
     is_active: bool = True
 
 
-# Schema for QuestionBank model
+# Schema for QuestionBank model (Full)
 class QuestionBankSchema(Schema):
     category: CategorySchema
     id: UUID
@@ -33,56 +33,17 @@ class QuestionBankSchema(Schema):
     class Config:
         orm_mode = True
 
-
-class QuestionBankDetailSchema(Schema):
-    category: CategorySchema
+# Schema for QuestionBank model (Short)
+class QuestionBankSchema_Short(Schema):
     id: UUID
     name: str
     question_bank_image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
-    question_file: Optional[str] = None
-    question_count: int
-    price: int = None
-    discount: Optional[int] = None
-    validity: Optional[int] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
     is_active: bool = True
 
     class Config:
         orm_mode = True
-
-
-# Schema for Question model
-class QuestionSchema(Schema):
-    id: UUID
-    question_bank: UUID
-    subject: str
-    topic: str
-    question_number: int
-    question_image: Optional[str] = None
-    question_text: Optional[str] = None
-    additional_details: Optional[str] = None
-    unique_identifier: Optional[str]
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    is_active: bool = True
-
-
-class QuestionDetailSchema(Schema):
-    id: UUID
-    question_bank: UUID
-    subject: str
-    topic: str
-    question_number: int
-    question_image: Optional[str] = None
-    question_text: Optional[str] = None
-    additional_details: Optional[str] = None
-    unique_identifier: Optional[str]
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    is_active: bool = True
 
 
 # Schema for Option model
@@ -96,7 +57,7 @@ class OptionSchema(Schema):
     updated_at: Optional[datetime] = None
     is_active: bool = True
     
-    class config:
+    class Config:
         orm_mode = True
 
 
@@ -108,16 +69,30 @@ class WhyCorrectOptionSchema(Schema):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     is_active: bool = True
+    
+    class Config:
+        orm_mode = True
 
 
-# Composite Schema for detailed Question including options
-class DetailedQuestionSchema(QuestionSchema):
+# Schema for Question model
+class QuestionSchema(Schema):
+    question_bank: QuestionBankSchema_Short # Using Short Question Bank Schema
+    id: UUID
+    subject: str
+    topic: str
+    question_number: int
+    question_image: Optional[str] = None
+    question_text: Optional[str] = None
+    additional_details: Optional[str] = None
+    unique_identifier: Optional[str]
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    is_active: bool = True
     options: List[OptionSchema] = []
-
-
-# Composite Schema for detailed QuestionBank including questions
-class DetailedQuestionBankSchema(QuestionBankSchema):
-    questions: List[DetailedQuestionSchema] = []
+    why_correct_option: Optional[WhyCorrectOptionSchema] = None
+    
+    class Config:
+        orm_mode = True
 
 
 # Save question Schema

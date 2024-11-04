@@ -19,8 +19,8 @@ from .models import (
     QuestionBank, Question, SaveQuestion
 )
 from .schemas import (
-    QuestionBankSchema, QuestionBankDetailSchema, QuestionSchema, QuestionDetailSchema,
-    OptionSchema, WhyCorrectOptionSchema, SaveQuestionSchema, ReportQuestionSchema,
+    QuestionBankSchema, QuestionSchema, OptionSchema, WhyCorrectOptionSchema, 
+    SaveQuestionSchema, ReportQuestionSchema,
 )
 from .serializers import (
     QuestionBankSerializer, QuestionSerializer, ReportSerializer, SaveQuestionSerializer,
@@ -60,23 +60,28 @@ async def get_all_question_banks(request):
                                                         codes_4xx: dict}, auth=django_auth)
 @login_required
 async def get_saved_questions(request, *args, **kwargs):
-    # Getting the user from request
-    user = request.user
+    try:
+        # Getting the user from request
+        user = request.user
+        
+        # Getting the saved question(s)
+        saved_questions = await sync_to_async(
+            lambda: list(SaveQuestion.objects.filter(user=user).select_related('question'))
+        )()
+        
+        # Serializing
+        serialized_saved_questions = GetSavedQuestionSerializer(saved_questions, many=True).data
+        
+        # Returning
+        return JsonResponse(serialized_saved_questions, status=200, safe=False)
     
-    # Getting the saved question(s)
-    saved_questions = await sync_to_async(list)(
-        SaveQuestion.objects.filter(user=user).select_related('question')
-    )
-    
-    # Serializing
-    serialized_saved_questions = GetSavedQuestionSerializer(saved_questions, many=True).data
-    
-    # Returning
-    return JsonResponse(serialized_saved_questions, status=200, safe=False)
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HttpError(500, "An unexpected error occurred. Please try again later.")
 
 
 # Get the details of specific Question bank
-@question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankDetailSchema, 
+@question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankSchema, 
                                                             codes_4xx: dict}, auth=django_auth)
 @login_required
 async def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
@@ -115,11 +120,11 @@ async def get_questions_in_question_bank(request, question_bank_id: UUID, *args,
                 question_bank=question_bank).select_related('why_correct_option').prefetch_related('options'))
         )()
 
-        # Serializing the questions
+        # Serializing the questions using pydantic serializer
         serialized_questions = QuestionSerializer(questions, many=True).data
         
         # Returning the Json data
-        return serialized_questions
+        return JsonResponse(serialized_questions, status=200, safe=False)
     
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
@@ -127,7 +132,7 @@ async def get_questions_in_question_bank(request, question_bank_id: UUID, *args,
 
 
 # Get the details for specific question in a question bank
-@question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionDetailSchema,
+@question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionSchema,
                                                                         codes_4xx: dict}, auth=django_auth)
 @login_required
 async def get_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
@@ -150,40 +155,42 @@ async def get_question_in_question_bank(request, question_bank_id: UUID, questio
 
 # Save question
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
-                        response={200: SaveQuestionSchema, codes_4xx: dict}, auth=django_auth)
+                        response={200: SaveQuestionSchema, 400: dict, 500: dict}, auth=django_auth)
 @login_required
 async def save_question(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
-    # Verifying the UUIDs
     try:
-        question_bank_id = UUID(str(question_bank_id))
-        question_id = UUID(str(question_id))
-    except ValueError:
-        return JsonResponse({"error": "Invalid UUID format"}, status=400)
+        # Getting the question bank using uuid
+        question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
 
-    # Getting the question bank using uuid
-    question_bank = await sync_to_async(get_object_or_404)(QuestionBank, id=question_bank_id)
+        # Getting the question using uuid
+        question = await sync_to_async(get_object_or_404)(Question, id=question_id)
 
-    # Getting the question using uuid
-    question = await sync_to_async(get_object_or_404)(Question, id=question_id)
-    
-    # Creating a new save question object
-    try:
+        # Creating a new save question object
         data = {
             "user": request.user.id,
             "question_bank": question_bank.id,
             "question": question.id,
         }
+
         # Serializing the data
-        serializer = SaveQuestionSerializer(data=data)
+        serializer_data = SaveQuestionSerializer(data=data)
+
         # Validation for serializer
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=200)
+        if serializer_data.is_valid():
+            save_question = serializer_data.save()
+            response_data = {
+                "id": str(save_question.id),
+                "saved_at": save_question.saved_at,
+                "user": str(save_question.user.id),
+                "question_bank": str(save_question.question_bank.id),
+                "question": str(save_question.question.id),
+            }
+            return JsonResponse(response_data, status=200)
         else:
-            return JsonResponse(serializer.errors, status=400)
-        
+            return JsonResponse(serializer_data.errors, status=400)
     except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+        logger.error(f"Unexpected error: {str(e)}")
+        return JsonResponse({"error": f"An error occurred. Try again later."}, status=500)
 
 
 # Report a question in a question bank

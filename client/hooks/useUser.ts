@@ -1,4 +1,12 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+
+interface UserState  {
+    user: any | null,
+    setUser : (user:any | null) => void;
+}
+
 
 
 interface UserState  {

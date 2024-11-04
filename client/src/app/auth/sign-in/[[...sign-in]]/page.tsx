@@ -1,10 +1,14 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../hooks/useUser";
 import { useSignIn } from "../../../../../hooks/userSignedIn";
 
 export default function Page() {
+
+  
+
+  const user = useUser((state) => state.user)
   const setUser = useUser((state) => state.setUser)
   const setSignedIn = useSignIn((state) => state.setSignedIn)
   const router = useRouter()
@@ -13,6 +17,11 @@ export default function Page() {
     phone_number: "",
     password: "",
   });
+    
+  
+  useEffect (() => {
+    window.localStorage.setItem('user', JSON.stringify(user))
+  }, [user])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     

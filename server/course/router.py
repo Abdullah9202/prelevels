@@ -2,6 +2,7 @@
 import logging
 from uuid import UUID
 from typing import List
+from asgiref.sync import sync_to_async
 # Django imports
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,7 @@ from ninja_extra.security import django_auth
 # My Files
 from .models import Course
 from .serializers import CourseSerializer
-from .schemas import GetCourseDetailSchema, GetCourseListSchema
+from .schemas import GetCourseDetailSchema
 
 
 # Router Init
@@ -24,13 +25,17 @@ course_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all courses router
-@course_router.get("/", response={200: List[GetCourseListSchema], codes_4xx: dict})
-def get_all_courses(request, *args, **kwargs):
+@course_router.get("/", response={200: List[GetCourseDetailSchema], codes_4xx: dict})
+async def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses
-        courses = Course.objects.all()
+        courses = await sync_to_async(
+            lambda: list(Course.objects.all())
+        )()
+        
         # Serializing the courses
         serialized_courses = CourseSerializer(courses, many=True).data
+        
         # Returning the Json data
         return JsonResponse(serialized_courses, status=200, safe=False) # It will return the empty list if DB doesn't contains any course
     except HttpError as err:
@@ -44,12 +49,14 @@ def get_all_courses(request, *args, **kwargs):
 # Get course details router
 @course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict}, auth=django_auth)
 @login_required
-def get_course(request, course_id: UUID, *args, **kwargs):
+async def get_course(request, course_id: UUID, *args, **kwargs):
     try:
         # Getting the course
-        course = get_object_or_404(Course, id=course_id)
+        course = await sync_to_async(get_object_or_404)(Course, id=course_id)
+        
         # Serializing the course
         serialized_course = CourseSerializer(course).data
+        
         # Returning the Json data
         return JsonResponse(serialized_course, status=200)
     except HttpError as err:

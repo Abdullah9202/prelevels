@@ -101,7 +101,6 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
         # Checking if the user exists
         if user is not None:
             login(request, user)
-            return JsonResponse({"message": "Login successful"}, status=200)
         else:
             logger.warning("Failed login attempt for user with phone number: %s", payload.phone_number)
             raise HttpError(400, "Invalid credentials or user does not exist.")

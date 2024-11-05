@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { FaHome, FaBook, FaQuestion, FaChartBar, FaSignOutAlt, FaBars } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import { useUser } from "@clerk/nextjs";
+import { useUser } from '../../../hooks/useUser';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const { user } = useUser();
+  const user = useUser((state) => state.user)
   const dashboardUrl = user ? `/dashboard/${user.id}` : "/dashboard";
 
   const toggleSidebar = () => {

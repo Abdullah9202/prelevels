@@ -11,6 +11,7 @@ export default function Page() {
   const user = useUser((state) => state.user)
   const setUser = useUser((state) => state.setUser)
   const setSignedIn = useSignIn((state) => state.setSignedIn)
+  const isSigned = useSignIn((state) => state.signedIn)
   const router = useRouter()
   // const [user, setuser] = useState();
   const [formData, setFormData] = useState({
@@ -22,6 +23,10 @@ export default function Page() {
   useEffect (() => {
     window.localStorage.setItem('user', JSON.stringify(user))
   }, [user])
+
+  useEffect(() => {
+  window.localStorage.setItem('isSignedIn',JSON.stringify(isSigned))
+  }, [isSigned])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     

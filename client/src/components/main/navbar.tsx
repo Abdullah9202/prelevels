@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaBars, FaTimes } from "react-icons/fa";
 // import { useUser, UserButton } from "@clerk/nextjs";
@@ -11,10 +11,26 @@ import { useSignIn } from "../../../hooks/userSignedIn";
 export default function Navbar() {
   const [nav, setNav] = useState(false);
   const userData = useUser((state) => state.user)
-  const isSignedIn = useSignIn((state) => state.signedIn)
+  const [user_data, setUser_data] = useState<string | null>(null)
+  
+  const [isSigned, setSignedIn] = useState<string | null>(null)
   // const { isSignedIn, user } = useUser();
   // const [isSignedIn, user] = [true, { id: 1 }];
   const router = useRouter();
+
+  useEffect(() => {
+          const signedIn = localStorage.getItem('isSignedIn')
+          if (signedIn) {
+              setSignedIn(JSON.parse(signedIn))
+          }
+      },[])
+
+  useEffect(() => {
+    const user = localStorage.getItem('user')
+    if(user){
+      setSignedIn(JSON.parse(user))
+    }
+  }, [])
 
   const handleViewProfile = () => {
     const id = userData?.id; // Get the user's ID
@@ -67,7 +83,7 @@ export default function Navbar() {
               </Link>
             </div>
           </div>
-          {!isSignedIn ? (
+          {!isSigned ? (
             <div className="flex items-center space-x-4">
               <Link
                 href="/auth/sign-in"
@@ -84,7 +100,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Profile name='Abdullah Zulfiqar'/>
+              <Profile name="Abdullah Zulfiqar"/>
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}

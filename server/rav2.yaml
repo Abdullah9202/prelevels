@@ -1,0 +1,16 @@
+# Run the commands using 'rav2 run {script command}'
+# Example:
+# To run server: rav2 run server
+# It will automatically execute 'python3 manage.py runserver'
+
+scripts:
+  server:
+    python3 manage.py runserver
+  makemigrations:
+    python3 manage.py makemigrations
+  migrate:
+    python3 manage.py migrate
+  shell:
+    python3 manage.py shell
+  createsuperuser:
+    python3 manage.py createsuperuser

@@ -27,9 +27,9 @@ const DashboardPage = () => {
           <div className="md:w-2/3">
             {/* Stat Cards */}
             <div className="grid grid-cols-3 mt-4 md:mt-0 md:grid-cols-3 gap-2 md:gap-4 order-first md:order-none">
-              <StatCard title="24" subtitle="Days Streak" icon={<FaCalendarAlt />} />
-              <StatCard title="544" subtitle="Questions Solved" icon={<FaCheckSquare />} />
-              <StatCard title="256" subtitle="Questions Remaining" icon={<FaClock />} />
+              <StatCard title={user.daysStreak} subtitle="Days Streak" icon={<FaCalendarAlt />} />
+              <StatCard title={user.questionSolved} subtitle="Questions Solved" icon={<FaCheckSquare />} />
+              <StatCard title={user.questionRemained} subtitle="Questions Remaining" icon={<FaClock />} />
             </div>
 
             {/* Question Banks Section */}

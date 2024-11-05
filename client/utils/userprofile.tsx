@@ -1,24 +1,32 @@
 "use client"
 import React, { useState } from "react";
 import { FaUser,FaSignOutAlt,  } from "react-icons/fa";
+import { useUser } from "../hooks/useUser";
+import { useSignIn } from "../hooks/userSignedIn";
 
 
 
-const Profile = ({name } : {name : string}) => {
+const Profile = () => {
     const [isMenuOpen, setMenuOpen] = useState(false)
-    const nameParts = name.split(" ");
-    const first_name = nameParts[0] ? nameParts[0][0] : ""
-    const last_name = nameParts[1]? nameParts[1][0] : ""
+    const data = useUser((state)=> state.user)
+    
+    const firstInitial = data.first_name[0] || '';
+    const lastInitial = data.last_name[0] || '';
 
     const toggleMenu = () => {
         setMenuOpen(!isMenuOpen)
     }
 
+    const handleLogout = () => {
+        useUser.getState().setUser(null)
+        useSignIn.getState().setSignedIn(false)
+    }
+
     return (
         <div>
             <button onClick={toggleMenu} className="flex justify-center items-center w-44 h-44 bg-blue-500 text-white text-base p-2 rounded-full font-bold">
-                {first_name}
-                {last_name}
+                {firstInitial}
+                {lastInitial}
             </button>
 
             { isMenuOpen && (
@@ -34,7 +42,7 @@ const Profile = ({name } : {name : string}) => {
                         </li>
                         <li className="px-4 py-2 flex items-center">
                             <span className="mr-2">🚪</span>
-                            <button className="w-full text-left hover:bg-gray-400 cursor-pointer">Logout</button>
+                            <button onClick={handleLogout} className="w-full text-left hover:bg-gray-400 cursor-pointer">Logout</button>
                         </li>
                     </ul>
                 </div>

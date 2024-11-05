@@ -14,10 +14,18 @@ interface UserState  {
     setUser : (user:any | null) => void;
 }
 
-export const useUser = create<UserState>((set:any) => ({
-    user: null,
-    setUser: (user:any) => set({ user }),
-}));
+export const useUser = create<UserState>()(
+    persist(
+        (set) => ({
+            user : null,
+            setUser: (user) => set({user}),
+        }),
+        {
+            name : "user-storage",
+            partialize: (state) => ({user: state.user}),
+        }
+    )
+);
 
 
 
@@ -96,3 +104,18 @@ export const useUser = create<UserState>((set:any) => ({
 // }
 
 // export default MyApp;
+
+
+// how to use this with persist
+
+// import { useUser } from "../hooks/useUser";
+
+// const fetchUserData = async () => {
+//   try {
+//     const response = await fetch("http://127.0.0.1:8000/api/user/profile/");
+//     const data = await response.json();
+//     useUser.getState().setUser(data); // Store user data
+//   } catch (error) {
+//     console.error("Failed to fetch user data:", error);
+//   }
+// };

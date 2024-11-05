@@ -11,26 +11,15 @@ import { useSignIn } from "../../../hooks/userSignedIn";
 export default function Navbar() {
   const [nav, setNav] = useState(false);
   const userData = useUser((state) => state.user)
-  const [user_data, setUser_data] = useState<string | null>(null)
   
-  const [isSigned, setSignedIn] = useState<string | null>(null)
+  
+  
+  const isSigned = useSignIn((state) => state.signedIn)
   // const { isSignedIn, user } = useUser();
   // const [isSignedIn, user] = [true, { id: 1 }];
   const router = useRouter();
 
-  useEffect(() => {
-          const signedIn = localStorage.getItem('isSignedIn')
-          if (signedIn) {
-              setSignedIn(JSON.parse(signedIn))
-          }
-      },[])
-
-  useEffect(() => {
-    const user = localStorage.getItem('user')
-    if(user){
-      setSignedIn(JSON.parse(user))
-    }
-  }, [])
+ 
 
   const handleViewProfile = () => {
     const id = userData?.id; // Get the user's ID
@@ -100,7 +89,8 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Profile name="Abdullah Zulfiqar"/>
+              <Profile  />
+              
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
                 onClick={handleViewProfile}

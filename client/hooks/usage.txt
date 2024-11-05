@@ -1,0 +1,79 @@
+
+
+creating hook
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  email: string;
+  username: string;
+  // Add other properties as needed
+}
+
+interface UserState {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+
+export const useUser = create<UserState>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+    }),
+    {
+      name: "user-storage", // Key for localStorage or IndexedDB
+      partialize: (state) => ({ user: state.user }), // Store only `user` property
+    }
+  )
+);
+
+////using hook to store data
+
+import { useUser } from "../hooks/useUser";
+
+const fetchUserData = async () => {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/user/profile/");
+    const data = await response.json();
+    useUser.getState().setUser(data); // Store user data
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+  }
+};
+
+//// using hook to get the store data 
+
+import React from 'react';
+import { useUser } from '../hooks/useUser';
+
+const Profile: React.FC = () => {
+  const user = useUser((state) => state.user);
+
+  if (!user) return <div>Loading...</div>;
+
+  const firstInitial = user.first_name[0] || '';
+  const lastInitial = user.last_name[0] || '';
+
+  return (
+    <span className="flex justify-center items-center w-[80px] h-[80px] bg-blue-500 text-white text-xl rounded-full font-bold">
+      {firstInitial}
+      {lastInitial}
+    </span>
+  );
+};
+
+export default Profile;
+
+
+///// deleting the user data
+const handleLogout = () => {
+  useUser.getState().setUser(null); // Clears user data from Zustand and localStorage
+};
+
+

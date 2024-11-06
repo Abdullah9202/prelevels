@@ -1,7 +1,7 @@
-import React from 'react';
-import SupportItem from './supportItme';
-import WhatsappIcon from '@/assets/whatsapp.svg'
-import support from '@/assets/support.svg'
+import React from "react";
+import SupportItem from "./supportItme";
+import WhatsappIcon from "@/assets/whatsapp.svg";
+import support from "@/assets/support.svg";
 
 interface SupportItemData {
   imageSrc: string;
@@ -11,12 +11,12 @@ interface SupportItemData {
 const supportItems: SupportItemData[] = [
   {
     imageSrc: support,
-    text: "Prelevels Support 24/7"
+    text: "Prelevels Support 24/7",
   },
   {
     imageSrc: WhatsappIcon,
-    text: "WhatsApp community"
-  }
+    text: "WhatsApp community",
+  },
 ];
 
 const SeasonSale: React.FC = () => {
@@ -40,4 +40,3 @@ const SeasonSale: React.FC = () => {
 };
 
 export default SeasonSale;
-

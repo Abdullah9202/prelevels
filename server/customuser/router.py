@@ -67,8 +67,8 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
             logger.error("Serializer validation failed: %s", serializer.errors)
             raise HttpError(400, str(serializer.errors))
 
-        user = serializer.save()
-        serialized_data = await sync_to_async(lambda: RegisterSerializer(user).data)()
+        user = await sync_to_async(serializer.save)()
+        serialized_data = RegisterSerializer(user).data
         
         logger.info("User registered successfully: %s", serialized_data)
         return JsonResponse(serialized_data, status=200)

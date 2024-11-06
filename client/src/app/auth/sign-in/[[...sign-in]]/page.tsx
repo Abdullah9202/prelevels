@@ -4,24 +4,15 @@ import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../hooks/useUser";
 import { useSignIn } from "../../../../../hooks/userSignedIn";
 
-
 export default function Page() {
-
-  
-
-
-  const router = useRouter()
+  const router = useRouter();
   // const [user, setuser] = useState();
   const [formData, setFormData] = useState({
     phone_number: "",
     password: "",
   });
-    
-  
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -31,7 +22,8 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", { // AZAK
+    const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", {
+      // AZAK
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -40,8 +32,8 @@ export default function Page() {
     const data = await res.json();
     if (res.ok) {
       useUser.getState().setUser(data);
-      router.push('/')
-      useSignIn.getState().setSignedIn(true)
+      router.push("/");
+      useSignIn.getState().setSignedIn(true);
       console.log("server responded");
     }
     console.log(formData);

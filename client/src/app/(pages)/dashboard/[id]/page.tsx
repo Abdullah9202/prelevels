@@ -9,6 +9,5 @@ export default function Dashboard({ params }: { params: { id: string } }) {
       <Sidebar />
       <DashboardPage />
     </div>
-
   );
 }

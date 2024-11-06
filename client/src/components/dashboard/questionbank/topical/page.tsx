@@ -1,9 +1,8 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import MDCAT from '@/assets/MDCATBanner.png';
+import MDCAT from "@/assets/MDCATBanner.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 
 export default function TopicalPage() {
   const { user } = useUser();
@@ -20,12 +19,18 @@ export default function TopicalPage() {
       <div>
         <Image src={MDCAT} alt="MDCAT" className="w-full " />
         <div className="flex justify-center items-center mt-3 space-x-6 text-white">
-          <button className="bg-red-600 rounded-3xl px-6 py-2"
-          onClick={() => router.push('/dashboard/question-bank/solve')}>
-            Yearly</button>
-          <button className="bg-red-600 rounded-3xl px-6 py-2"
-          onClick={()=> router.push('/dashboard/question-bank/topical')}>
-            Topical</button>
+          <button
+            className="bg-red-600 rounded-3xl px-6 py-2"
+            onClick={() => router.push("/dashboard/question-bank/solve")}
+          >
+            Yearly
+          </button>
+          <button
+            className="bg-red-600 rounded-3xl px-6 py-2"
+            onClick={() => router.push("/dashboard/question-bank/topical")}
+          >
+            Topical
+          </button>
         </div>
         <div className="bg-[#D9D9D9] shadow-sm rounded-lg mt-5 border-2 border-white">
           <h1 className="px-10 py-5 font-bold">
@@ -34,11 +39,13 @@ export default function TopicalPage() {
           </h1>
           {repeatedBlocks.map((_, index) => (
             <div key={index} className="px-14 pb-4">
-                <div className="flex justify-between items-center">
-                    <p>202{index}</p>
-                    <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">View Detail</button>
-                </div>
-                <hr className="border-1 border-gray-400 w-full mt-2" />
+              <div className="flex justify-between items-center">
+                <p>202{index}</p>
+                <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">
+                  View Detail
+                </button>
+              </div>
+              <hr className="border-1 border-gray-400 w-full mt-2" />
             </div>
           ))}
         </div>
@@ -52,11 +59,13 @@ export default function TopicalPage() {
           </h1>
           {repeatedBlocks.map((_, index) => (
             <div key={index} className="px-14 pb-4">
-                <div className="flex justify-between items-center">
-                    <p>202{index}</p>
-                    <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">View Detail</button>
-                </div>
-                <hr className="border-1 border-gray-400 w-full mt-2" />
+              <div className="flex justify-between items-center">
+                <p>202{index}</p>
+                <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">
+                  View Detail
+                </button>
+              </div>
+              <hr className="border-1 border-gray-400 w-full mt-2" />
             </div>
           ))}
         </div>

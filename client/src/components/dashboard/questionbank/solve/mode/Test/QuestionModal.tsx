@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface QuestionModalProps {
   isOpen: boolean;
@@ -7,10 +7,18 @@ interface QuestionModalProps {
   onQuestionSelect: (questionIndex: number) => void;
 }
 
-const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, totalQuestions, onQuestionSelect }) => {
+const QuestionModal: React.FC<QuestionModalProps> = ({
+  isOpen,
+  onClose,
+  totalQuestions,
+  onQuestionSelect,
+}) => {
   if (!isOpen) return null;
 
-  const questionDots = Array.from({ length: totalQuestions }, (_, index) => index + 1);
+  const questionDots = Array.from(
+    { length: totalQuestions },
+    (_, index) => index + 1
+  );
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
@@ -28,7 +36,12 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, totalQue
           ))}
         </div>
         <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 rounded-lg">Close</button>
+          <button
+            onClick={onClose}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

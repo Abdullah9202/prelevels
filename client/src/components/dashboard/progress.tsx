@@ -1,18 +1,33 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Progress = () => {
   // Data for Topical Chart
   const topicalData = {
-    labels: ['SU', 'WR', 'ME', 'IO', 'SR', 'TM', 'IR', 'MO', 'TE', 'SA'],
+    labels: ["SU", "WR", "ME", "IO", "SR", "TM", "IR", "MO", "TE", "SA"],
     datasets: [
       {
-        label: 'Topical',
+        label: "Topical",
         data: [20, 10, 15, 7, 10, 22, 25, 18, 14, 8], // Example data, adjust as needed
-        backgroundColor: '#5A67D8', // Blue color
+        backgroundColor: "#5A67D8", // Blue color
         borderRadius: 10,
         barThickness: 15,
       },
@@ -21,12 +36,12 @@ const Progress = () => {
 
   // Data for Yearly Chart
   const yearlyData = {
-    labels: ['SU', 'WR', 'ME', 'IO', 'SR', 'TM', 'IR', 'MO', 'TE', 'SA'],
+    labels: ["SU", "WR", "ME", "IO", "SR", "TM", "IR", "MO", "TE", "SA"],
     datasets: [
       {
-        label: 'Yearly',
+        label: "Yearly",
         data: [18, 21, 13, 9, 16, 20, 23, 14, 15, 21], // Example data, adjust as needed
-        backgroundColor: '#ED8936', // Orange color
+        backgroundColor: "#ED8936", // Orange color
         borderRadius: 10,
         barThickness: 15,
       },

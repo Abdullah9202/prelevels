@@ -4,10 +4,10 @@ import Progress from "./progress";
 import Courses from "./courses";
 import QuestionBankProgress from "./questionbankprogress"; // Import the QuestionBankProgress component
 import { useUser } from "../../../hooks/useUser";
-import { FaCalendarAlt, FaCheckSquare, FaClock } from 'react-icons/fa';
+import { FaCalendarAlt, FaCheckSquare, FaClock } from "react-icons/fa";
 
 const DashboardPage = () => {
-  const user = useUser((state) => state.user)
+  const user = useUser((state) => state.user);
 
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">
@@ -27,9 +27,21 @@ const DashboardPage = () => {
           <div className="md:w-2/3">
             {/* Stat Cards */}
             <div className="grid grid-cols-3 mt-4 md:mt-0 md:grid-cols-3 gap-2 md:gap-4 order-first md:order-none">
-              <StatCard title={user.daysStreak} subtitle="Days Streak" icon={<FaCalendarAlt />} />
-              <StatCard title={user.questionSolved} subtitle="Questions Solved" icon={<FaCheckSquare />} />
-              <StatCard title={user.questionRemained} subtitle="Questions Remaining" icon={<FaClock />} />
+              <StatCard
+                title={user.daysStreak}
+                subtitle="Days Streak"
+                icon={<FaCalendarAlt />}
+              />
+              <StatCard
+                title={user.questionSolved}
+                subtitle="Questions Solved"
+                icon={<FaCheckSquare />}
+              />
+              <StatCard
+                title={user.questionRemained}
+                subtitle="Questions Remaining"
+                icon={<FaClock />}
+              />
             </div>
 
             {/* Question Banks Section */}
@@ -51,17 +63,20 @@ const DashboardPage = () => {
 const StatCard = ({
   title,
   subtitle,
-  icon
+  icon,
 }: {
   title: string;
   subtitle: string;
   icon: React.ReactNode;
 }) => (
   <div className="bg-[#D9D9D9] shadow-lg border-2 border-white  rounded-xl p-3 flex items-center space-x-4 transform hover:scale-105 transition-transform duration-200 ease-in-out w-full max-w-[200px] mx-auto">
-    <div className="text-3xl text-blue-600">{icon}</div> {/* Icon color updated */}
+    <div className="text-3xl text-blue-600">{icon}</div>{" "}
+    {/* Icon color updated */}
     <div>
-      <div className="text-xl font-semibold text-gray-800">{title}</div> {/* Slightly smaller title */}
-      <div className="text-sm text-gray-500">{subtitle}</div> {/* Subtitle remains small */}
+      <div className="text-xl font-semibold text-gray-800">{title}</div>{" "}
+      {/* Slightly smaller title */}
+      <div className="text-sm text-gray-500">{subtitle}</div>{" "}
+      {/* Subtitle remains small */}
     </div>
   </div>
 );

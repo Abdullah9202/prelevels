@@ -11,7 +11,10 @@ export default function ServicesSection() {
           <div className="flex flex-col items-center justify-center space-y-4 relative z-20 ">
             <div className="bg-[#D9D9D9] p-10 rounded-lg shadow-lg flex-col items-center justify-center text-center w-48 h-70 hidden lg:flex border-2 border-white">
               <div className="relative w-24 h-24 mb-4">
-                <svg className="absolute inset-0 w-full h-full text-red-500" viewBox="0 0 36 36">
+                <svg
+                  className="absolute inset-0 w-full h-full text-red-500"
+                  viewBox="0 0 36 36"
+                >
                   <path
                     className="text-gray-300 dark:text-slate-600"
                     strokeWidth="3"
@@ -30,7 +33,9 @@ export default function ServicesSection() {
                   <span className="text-lg font-bold text-gray-800">100%</span>
                 </div>
               </div>
-              <p className="text-lg font-semibold text-gray-800">Satisfaction</p>
+              <p className="text-lg font-semibold text-gray-800">
+                Satisfaction
+              </p>
             </div>
 
             {/* Test Box */}
@@ -48,7 +53,9 @@ export default function ServicesSection() {
 
           {/* Support Box */}
           <div className="bg-[#D9D9D9] p-5 lg:w-64 w-full rounded-lg shadow-lg relative z-10 lg:-ml-20 lg:mr-5 mt-10 border-2 border-white">
-            <h3 className="text-xl font-semibold text-red-500 mb-4">24/7 Support</h3>
+            <h3 className="text-xl font-semibold text-red-500 mb-4">
+              24/7 Support
+            </h3>
             <ul className="space-y-4">
               {[
                 { name: "Matt Haris", role: "Studio H" },
@@ -77,7 +84,9 @@ export default function ServicesSection() {
               Let us handle the best.
             </h3>
             <p className="text-gray-600  mb-6">
-              We don’t like to brag, but we don’t mind letting our students do it for us. Here are a few nice things folks have said about our service over the years.
+              We don’t like to brag, but we don’t mind letting our students do
+              it for us. Here are a few nice things folks have said about our
+              service over the years.
             </p>
             <button className="bg-red-500 text-white py-2 px-5 rounded-3xl hover:bg-red-600">
               Explore More

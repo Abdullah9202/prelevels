@@ -5,29 +5,29 @@ import Navbar from "@/components/main/navbar";
 import Banner from "@/components/questionbank/banner";
 import Sidebar from "@/components/ui/sidebar";
 import BannerImage from "@/assets/Banner.png";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import SeasonSale from "@/components/ui/timeline";
-
 
 export default function QuestionBankPage() {
   const [posts, setPosts] = useState([]);
-  
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/questionbank/", { method: 'GET' });
+        const res = await fetch("http://127.0.0.1:8000/api/questionbank/", {
+          method: "GET",
+        });
         const data = await res.json();
         if (res.ok) {
           setPosts(data);
-          console.log('Posts fetched:', data);
+          console.log("Posts fetched:", data);
         } else {
-          console.log('No data found');
+          console.log("No data found");
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
-    }
+    };
     fetchPost();
   }, []);
 
@@ -36,7 +36,7 @@ export default function QuestionBankPage() {
       <SeasonSale />
       <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar />
-        <Banner src={BannerImage} alt="banner Image" text="Question bank"/>
+        <Banner src={BannerImage} alt="banner Image" text="Question bank" />
         <Sidebar />
         <div className="py-48 hidden sm:block">
           <Footer />

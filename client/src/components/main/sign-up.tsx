@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const router = useRouter()
+  const router = useRouter();
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -26,15 +26,19 @@ export default function SignUp() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/customuser/register/", { // AZAK
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+      const res = await fetch(
+        "http://127.0.0.1:8000/api/customuser/register/",
+        {
+          // AZAK
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       // const data = await res.json()
       if (res.ok) {
-        router.push('/auth/sign-in')
+        router.push("/auth/sign-in");
         alert("Data sent successFully");
       } else {
         alert("There is an error");

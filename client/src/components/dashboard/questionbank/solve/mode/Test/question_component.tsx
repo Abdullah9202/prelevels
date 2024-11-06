@@ -1,6 +1,5 @@
 // components/QuestionComponent.js
-import { useState, useEffect, useCallback } from 'react';
-
+import { useState, useEffect, useCallback } from "react";
 
 interface QuestionData {
   question: string;
@@ -18,8 +17,15 @@ interface QuestionComponentProps {
   isHighlighterActive: boolean;
 }
 
-const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, currentQuestionIndex, totalQuestions, onNext, onPrevious ,isHighlighterActive }) => {
-  const [selectedOption, setSelectedOption] = useState('');
+const QuestionComponent: React.FC<QuestionComponentProps> = ({
+  questionData,
+  currentQuestionIndex,
+  totalQuestions,
+  onNext,
+  onPrevious,
+  isHighlighterActive,
+}) => {
+  const [selectedOption, setSelectedOption] = useState("");
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOption(optionId);
@@ -29,8 +35,8 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, cur
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0 && isHighlighterActive) {
       const range = selection.getRangeAt(0);
-      const span = document.createElement('span');
-      span.style.backgroundColor = 'yellow';
+      const span = document.createElement("span");
+      span.style.backgroundColor = "yellow";
       range.surroundContents(span);
       selection.removeAllRanges(); // clear selection after highlighting
     }
@@ -38,14 +44,14 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, cur
 
   useEffect(() => {
     if (isHighlighterActive) {
-      document.addEventListener('mouseup', highlightText);
+      document.addEventListener("mouseup", highlightText);
     } else {
-      document.removeEventListener('mouseup', highlightText);
+      document.removeEventListener("mouseup", highlightText);
     }
 
     // Cleanup the event listener when component unmounts
     return () => {
-      document.removeEventListener('mouseup', highlightText);
+      document.removeEventListener("mouseup", highlightText);
     };
   }, [isHighlighterActive, highlightText]);
 
@@ -53,7 +59,9 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, cur
     <div className="max-w-4xl mx-auto">
       {/* Question */}
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Question {currentQuestionIndex + 1}:</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Question {currentQuestionIndex + 1}:
+        </h2>
         <p className="text-lg">{questionData.question}</p>
       </div>
 
@@ -63,7 +71,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, cur
           <button
             key={option.id}
             className={`border border-gray-300 rounded-lg p-4 text-left hover:bg-gray-200 ${
-              selectedOption === option.id ? 'bg-gray-300' : ''
+              selectedOption === option.id ? "bg-gray-300" : ""
             }`}
             onClick={() => handleOptionSelect(option.id)}
           >
@@ -80,7 +88,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionData, cur
           <p>
             {selectedOption === questionData.correctOption
               ? questionData.explanation
-              : 'Wrong answer. Please try again!'}
+              : "Wrong answer. Please try again!"}
           </p>
         </div>
       )}

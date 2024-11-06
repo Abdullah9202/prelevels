@@ -16,7 +16,7 @@ const Banner = ({ src, alt, text }: BannerProps) => {
         width={700} // The image's natural aspect ratio width
         height={400} // The image's natural aspect ratio height
         className="object-cover"
-        sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, (max-width: 1280px) 70vw, (max-width: 2000px) 60vw, 50vw" 
+        sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, (max-width: 1280px) 70vw, (max-width: 2000px) 60vw, 50vw"
         // Adjust sizes for small, medium, large, extra-large, and 2xl screens
       />
       <div className="absolute insert-0 flex justify-center items-center">

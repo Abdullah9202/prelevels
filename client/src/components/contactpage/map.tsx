@@ -1,4 +1,4 @@
-import Maps from "@/assets/Maps.png"
+import Maps from "@/assets/Maps.png";
 import Image from "next/image";
 
 const Map = () => {

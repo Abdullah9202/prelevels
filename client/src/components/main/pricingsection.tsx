@@ -12,7 +12,8 @@ export default function PricingSection() {
             Fair & Simple Pricing for All
           </h2>
           <p className="text-gray-600 mt-2">
-            We don’t like to brag, but we don’t mind letting our students do it for us
+            We don’t like to brag, but we don’t mind letting our students do it
+            for us
           </p>
         </div>
 

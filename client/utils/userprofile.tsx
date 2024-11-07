@@ -8,17 +8,29 @@ const Profile = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const data = useUser((state) => state.user);
 
-  const firstInitial = data.first_name[0] || "";
-  const lastInitial = data.last_name[0] || "";
+  const firstInitial = data?.first_name[0] || "";
+  const lastInitial = data?.last_name[0] || "";
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
 
-  const handleLogout = () => {
+
+
+  const handleLogoutRequest = async () => {
+    const res = await fetch('127.0.0.1:8000/api/customuser/logout/', {
+      method : 'POST',
+      headers: {"Content-Type": "application/json"},
+      credentials: 'include'
+    });
     useUser.getState().setUser(null);
     useSignIn.getState().setSignedIn(false);
-  };
+    const data = await res.json()
+    if (data.status === 200){
+      
+    }
+
+  }
 
   return (
     <div>
@@ -49,7 +61,7 @@ const Profile = () => {
             <li className="px-4 py-2 flex items-center">
               <span className="mr-2">🚪</span>
               <button
-                onClick={handleLogout}
+                onClick={handleLogoutRequest}
                 className="w-full text-left hover:bg-gray-400 cursor-pointer"
               >
                 Logout

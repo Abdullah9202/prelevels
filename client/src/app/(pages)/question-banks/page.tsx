@@ -14,7 +14,7 @@ export default function QuestionBankPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/questionbank/", {
+        const res = await fetch("http://127.0.0.1:8000/api/questionbank/all/", {
           method: "GET",
         });
         const data = await res.json();
@@ -34,10 +34,11 @@ export default function QuestionBankPage() {
   return (
     <div>
       <SeasonSale />
+      
       <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar />
         <Banner src={BannerImage} alt="banner Image" text="Question bank" />
-        <Sidebar />
+        <Sidebar data={posts} />
         <div className="py-48 hidden sm:block">
           <Footer />
         </div>

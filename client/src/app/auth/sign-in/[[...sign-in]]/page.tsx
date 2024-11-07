@@ -20,6 +20,8 @@ export default function Page() {
     });
   };
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", {

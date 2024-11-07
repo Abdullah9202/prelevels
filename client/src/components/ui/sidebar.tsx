@@ -6,9 +6,15 @@ import Image from "next/image";
 import { FaBook, FaInfoCircle } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-export default function Sidebar() {
+interface SidebarProps {
+  data: any;
+}
+
+export default function Sidebar({ data }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [catogory, setCategory] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(0);
+  
 
   const pricingData = [
     {
@@ -62,6 +68,15 @@ export default function Sidebar() {
     // Add more items as needed
   ];
 
+  console.log("this is the props data ", data)
+  console.log(catogory)
+  const filterData = catogory ? data?.filter( (item : any) => item.category.name === catogory) : pricingData
+
+
+  
+  
+  console.log('this is filter data', filterData)
+
   const itemsPerPage = 6;
   const totalPages = Math.ceil(pricingData.length / itemsPerPage);
 
@@ -77,7 +92,7 @@ export default function Sidebar() {
     }
   };
 
-  const paginatedData = pricingData.slice(
+  const paginatedData = (filterData || []).slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
@@ -101,38 +116,42 @@ export default function Sidebar() {
         {/* Sidebar Links */}
         <div className="p-4 space-y-4">
           <h2 className="text-lg font-semibold">Categories</h2>
-          <a href="#" className="flex items-center p-2 rounded bg-gray-200">
+          <button onClick={()=> setCategory("ETEA")} className="flex items-center p-2 rounded bg-gray-200">
             <FaBook className="w-5 h-5 text-red-600" />
             <span className="ml-2 text-red-600 font-semibold">ETA</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center p-2 rounded hover:bg-gray-100"
+          </button>
+
+          <button
+            onClick={()=> setCategory("NMDCAT")}
+            className="flex items-center  p-2 rounded hover:bg-gray-100"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">NMDCAT</span>
-          </a>
-          <a
-            href="#"
+          </button>
+
+          <button
+            onClick={()=> setCategory("GAT")}
             className="flex items-center p-2 rounded hover:bg-gray-100"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">GAT</span>
-          </a>
-          <a
-            href="#"
+          </button>
+
+          <button
+            onClick={()=> setCategory("LUMS")}
             className="flex items-center p-2 rounded hover:bg-gray-100"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">LUMS</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center p-2 rounded hover:bg-gray-100"
+          </button>
+
+          <button
+            onClick={()=> setCategory("NUST")}
+            className="flex items-center p-2  rounded hover:bg-gray-100"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">NUST</span>
-          </a>
+          </button>
         </div>
 
         {/* Help Section */}
@@ -162,15 +181,16 @@ export default function Sidebar() {
         </header>
         <main className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {paginatedData.map((item) => (
+            {(paginatedData || []).map((item : any) => (
               <div
                 key={item.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
                 <div className="relative">
                   <Image
-                    src={item.image}
-                    alt={item.title}
+                    src={item.question_bank_image}
+                    alt={item.name
+                    }
                     className="w-full h-48 object-cover"
                   />
                   <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
@@ -179,15 +199,16 @@ export default function Sidebar() {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-800">
-                    {item.title}
+                    {item.description}
                   </h3>
                   <p className="text-gray-500">Prelevels</p>
-                  <p className="text-gray-500 mb-2">{item.validTill}</p>
+                  <p className="text-gray-500 mb-2">{item.validity}</p>
                   <div className="text-red-500 text-3xl font-bold">
                     {item.price}
                   </div>
                   <div className="text-gray-500 line-through text-xl">
-                    {item.originalPrice}
+                    {item.price
+                    }
                   </div>
                   <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                     Add to Cart

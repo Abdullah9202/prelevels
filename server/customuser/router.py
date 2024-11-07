@@ -115,5 +115,10 @@ def login_user(request, payload: LoginSchema, *args, **kwargs):
 # Logout router
 @auth_router.post("/logout/", response={200: dict})
 async def logout_user(request, *args, **kwargs):
-    await sync_to_async(logout)(request)
-    return JsonResponse({"message": "User logged out successfully"}, status=200)
+    try:
+        await sync_to_async(logout)(request)
+        logger.info("User logged out successfully")
+        return JsonResponse({"message": "User logged out successfully"}, status=200)
+    except Exception as e:
+        logger.error("Error during logout: %s", str(e))
+        return JsonResponse({"error": "An error occurred during logout. Please try again later."}, status=500)

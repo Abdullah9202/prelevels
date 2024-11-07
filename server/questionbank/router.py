@@ -26,6 +26,7 @@ from .serializers import (
     QuestionBankSerializer, QuestionSerializer, ReportSerializer, SaveQuestionSerializer,
     GetSavedQuestionSerializer
 )
+from customuser.models import User
 
 
 # Router Init
@@ -150,6 +151,33 @@ async def get_question_in_question_bank(request, question_bank_id: UUID, questio
     
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
+        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+
+
+# Get User Question Bank router
+@question_bank_router.get("/{username}/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, 
+                        auth=django_auth)
+@login_required
+async def get_user_questionbanks(request, username: str, *args, **kwargs):
+    try:
+        # Getting the user using username
+        user = await sync_to_async(get_object_or_404)(User, username=username)
+        
+        # Getting the question banks concerned with user
+        question_banks = await sync_to_async(
+            lambda: list(QuestionBank.objects.annotate(question_count=Count("questions")))
+        )()
+        
+        # Serializing the question banks
+        serialized_question_banks = [QuestionBankSchema.from_orm(qb).dict() for qb in question_banks]
+
+        # Returning the Json response
+        return JsonResponse(serialized_question_banks, status=200, safe=False)
+    except HttpError as err:
+        logger.error(f"HttpError: {err}")
+        raise err
+    except Exception as err:
+        logger.error(f"Unexpected error: {str(err)}")
         raise HttpError(500, "An unexpected error occurred. Please try again later.")
 
 

@@ -31,10 +31,11 @@ def process_question_file(sender, instance, created, **kwargs):
                 # Creating the question
                 question = Question.objects.create(
                     question_bank=instance,
-                    subject=row['Subject'],
-                    topic=row['Topic'],
                     question_number=row['Question Number'],
                     question_text=row['Question'],
+                    question_image=row['Question Image'],
+                    subject=row['Subject'],
+                    topic=row['Topic'],
                 )
                 
                 # Iterating over the options
@@ -45,7 +46,7 @@ def process_question_file(sender, instance, created, **kwargs):
                         Option.objects.create(
                             question=question,
                             option_text=row[option],
-                            is_correct=True if row['Correct Option'] == option else False,
+                            is_correct=True if row['Answer'] == option else False,
                             is_active=True,
                         )
                     else:
@@ -54,6 +55,6 @@ def process_question_file(sender, instance, created, **kwargs):
                 # Creating why correct option
                 WhyCorrectOption.objects.create(
                     question=question,
-                    why_correct_option_text=row['Why Correct Option'],
+                    why_correct_option_text=row['Answer Explanation'],
                     is_active=True,
                 )

@@ -12,7 +12,7 @@ interface SidebarProps {
 
 export default function Sidebar({ data }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [catogory, setCategory] = useState<string | null>(null)
+  const [catogory, setCategory] = useState<string | "ETEA">("ETEA")
   const [currentPage, setCurrentPage] = useState(0);
   
 
@@ -116,22 +116,22 @@ export default function Sidebar({ data }: SidebarProps) {
         {/* Sidebar Links */}
         <div className="p-4 space-y-4">
           <h2 className="text-lg font-semibold">Categories</h2>
-          <button onClick={()=> setCategory("ETEA")} className="flex items-center p-2 rounded bg-gray-200">
-            <FaBook className="w-5 h-5 text-red-600" />
-            <span className="ml-2 text-red-600 font-semibold">ETA</span>
+          <button onClick={()=> setCategory("ETEA")} className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300">
+            <FaBook className="w-5 h-5 text-black active:text-red-600 " />
+            <span className="ml-2 text-balance active:text-red-600 font-semibold">ETA</span>
           </button>
 
           <button
             onClick={()=> setCategory("NMDCAT")}
-            className="flex items-center  p-2 rounded hover:bg-gray-100"
+            className="flex items-center  p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
-            <FaBook className="w-5 h-5 text-gray-800" />
-            <span className="ml-2">NMDCAT</span>
+            <FaBook className="w-5 h-5 text-gray-800 active:text-red-500" />
+            <span className="ml-2 text-gray-900 active:text-red-500">NMDCAT</span>
           </button>
 
           <button
             onClick={()=> setCategory("GAT")}
-            className="flex items-center p-2 rounded hover:bg-gray-100"
+            className="flex items-center p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">GAT</span>
@@ -139,7 +139,7 @@ export default function Sidebar({ data }: SidebarProps) {
 
           <button
             onClick={()=> setCategory("LUMS")}
-            className="flex items-center p-2 rounded hover:bg-gray-100"
+            className="flex items-center p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">LUMS</span>
@@ -147,7 +147,7 @@ export default function Sidebar({ data }: SidebarProps) {
 
           <button
             onClick={()=> setCategory("NUST")}
-            className="flex items-center p-2  rounded hover:bg-gray-100"
+            className="flex items-center p-2  rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
             <span className="ml-2">NUST</span>
@@ -187,10 +187,11 @@ export default function Sidebar({ data }: SidebarProps) {
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
                 <div className="relative">
+                  
                   <Image
-                    src={item.question_bank_image}
-                    alt={item.name
-                    }
+                    src={item.question_bank_image || TestImage}
+                    alt={item.title || "Image"}
+                    
                     className="w-full h-48 object-cover"
                   />
                   <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">

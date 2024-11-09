@@ -12,7 +12,8 @@ from cart.models import Cart
 # Category model
 class CourseCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
-    name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Category")
+    name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Category", 
+                            unique=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)

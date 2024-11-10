@@ -221,7 +221,7 @@ export default function Sidebar({ data }: SidebarProps) {
                         Valid till {item.validity} days
                       </p>
                     ) : (
-                      <div className="h-6"></div>
+                      <div className="h-8"></div>
                     )}
                     <div className="text-red-500 text-3xl font-bold">
                       Rs. {item.price}
@@ -235,7 +235,7 @@ export default function Sidebar({ data }: SidebarProps) {
                           <span>% off</span>
                         </>
                       ) : (
-                        <div className="h-7"></div>
+                        <div className="h-"></div>
                       )}
                     </div>
                     <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">

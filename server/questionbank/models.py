@@ -47,7 +47,7 @@ class QuestionBank(models.Model):
                                     upload_to="excel_files/", 
                                     null=True, blank=True)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=0, null=True)
-    discount = models.DecimalField(_("Discount"), max_digits=10, decimal_places=0, null=True, blank=True)
+    discount = models.DecimalField(_("Discount %"), max_digits=10, decimal_places=0, null=True, blank=True)
     validity = models.IntegerField(_("Validity"), null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)

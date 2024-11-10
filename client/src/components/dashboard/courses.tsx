@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 
 const Courses = () => {
@@ -51,9 +52,11 @@ const CourseCard = ({
   Resources: string;
 }) => (
   <div className="p-4 bg-gray-100 shadow-md rounded-lg">
-    <img
+    <Image
       src="https://via.placeholder.com/150"
       alt="Course"
+      width={300}
+      height={300}
       className="w-full h-32 object-cover rounded-md"
     />
     <h3 className="mt-2 font-bold">{title}</h3>

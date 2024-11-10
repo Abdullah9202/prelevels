@@ -50,7 +50,7 @@ const QuestionBankProgress = () => {
             <th className="py-3 px-4">Course Name</th>
             <th className="py-3 px-4">Progress</th>
             <th className="py-3 px-4">Status</th>
-            <th className="py-3 px-4"></th> {/* Empty header for the arrow */}
+            <th className="py-3 px-4"></th> 
           </tr>
         </thead>
         <tbody>

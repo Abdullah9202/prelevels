@@ -8,7 +8,6 @@ import { FaCalendarAlt, FaCheckSquare, FaClock } from "react-icons/fa";
 
 const DashboardPage = () => {
   const user = useUser((state) => state.user);
-
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">
       {/* Top Section */}

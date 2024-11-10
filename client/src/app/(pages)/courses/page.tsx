@@ -36,7 +36,7 @@ export default function CoursesPage() {
       <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar />
         <Banner src={Courses} alt="Bundle Image" text="Courses" />
-        <Sidebar />
+        <Sidebar data={posts} />
         <div className="py-48 hidden sm:block">
           <Footer />
         </div>

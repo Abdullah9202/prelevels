@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import TestImage from "@/assets/Banner.png";
 import Image from "next/image";
@@ -14,6 +14,7 @@ export default function Sidebar({ data }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [catogory, setCategory] = useState<string | "ETEA">("ETEA")
   const [currentPage, setCurrentPage] = useState(0);
+  const [hydrated, setHydrated] = useState(false)
   
 
   const pricingData = [
@@ -70,6 +71,13 @@ export default function Sidebar({ data }: SidebarProps) {
 
   console.log("this is the props data ", data)
   console.log(catogory)
+  useEffect(() => {
+    setHydrated(true)
+  }, [])
+
+  if (!hydrated) {
+    return null
+  }
   const filterData = catogory ? data?.filter( (item : any) => item.category.name === catogory) : pricingData
 
 
@@ -78,7 +86,7 @@ export default function Sidebar({ data }: SidebarProps) {
   console.log('this is filter data', filterData)
 
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(pricingData.length / itemsPerPage);
+  const totalPages = Math.ceil(filterData.length/ itemsPerPage);
 
   const nextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -208,7 +216,7 @@ export default function Sidebar({ data }: SidebarProps) {
                     {item.price}
                   </div>
                   <div className="text-gray-500 line-through text-xl">
-                    {item.price
+                    {item.discount
                     }
                   </div>
                   <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">

@@ -35,7 +35,7 @@ class Course(models.Model):
     # Foreign key (One to many relation with category)
     category = models.ForeignKey(CourseCategory, verbose_name=_("Category"), related_name="courses",
                                     on_delete=models.CASCADE)
-    name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course")
+    name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course", unique=True)
     description = models.TextField(_("Description"), null=True, blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
     course_image = models.ImageField(_("Course Image"),

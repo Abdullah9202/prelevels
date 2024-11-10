@@ -37,7 +37,7 @@ class Bundle(models.Model):
     # Foreign key (One to many relation with category)
     category = models.ForeignKey(BundleCategory, verbose_name=_("Category"), related_name="bundles",
                                     on_delete=models.CASCADE)
-    name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Bundle")
+    name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Bundle", unique=True)
     bundle_image = models.ImageField(_("Bundle Image"), 
                                     upload_to="images/", 
                                     height_field=None, width_field=None, max_length=None,

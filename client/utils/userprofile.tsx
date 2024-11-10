@@ -18,16 +18,17 @@ const Profile = () => {
 
 
   const handleLogoutRequest = async () => {
-    const res = await fetch('127.0.0.1:8000/api/customuser/logout/', {
+    const res = await fetch('http://127.0.0.1:8000/api/customuser/logout/', {
       method : 'POST',
       headers: {"Content-Type": "application/json"},
       credentials: 'include'
     });
-    useUser.getState().setUser(null);
-    useSignIn.getState().setSignedIn(false);
+    
     const data = await res.json()
-    if (data.status === 200){
-      
+    if (res.ok){
+      if(data && data.status === 200)
+        useUser.getState().setUser(null);
+        useSignIn.getState().setSignedIn(false);
     }
 
   }

@@ -12,11 +12,9 @@ interface SidebarProps {
 
 export default function Sidebar({ data }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [catogory, setCategory] = useState<string | "ETEA">("ETEA")
+  const [catogory, setCategory] = useState<string | "ETEA">("ETEA");
   const [currentPage, setCurrentPage] = useState(0);
-  const [hydrated, setHydrated] = useState(false)
-
-  
+  const [hydrated, setHydrated] = useState(false);
 
   const pricingData = [
     {
@@ -70,24 +68,23 @@ export default function Sidebar({ data }: SidebarProps) {
     // Add more items as needed
   ];
 
-  console.log("this is the props data ", data)
-  console.log(catogory)
+  console.log("this is the props data ", data);
+  console.log(catogory);
   useEffect(() => {
-    setHydrated(true)
-  }, [])
+    setHydrated(true);
+  }, []);
 
   if (!hydrated) {
-    return null
+    return null;
   }
-  const filterData = catogory ? data?.filter( (item : any) => item.category.name === catogory) : pricingData
+  const filterData = catogory
+    ? data?.filter((item: any) => item.category.name === catogory)
+    : pricingData;
 
-
-  
-  
-  console.log('this is filter data', filterData)
+  console.log("this is filter data", filterData);
 
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(filterData.length/ itemsPerPage);
+  const totalPages = Math.ceil(filterData.length / itemsPerPage);
 
   const nextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -125,21 +122,28 @@ export default function Sidebar({ data }: SidebarProps) {
         {/* Sidebar Links */}
         <div className="p-4 space-y-4">
           <h2 className="text-lg font-semibold">Categories</h2>
-          <button onClick={()=> setCategory("ETEA")} className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300">
+          <button
+            onClick={() => setCategory("ETEA")}
+            className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300"
+          >
             <FaBook className="w-5 h-5 text-black active:text-red-600 " />
-            <span className="ml-2 text-balance active:text-red-600 font-semibold">ETA</span>
+            <span className="ml-2 text-balance active:text-red-600 font-semibold">
+              ETA
+            </span>
           </button>
 
           <button
-            onClick={()=> setCategory("NMDCAT")}
+            onClick={() => setCategory("NMDCAT")}
             className="flex items-center  p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800 active:text-red-500" />
-            <span className="ml-2 text-gray-900 active:text-red-500">NMDCAT</span>
+            <span className="ml-2 text-gray-900 active:text-red-500">
+              NMDCAT
+            </span>
           </button>
 
           <button
-            onClick={()=> setCategory("GAT")}
+            onClick={() => setCategory("GAT")}
             className="flex items-center p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
@@ -147,7 +151,7 @@ export default function Sidebar({ data }: SidebarProps) {
           </button>
 
           <button
-            onClick={()=> setCategory("LUMS")}
+            onClick={() => setCategory("LUMS")}
             className="flex items-center p-2 rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
@@ -155,7 +159,7 @@ export default function Sidebar({ data }: SidebarProps) {
           </button>
 
           <button
-            onClick={()=> setCategory("NUST")}
+            onClick={() => setCategory("NUST")}
             className="flex items-center p-2  rounded  hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800" />
@@ -190,17 +194,15 @@ export default function Sidebar({ data }: SidebarProps) {
         </header>
         <main className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(paginatedData || []).map((item : any) => (
+            {(paginatedData || []).map((item: any) => (
               <div
                 key={item.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
                 <div className="relative">
-                  
                   <Image
                     src={item.question_bank_image || TestImage}
                     alt={item.title || "Image"}
-                    
                     className="w-full h-48 object-cover"
                   />
                   <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
@@ -212,16 +214,24 @@ export default function Sidebar({ data }: SidebarProps) {
                     {item.name}
                   </h3>
                   <p className="text-gray-500">Prelevels</p>
-                  <p className="text-gray-500 mb-2"> Valid till {item.validity} days</p>
+                  <p className="text-gray-500 mb-2">
+                    {" "}
+                    Valid till {item.validity} days
+                  </p>
                   <div className="text-red-500 text-3xl font-bold">
                     Rs. {item.price}
                   </div>
-                  <div className="flex items-center">
-                    <div className="text-gray-500 line-through text-xl">
-                      {item.discount
-                      }
-                    </div>
-                    <span>% off</span>
+                  <div className="flex items-center mb-2">
+                    {item.discount ? (
+                      <>
+                        <div className="text-gray-500 line-through text-xl">
+                          {item.discount}
+                        </div>
+                        <span>% off</span>
+                      </>
+                    ) : (
+                      <div className="h-7"></div> // Adding an empty div with fixed height to maintain layout
+                    )}
                   </div>
                   <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                     Add to Cart

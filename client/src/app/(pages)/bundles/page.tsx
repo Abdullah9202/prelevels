@@ -37,7 +37,7 @@ export default function QuestionBankPage() {
         <Navbar />
         <Banner src={bundle} alt="Bundle Image" text="Bundle" />
         <Sidebar data={posts}/>
-        <div className="py-48 hidden sm:block">
+        <div className="py-15 hidden sm:block">
           <Footer />
         </div>
         <div className="hidden sm:block">

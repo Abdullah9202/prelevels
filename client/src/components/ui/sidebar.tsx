@@ -235,7 +235,7 @@ export default function Sidebar({ data }: SidebarProps) {
                           <span>% off</span>
                         </>
                       ) : (
-                        <div className="h-"></div>
+                        <div className="h-7"></div>
                       )}
                     </div>
                     <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">

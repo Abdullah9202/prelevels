@@ -77,7 +77,9 @@ export default function Sidebar({ data }: SidebarProps) {
     return null;
   }
 
-  const filterData = category ? data?.filter((item: any) => item.category.name === category) : pricingData;
+  const filterData = category
+    ? data?.filter((item: any) => item.category.name === category)
+    : pricingData;
 
   console.log("this is filter data", filterData);
 
@@ -120,9 +122,14 @@ export default function Sidebar({ data }: SidebarProps) {
         {/* Sidebar Links */}
         <div className="p-4 space-y-4">
           <h2 className="text-lg font-semibold">Categories</h2>
-          <button onClick={() => setCategory("ETEA")} className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300">
+          <button
+            onClick={() => setCategory("ETEA")}
+            className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300"
+          >
             <FaBook className="w-5 h-5 text-black active:text-red-600 " />
-            <span className="ml-2 text-balance active:text-red-600 font-semibold">ETA</span>
+            <span className="ml-2 text-balance active:text-red-600 font-semibold">
+              ETA
+            </span>
           </button>
 
           <button
@@ -130,7 +137,9 @@ export default function Sidebar({ data }: SidebarProps) {
             className="flex items-center p-2 rounded hover:bg-gray-200 active:bg-gray-300"
           >
             <FaBook className="w-5 h-5 text-gray-800 active:text-red-500" />
-            <span className="ml-2 text-gray-900 active:text-red-500">NMDCAT</span>
+            <span className="ml-2 text-gray-900 active:text-red-500">
+              NMDCAT
+            </span>
           </button>
 
           <button
@@ -175,75 +184,98 @@ export default function Sidebar({ data }: SidebarProps) {
           </div>
         </div>
       </div>
-      
-      
+
       {/* Main content */}
-{filterData.length > 0 ? (
-  <div className="flex-1 flex flex-col">
-    {/* Main content */}
-    <header className="bg-gray-800 text-white p-4 md:hidden">
-      <button onClick={() => setIsOpen(!isOpen)}>
-        <FiMenu className="w-6 h-6" />
-      </button>
-    </header>
-    <main className="p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {(paginatedData || []).map((item : any) => (
-          <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="relative">
-              <Image
-                src={item.question_bank_image || TestImage}
-                alt={item.title || "Image"}
-                className="w-full h-48 object-cover"
-              />
-              <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
-                Best Value
-              </span>
+      {filterData.length > 0 ? (
+        <div className="flex-1 flex flex-col">
+          {/* Main content */}
+          <header className="bg-gray-800 text-white p-4 md:hidden">
+            <button onClick={() => setIsOpen(!isOpen)}>
+              <FiMenu className="w-6 h-6" />
+            </button>
+          </header>
+          <main className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {(paginatedData || []).map((item: any) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden"
+                >
+                  <div className="relative">
+                    <Image
+                      src={item.question_bank_image || TestImage}
+                      alt={item.title || "Image"}
+                      className="w-full h-48 object-cover"
+                    />
+                    <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
+                      Best Value
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      {item.name}
+                    </h3>
+                    <p className="text-gray-500">Prelevels</p>
+                    {item.validity ? (
+                      <p className="text-gray-500 mb-2">
+                        Valid till {item.validity} days
+                      </p>
+                    ) : (
+                      <div className="h-6"></div>
+                    )}
+                    <div className="text-red-500 text-3xl font-bold">
+                      Rs. {item.price}
+                    </div>
+                    <div className="flex items-center mb-2">
+                      {item.discount ? (
+                        <>
+                          <div className="text-gray-500 line-through text-xl">
+                            {item.discount}
+                          </div>
+                          <span>% off</span>
+                        </>
+                      ) : (
+                        <div className="h-7"></div>
+                      )}
+                    </div>
+                    <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-gray-800">
-                {item.name}
-              </h3>
-              <p className="text-gray-500">Prelevels</p>
-              <p className="text-gray-500 mb-2"> Valid till {item.validity} days</p>
-              <div className="text-red-500 text-3xl font-bold">Rs. {item.price}</div>
-              <div className="flex items-center">
-                <div className="text-gray-500 line-through text-xl">{item.discount}</div>
-                <span>% off</span>
-              </div>
-              <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
-                Add to Cart
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center mt-6 space-x-4">
+              <button
+                onClick={prevPage}
+                disabled={currentPage === 0}
+                className={`${
+                  currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
+                } bg-red-500 text-white px-4 py-2 rounded-full`}
+              >
+                &#60;&#60;Back
+              </button>
+              <button
+                onClick={nextPage}
+                disabled={currentPage === totalPages - 1}
+                className={`${
+                  currentPage === totalPages - 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                } bg-red-500 text-white px-4 py-2 rounded-full`}
+              >
+                Next &gt;&gt;
               </button>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 space-x-4">
-        <button
-          onClick={prevPage}
-          disabled={currentPage === 0}
-          className={`${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""} bg-red-500 text-white px-4 py-2 rounded-full`}
-        >
-          &#60;&#60;Back
-        </button>
-        <button
-          onClick={nextPage}
-          disabled={currentPage === totalPages - 1}
-          className={`${currentPage === totalPages - 1 ? "opacity-50 cursor-not-allowed" : ""} bg-red-500 text-white px-4 py-2 rounded-full`}
-        >
-          Next &gt;&gt;
-        </button>
-      </div>
-    </main>
-  </div>
-) : (
-  <div className="flex justify-center items-center flex-1 text-gray-600 font-bold text-lg p-8">
-    <span>This category does not contain any data</span>
-  </div>
-)}
-
+          </main>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center flex-1 text-gray-600 font-bold text-lg p-8">
+          <span>This category does not contain any data</span>
+        </div>
+      )}
     </div>
   );
 }

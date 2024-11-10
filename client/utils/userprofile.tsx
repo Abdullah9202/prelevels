@@ -43,7 +43,7 @@ const Profile = () => {
       </button>
 
       {isMenuOpen && (
-        <div className="absolute right-0 mt-2 bg-gray-600 w-40 border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 bg-white w-40 border border-gray-200 rounded-lg shadow-lg z-50">
           <ul className="py-1">
             <li className="px-4 py-2 flex items-center">
               <span className="mr-2">👨‍💻</span>

@@ -15,6 +15,7 @@ export default function Sidebar({ data }: SidebarProps) {
   const [catogory, setCategory] = useState<string | "ETEA">("ETEA")
   const [currentPage, setCurrentPage] = useState(0);
   const [hydrated, setHydrated] = useState(false)
+
   
 
   const pricingData = [
@@ -106,7 +107,7 @@ export default function Sidebar({ data }: SidebarProps) {
   );
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[925px]">
       {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 w-64 bg-white text-gray-800 transform ${
@@ -208,16 +209,19 @@ export default function Sidebar({ data }: SidebarProps) {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-800">
-                    {item.description}
+                    {item.name}
                   </h3>
                   <p className="text-gray-500">Prelevels</p>
-                  <p className="text-gray-500 mb-2">{item.validity}</p>
+                  <p className="text-gray-500 mb-2"> Valid till {item.validity} days</p>
                   <div className="text-red-500 text-3xl font-bold">
-                    {item.price}
+                    Rs. {item.price}
                   </div>
-                  <div className="text-gray-500 line-through text-xl">
-                    {item.discount
-                    }
+                  <div className="flex items-center">
+                    <div className="text-gray-500 line-through text-xl">
+                      {item.discount
+                      }
+                    </div>
+                    <span>% off</span>
                   </div>
                   <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                     Add to Cart
@@ -236,7 +240,7 @@ export default function Sidebar({ data }: SidebarProps) {
                 currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
               } bg-red-500 text-white px-4 py-2 rounded-full`}
             >
-              Previous
+              &#60;&#60;Back
             </button>
             <button
               onClick={nextPage}
@@ -247,7 +251,7 @@ export default function Sidebar({ data }: SidebarProps) {
                   : ""
               } bg-red-500 text-white px-4 py-2 rounded-full`}
             >
-              Next
+              Next &gt;&gt;
             </button>
           </div>
         </main>

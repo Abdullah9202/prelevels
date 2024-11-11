@@ -14,6 +14,7 @@ from ninja.responses import codes_4xx
 # My Files
 from .models import Cart
 from .schemas import CartResponseSchema, CartSchema
+from .serializers import CartItemSerializer
 
 # Router Init
 cart_router = Router()
@@ -30,26 +31,17 @@ MODEL_MAP = {
 
 
 # Get all items in cart
-@cart_router.get("/", response={200: List[CartResponseSchema], codes_4xx: dict}, auth=django_auth)
+@cart_router.get("/", response={200: List[CartResponseSchema], codes_4xx: dict})
 @login_required
 def list_cart_items(request, *args, **kwargs):
     cart_items = Cart.objects.filter(user=request.user)
-    data = [{
-        "cart_item_id": str(item.id),  # Assuming Cart.id is a UUID
-        "product_id": str(item.content_object.id),  # Assuming item IDs are UUIDs
-        "product_name": item.content_object.name,
-        "quantity": item.quantity,
-        "price": item.content_object.price,
-        "total_price": item.content_object.price * item.quantity,
-        "created_at": item.added_at.isoformat()
-    } for item in cart_items]
-    
-    return JsonResponse(data, safe=False)
+    serializer = CartItemSerializer(cart_items, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 # Add items in cart
 @cart_router.post("/add/", response={200: CartResponseSchema, 201: CartResponseSchema, 
-                                            codes_4xx: dict}, auth=django_auth)
+                                            codes_4xx: dict})
 @login_required
 def add_to_cart(request, item: CartSchema, *args, **kwargs):
     try:
@@ -111,7 +103,7 @@ def add_to_cart(request, item: CartSchema, *args, **kwargs):
 
 # Update item quantity in cart
 @cart_router.put("/{cart_item_id}/update/", response={200: CartResponseSchema, 
-                                                            codes_4xx: dict}, auth=django_auth)
+                                                            codes_4xx: dict})
 @login_required
 def update_cart_item(request, cart_item_id: UUID, item: CartSchema = None, *args, **kwargs):
     # Getting the cart item
@@ -145,7 +137,7 @@ def update_cart_item(request, cart_item_id: UUID, item: CartSchema = None, *args
 
 # Remove item from cart
 @cart_router.delete("/{cart_item_id}/delete/", response={200: dict, 
-                                            codes_4xx: dict}, auth=django_auth)
+                                            codes_4xx: dict})
 @login_required
 def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
     try:

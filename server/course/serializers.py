@@ -23,3 +23,14 @@ class CourseSerializer(serializers.ModelSerializer):
             'whatsapp_link', 'resource_link','price', 'discount', 'validity', 'created_at', 
             'updated_at', 'is_active',
         ]
+
+
+# Serializer for Course model (Short)
+class CourseSerializer_Short(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'name', 'description', 'additional_details', 'course_image',
+            'validity', 'created_at', 'updated_at', 'is_active'
+        ]

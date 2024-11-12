@@ -27,3 +27,14 @@ class BundleSerializer(serializers.ModelSerializer):
             'price', 'discount', 'validity', 'created_at', 'updated_at', 'is_active', 
             'course', 'question_bank'
         ]
+
+
+# Serializer for Bundle model (Short)
+class BundleSerializer_Short(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Bundle
+        fields = [
+            'id', 'name', 'bundle_image', 'description', 'additional_details', 
+            'validity', 'created_at', 'updated_at', 'is_active',
+        ]

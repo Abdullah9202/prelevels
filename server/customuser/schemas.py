@@ -79,7 +79,7 @@ class UserSchema(Schema):
     # User identity and details
     first_name: str
     last_name: str
-    user_image: str = None
+    user_image: Optional[str] = None
     email: str
     username: str
     password: str
@@ -92,22 +92,9 @@ class UserSchema(Schema):
     # User creation and update timestamps
     created_at: datetime
     updated_at: datetime
-
-
-class GetUserDetailSchema(Schema):
-    id: UUID
-    first_name: str = None
-    last_name: str = None
-    user_image: Optional[str] = None
-    email: str = None
-    username: str
-    password: str
-    is_authenticated: bool = True
-    taking_questionBanks: list[QuestionBankSchema]  = []
-    taking_courses: list[CourseSchema] = []
-    taking_bundles: list[BundleSchema] = []
-    created_at: datetime
-    updated_at: datetime
+    
+    class Config:
+        orm_mode = True
 
 
 # Error Schema

@@ -19,7 +19,7 @@ from ninja.responses import codes_4xx, codes_5xx
 # My Files
 from .models import User
 from .schemas import (
-    RegisterSchema, LoginSchema, UpdateSchema, GetUserDetailSchema
+    RegisterSchema, LoginSchema, UpdateSchema, UserSchema
 )
 from .serializers import UserSerializer, RegisterSerializer
 
@@ -88,7 +88,7 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
 
 
 # Login and get the user details router
-@auth_router.post("/login/", response={200: GetUserDetailSchema, codes_4xx: dict})
+@auth_router.post("/login/", response={200: UserSchema, codes_4xx: dict})
 @ratelimit(key="ip", rate="5/m", method="POST", block=True)  # Rate limiting
 def login_user(request, payload: LoginSchema, *args, **kwargs):
     # Checking if the user is already logged in

@@ -2,9 +2,15 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 # My Files
 from .models import User, TopicalProgress, YearlyProgress
+from questionbank.serializers import QuestionBankSerializer_Short
+from course.serializers import CourseSerializer_Short
+from bundle.serializers import BundleSerializer_Short
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
+    taking_questionBanks = QuestionBankSerializer_Short(read_only=True, many=True)
+    taking_courses = CourseSerializer_Short(read_only=True, many=True)
+    taking_bundles = BundleSerializer_Short(read_only=True, many=True)
     
     class Meta:
         model = User

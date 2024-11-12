@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Profile from "../../../utils/userprofile";
 import { useUser } from "../../../hooks/useUser";
 import { useSignIn } from "../../../hooks/userSignedIn";
+import Cart from "../../../utils/cart";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
@@ -85,7 +86,9 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
+              <Cart />
               <Profile />
+              
 
               <button
                 className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
@@ -93,6 +96,7 @@ export default function Navbar() {
               >
                 My dashboard
               </button>
+              
             </div>
           )}
 

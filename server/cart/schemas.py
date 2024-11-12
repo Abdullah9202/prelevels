@@ -10,7 +10,7 @@ class CartSchema(Schema):
 
 class CartResponseSchema(Schema):
     id: UUID
-    category: str
+    category: UUID
     product_id: UUID
     product_name: str
     quantity: int

@@ -38,7 +38,7 @@ const Cart = () => {
             {cartData.length > 0 ? (
               cartData.map((item) => (
                 <li key={item.id} className="p-2 border-b border-gray-200 flex justify-between items-center">
-                  {/* <img src={item.image} alt={item.name} className="w-8 h-8 object-cover mr-2" /> */}
+                  <img src={item.image} alt={item.name} className="w-8 h-8 object-cover mr-2" />
                   <div className="flex-1">
                     <span className="font-semibold block">{item.name}</span>
                     <span className="text-gray-500 text-sm">Qty: {item.quantity}</span>

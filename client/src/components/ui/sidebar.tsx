@@ -9,6 +9,8 @@ interface SidebarProps {
   data: any;
 }
 
+
+
 export default function Sidebar({ data }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [category, setCategory] = useState<string | "ETEA">("ETEA");
@@ -85,6 +87,19 @@ export default function Sidebar({ data }: SidebarProps) {
 
   const itemsPerPage = 6;
   const totalPages = Math.ceil(filterData.length / itemsPerPage);
+
+
+  const handleAddTOCart = async (product_id: string, product_model: string, quantity: number) => {
+    const res = await fetch("http://127.0.0.1:8000/api/cart/add", {
+      method: "POST",
+      headers : {"Content-Type": "application/json"},
+      body: JSON.stringify({ product_id, product_model, quantity })
+    })
+
+    if (res.ok){
+      alert("Items has been added to cart")
+    }
+  }
 
   const nextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -238,7 +253,7 @@ export default function Sidebar({ data }: SidebarProps) {
                         <div className="h-7"></div>
                       )}
                     </div>
-                    <button className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
+                    <button onClick={ ()=> handleAddTOCart(item.id , item.name, item.price)} className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                       Add to Cart
                     </button>
                   </div>

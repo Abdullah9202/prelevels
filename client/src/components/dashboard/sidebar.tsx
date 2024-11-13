@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import {
   FaHome,
   FaBook,
-  FaQuestion,
   FaChartBar,
-  FaSignOutAlt,
+  FaDatabase,
+  FaBookOpen,
   FaBars,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -52,14 +52,15 @@ const Sidebar = () => {
             <FaBook size={20} className="mr-3" /> Courses
           </a>
           <a href="/dashboard/question-bank" className="flex items-center p-2 hover:bg-gray-100">
-            <FaQuestion size={20} className="mr-3" /> Question Banks
+            <FaBookOpen size={20} className="mr-3" /> Question Banks
+          </a>
+          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+            <FaDatabase size={20} className="mr-3" /> Saved Questions
           </a>
           <a href="#" className="flex items-center p-2 hover:bg-gray-100">
             <FaChartBar size={20} className="mr-3" /> Statistics
           </a>
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
-            <FaSignOutAlt size={20} className="mr-3" /> Logout
-          </a>
+
         </nav>
       </div>
 

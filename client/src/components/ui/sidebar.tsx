@@ -7,11 +7,12 @@ import { FaBook, FaInfoCircle } from "react-icons/fa";
 
 interface SidebarProps {
   data: any;
+  type: string
 }
 
 
 
-export default function Sidebar({ data }: SidebarProps) {
+export default function Sidebar({ data, type }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [category, setCategory] = useState<string | "ETEA">("ETEA");
   const [currentPage, setCurrentPage] = useState(0);
@@ -89,11 +90,11 @@ export default function Sidebar({ data }: SidebarProps) {
   const totalPages = Math.ceil(filterData.length / itemsPerPage);
 
 
-  const handleAddTOCart = async (product_id: string, product_model: string, quantity: number) => {
-    const res = await fetch("http://127.0.0.1:8000/api/cart/add", {
+  const handleAddTOCart = async (product_id: string,quantity: number) => {
+    const res = await fetch("http://127.0.0.1:8000/api/cart/add/", {
       method: "POST",
       headers : {"Content-Type": "application/json"},
-      body: JSON.stringify({ product_id, product_model, quantity })
+      body: JSON.stringify({ product_id, product_model:type, quantity })
     })
 
     if (res.ok){
@@ -253,7 +254,7 @@ export default function Sidebar({ data }: SidebarProps) {
                         <div className="h-7"></div>
                       )}
                     </div>
-                    <button onClick={ ()=> handleAddTOCart(item.id , item.name, item.price)} className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
+                    <button onClick={ ()=> handleAddTOCart(item.id , item.price)} className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                       Add to Cart
                     </button>
                   </div>

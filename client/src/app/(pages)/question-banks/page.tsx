@@ -38,7 +38,7 @@ export default function QuestionBankPage() {
       <div className="bg-[#F4F4F4] min-h-screen">
         <Navbar />
         <Banner src={BannerImage} alt="banner Image" text="Question bank" />
-        <Sidebar data={posts} />
+        <Sidebar data={posts} type="QuestionBank" />
         <div className="py-15 hidden sm:block">
           <Footer />
         </div>

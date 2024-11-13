@@ -219,9 +219,12 @@ export default function Sidebar({ data, type }: SidebarProps) {
                 >
                   <div className="relative">
                     <Image
-                      src={item.question_bank_image || TestImage}
+                      src={item.question_bank_image
+                        || TestImage}
                       alt={item.title || "Image"}
                       className="w-full h-48 object-cover"
+                      width={400}
+                      height={400}
                     />
                     <span className="absolute top-3 left-3 bg-yellow-500 text-white text-sm px-2 py-1 rounded">
                       Best Value

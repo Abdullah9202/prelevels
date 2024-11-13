@@ -1,11 +1,11 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "../../../../../hooks/useUser";
 import MDCAT from "@/assets/MDCATBanner.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function TopicalPage() {
-  const { user } = useUser();
+  const user = useUser((state) => state.user)
   const router = useRouter();
 
   // Array to repeat the block of code
@@ -14,7 +14,7 @@ export default function TopicalPage() {
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">
       <h1 className="md:text-3xl text-xs w-full md:w-auto font-semibold mb-4 md:mb-0 md:pb-9">
-        Welcome Back, {user?.firstName} 👋
+        Welcome Back, {user?.full_name} 👋
       </h1>
       <div>
         <Image src={MDCAT} alt="MDCAT" className="w-full " />

@@ -4,10 +4,21 @@ import Progress from "./progress";
 import Courses from "./courses";
 import QuestionBankProgress from "./questionbankprogress"; // Import the QuestionBankProgress component
 import { useUser } from "../../../hooks/useUser";
+import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaCheckSquare, FaClock } from "react-icons/fa";
 
 const DashboardPage = () => {
+  const [isClient, setIsClient] = useState(false);
   const user = useUser((state) => state.user);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">
       {/* Top Section */}
@@ -25,7 +36,7 @@ const DashboardPage = () => {
 
           <div className="md:w-2/3">
             {/* Stat Cards */}
-            <div className="grid grid-cols-3 mt-4 md:mt-0 md:grid-cols-3 gap-2 md:gap-4 order-first md:order-none">
+            <div className="grid grid-cols-3 mt-4 md:mt-0 md:grid-cols-3 gap-2 md:gap-2 order-first md:order-none">
               <StatCard
                 title={user.daysStreak}
                 subtitle="Days Streak"

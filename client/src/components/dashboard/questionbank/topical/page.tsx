@@ -41,7 +41,7 @@ export default function TopicalPage() {
             <div key={index} className="px-14 pb-4">
               <div className="flex justify-between items-center">
                 <p>202{index}</p>
-                <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">
+                <button onClick={()=> router.push('/dashboard/question-bank/topical/topicview')} className="bg-red-600 text-white px-4 py-1 rounded-3xl">
                   View Detail
                 </button>
               </div>
@@ -61,7 +61,7 @@ export default function TopicalPage() {
             <div key={index} className="px-14 pb-4">
               <div className="flex justify-between items-center">
                 <p>202{index}</p>
-                <button className="bg-red-600 text-white px-4 py-1 rounded-3xl">
+                <button onClick={()=> router.push('/dashboard/question-bank/topical/topicview')}  className="bg-red-600 text-white px-4 py-1 rounded-3xl">
                   View Detail
                 </button>
               </div>

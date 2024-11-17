@@ -155,13 +155,12 @@ async def get_question_in_question_bank(request, question_bank_id: UUID, questio
 
 
 # Get User Question Bank router
-@question_bank_router.get("/{username}/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, 
-                        auth=django_auth)
+@question_bank_router.get("/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, auth=django_auth)
 # @login_required
-async def get_user_questionbanks(request, username: str, *args, **kwargs):
+async def get_user_questionbanks(request, *args, **kwargs):
     try:
-        # Getting the user using username
-        user = await sync_to_async(get_object_or_404)(User, username=username)
+        # Getting the authenticated user
+        user = request.user
         
         # Getting the question banks concerned with user
         question_banks = await sync_to_async(

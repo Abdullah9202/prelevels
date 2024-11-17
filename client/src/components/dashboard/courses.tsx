@@ -13,7 +13,7 @@ const Courses = () => {
       try {
         const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, {
           method: 'GET',
-          credentials: 'include'
+          
         });
 
         if (!res.ok) {

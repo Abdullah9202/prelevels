@@ -6,16 +6,30 @@ import { useUser } from "../../../hooks/useUser";
 const Courses = () => {
   const user = useUser((state) => state.user);
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-      const data = await res.json();
-      if (res.ok) {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new TypeError("Received non-JSON response");
+        }
+
+        const data = await res.json();
         setCourses(data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        setError("Failed to load courses. Please try again later.");
       }
     };
 
@@ -23,6 +37,10 @@ const Courses = () => {
       getData();
     }
   }, [user?.username]);
+
+  if (error) {
+    return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;
+  }
 
   return (
     <div className="mt-8 bg-[#D9D9D9] border-2 border-white p-6 shadow-md rounded-lg mx-auto">

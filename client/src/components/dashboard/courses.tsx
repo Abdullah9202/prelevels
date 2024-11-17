@@ -11,7 +11,7 @@ const Courses = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, { // AZAK
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

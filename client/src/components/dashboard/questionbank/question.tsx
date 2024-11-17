@@ -49,7 +49,7 @@ export default function Question() {
         const res = await fetch(
           "http://127.0.0.1:8000/api/questionbank/my-questionbanks/",
           {
-            method: "GET",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },

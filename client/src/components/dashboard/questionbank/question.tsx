@@ -2,7 +2,7 @@
 
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 
-import { useUser } from '../../../../hooks/useUser';
+import { useUser } from "../../../../hooks/useUser";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -42,17 +42,20 @@ const CourseCard = ({
 );
 
 export default function Question() {
-  const user = useUser((state)=> state.user)
+  const user = useUser((state) => state.user);
   useEffect(() => {
     const getQuestionBank = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/questionbank/${user.username}/my-questionbanks/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include credentials in the request
-        });
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/questionbank/${user.username}/my-questionbanks/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // Include credentials in the request
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -105,4 +108,3 @@ export default function Question() {
     </div>
   );
 }
-

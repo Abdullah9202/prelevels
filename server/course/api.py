@@ -5,7 +5,7 @@ from .router import course_router
 
 
 # API init
-api = NinjaExtraAPI(version="1.0.0", urls_namespace="course", csrf=True)
+api = NinjaExtraAPI(version="1.0.0", urls_namespace="course")
 
 # Including the router from course
 api.add_router("", course_router)

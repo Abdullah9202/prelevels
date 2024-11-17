@@ -57,7 +57,7 @@ const Sidebar = () => {
           <a href="#" className="flex items-center p-2 hover:bg-gray-100">
             <FaDatabase size={20} className="mr-3" /> Saved Questions
           </a>
-          <a href="#" className="flex items-center p-2 hover:bg-gray-100">
+          <a href="/dashboard/statistics" className="flex items-center p-2 hover:bg-gray-100">
             <FaChartBar size={20} className="mr-3" /> Statistics
           </a>
 

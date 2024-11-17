@@ -47,13 +47,14 @@ export default function Question() {
     const getQuestionBank = async () => {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/questionbank/${user.username}/my-questionbanks/`,
+          "http://127.0.0.1:8000/api/questionbank/my-questionbanks/",
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
             credentials: "include", // Include credentials in the request
+            body: JSON.stringify({user:user})
           }
         );
 
@@ -75,7 +76,7 @@ export default function Question() {
     if (user?.username) {
       getQuestionBank();
     }
-  }, [user?.username]);
+  }, [user]);
   const router = useRouter();
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">

@@ -26,7 +26,7 @@ course_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all courses router
-@course_router.get("/", response={200: List[GetCourseDetailSchema], codes_4xx: dict})
+@course_router.get("/", response={200: List[GetCourseDetailSchema], codes_4xx: dict}, auth=django_auth)
 async def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses
@@ -48,7 +48,7 @@ async def get_all_courses(request, *args, **kwargs):
 
 
 # Get course details router
-@course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict})
+@course_router.get("/{course_id}/", response={200: GetCourseDetailSchema, codes_4xx: dict}, auth=django_auth)
 @login_required
 async def get_course(request, course_id: UUID, *args, **kwargs):
     try:
@@ -69,7 +69,7 @@ async def get_course(request, course_id: UUID, *args, **kwargs):
 
 
 # Get User Courses router
-@course_router.get("/{username}/my-courses/", response={200: List[GetCourseDetailSchema], codes_4xx: dict})
+@course_router.get("/{username}/my-courses/", response={200: List[GetCourseDetailSchema], codes_4xx: dict}, auth=django_auth)
 @login_required
 async def get_user_courses(request, username: str, *args, **kwargs):
     try:

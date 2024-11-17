@@ -2,11 +2,11 @@
 
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 
-
 import { useUser } from '../../../../hooks/useUser';
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useEffect } from "react";
 
 const CourseCard = ({
   title,
@@ -42,7 +42,37 @@ const CourseCard = ({
 );
 
 export default function Question() {
-  const { user } = useUser();
+  const user = useUser((state)=> state.user)
+  useEffect(() => {
+    const getQuestionBank = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/api/questionbank/${user.username}/my-questionbanks/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include credentials in the request
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        } else {
+          alert("Your response is successful");
+        }
+      } catch (error) {
+        console.error("Error fetching question bank:", error);
+        if (error instanceof Error && error.message.includes("401")) {
+          alert("Unauthorized. Please log in again.");
+          // Optionally, redirect to login page
+          // router.push("/login");
+        }
+      }
+    };
+
+    if (user?.username) {
+      getQuestionBank();
+    }
+  }, [user?.username]);
   const router = useRouter();
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">

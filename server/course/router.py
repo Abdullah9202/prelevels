@@ -69,7 +69,7 @@ async def get_course(request, course_id: UUID, *args, **kwargs):
 
 
 # Get User Courses router
-@course_router.get("/{username}/my-courses/", response={200: List[GetCourseDetailSchema], codes_4xx: dict}, auth=django_auth)
+@course_router.get("/{username}/my-courses/", response={200: List[GetCourseDetailSchema], codes_4xx: dict}, )
 # @login_required
 async def get_user_courses(request, username: str, *args, **kwargs):
     try:

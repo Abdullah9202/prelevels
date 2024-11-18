@@ -8,12 +8,13 @@ from asgiref.sync import sync_to_async
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
 # Ninja Imports
-from ninja import Router, Form
+from ninja import Form
+from ninja_extra import Router
 from ninja.errors import HttpError
-from ninja_extra.security import django_auth
 from ninja.responses import codes_4xx
+# Ninja Jwt imports
+from ninja_jwt.authentication import JWTAuth
 # My Files
 from .models import (
     QuestionBank, Question, SaveQuestion
@@ -27,7 +28,6 @@ from .serializers import (
     GetSavedQuestionSerializer
 )
 from customuser.models import User
-
 
 # Router Init
 question_bank_router = Router()
@@ -58,8 +58,7 @@ async def get_all_question_banks(request):
 
 # Get Saved Questions
 @question_bank_router.get("/saved-questions/", response={200: List[SaveQuestionSchema], 
-                                                        codes_4xx: dict}, auth=django_auth)
-# @login_required
+                                                        codes_4xx: dict}, auth=JWTAuth())
 async def get_saved_questions(request, *args, **kwargs):
     try:
         # Getting the user from request
@@ -83,8 +82,7 @@ async def get_saved_questions(request, *args, **kwargs):
 
 # Get the details of specific Question bank
 @question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankSchema, 
-                                                            codes_4xx: dict}, auth=django_auth)
-# @login_required
+                                                            codes_4xx: dict}, auth=JWTAuth())
 async def get_question_bank_details(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank
@@ -108,8 +106,7 @@ async def get_question_bank_details(request, question_bank_id: UUID, *args, **kw
 
 # Get all questions in a question bank
 @question_bank_router.get("/{question_bank_id}/all-questions/", response={200: List[QuestionSchema], 
-                                                                    codes_4xx: dict}, auth=django_auth)
-# @login_required
+                                                                    codes_4xx: dict}, auth=JWTAuth())
 async def get_questions_in_question_bank(request, question_bank_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank using id
@@ -134,8 +131,7 @@ async def get_questions_in_question_bank(request, question_bank_id: UUID, *args,
 
 # Get the details for specific question in a question bank
 @question_bank_router.get("/{question_bank_id}/question/{question_id}/", response={200: QuestionSchema,
-                                                                        codes_4xx: dict}, auth=django_auth)
-# @login_required
+                                                                        codes_4xx: dict}, auth=JWTAuth())
 async def get_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank using id
@@ -155,8 +151,7 @@ async def get_question_in_question_bank(request, question_bank_id: UUID, questio
 
 
 # Get User Question Bank router
-@question_bank_router.get("/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, auth=django_auth)
-# @login_required
+@question_bank_router.get("/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, auth=JWTAuth())
 async def get_user_questionbanks(request, *args, **kwargs):
     try:
         # Getting the authenticated user
@@ -182,8 +177,7 @@ async def get_user_questionbanks(request, *args, **kwargs):
 
 # Save question
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/save/", 
-                        response={200: SaveQuestionSchema, 400: dict, 500: dict}, auth=django_auth)
-# @login_required
+                        response={200: SaveQuestionSchema, 400: dict, 500: dict}, auth=JWTAuth())
 async def save_question(request, question_bank_id: UUID, question_id: UUID, *args, **kwargs):
     try:
         # Getting the question bank using uuid
@@ -222,8 +216,7 @@ async def save_question(request, question_bank_id: UUID, question_id: UUID, *arg
 
 # Report a question in a question bank
 @question_bank_router.post("/{question_bank_id}/question/{question_id}/report/",
-                            response={200: ReportQuestionSchema, codes_4xx: dict}, auth=django_auth)
-# @login_required
+                            response={200: ReportQuestionSchema, codes_4xx: dict}, auth=JWTAuth())
 async def report_question_in_question_bank(request, question_bank_id: UUID, question_id: UUID, comment: str = Form(...)):
     try:
         # Getting the question bank using uuid

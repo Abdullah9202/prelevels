@@ -15,8 +15,6 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
-# Django imports
-from django.conf import settings
 
 
 load_dotenv()
@@ -49,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'ninja_extra',
+    'ninja_jwt',
     # Main App
     'server',
     # My Apps
@@ -173,7 +172,7 @@ NINJA_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': settings.SECRET_KEY,
+    'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,

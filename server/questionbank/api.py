@@ -1,16 +1,10 @@
-# Ninja Extra imports
+# Ninja imports
 from ninja_extra import NinjaExtraAPI
-# Ninja Jwt imports
-from ninja_jwt.controller import NinjaJWTDefaultController
 # My Files
 from .router import question_bank_router
 
-
 # API init
-api = NinjaExtraAPI(version="1.0.0", urls_namespace="questionbank")
-
-# Registering the controller
-api.register_controllers(NinjaJWTDefaultController)
+qb_api = NinjaExtraAPI(version="1.0.0", urls_namespace="questionbank")
 
 # Including the router from question bank
-api.add_router("", question_bank_router)
+qb_api.add_router("", question_bank_router)

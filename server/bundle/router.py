@@ -6,12 +6,12 @@ from asgiref.sync import sync_to_async
 # Django imports
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
 # Ninja Imports
-from ninja import Router
+from ninja_extra import Router
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx
-from ninja_extra.security import django_auth
+# Ninja Jwt imports
+from ninja_jwt.authentication import JWTAuth
 # My Files
 from .models import Bundle
 from .schemas import BundleSchema
@@ -48,8 +48,7 @@ async def get_all_bundles(request, *args, **kwargs):
 
 
 # Get bundle details router
-@bundle_router.get("/{bundle_id}/", response={200: BundleSchema, codes_4xx: dict}, auth=django_auth)
-@login_required
+@bundle_router.get("/{bundle_id}/", response={200: BundleSchema, codes_4xx: dict}, auth=JWTAuth())
 async def get_bundle_details(request, bundle_id: UUID, *args, **kwargs):
     try:
         # Getting the bundle
@@ -69,8 +68,7 @@ async def get_bundle_details(request, bundle_id: UUID, *args, **kwargs):
 
 
 # Get user bundles router
-@bundle_router.get("/{username}/my-bundles/", response={200: BundleSchema, codes_4xx: dict}, auth=django_auth)
-@login_required
+@bundle_router.get("/{username}/my-bundles/", response={200: BundleSchema, codes_4xx: dict}, auth=JWTAuth())
 async def get_user_bundles(request, username: str, *args, **kwargs):
     try:
         # Reteriving the user using username

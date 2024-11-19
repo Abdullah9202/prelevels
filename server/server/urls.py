@@ -20,25 +20,28 @@ from django.conf import settings
 from django.conf.urls.static import static
 # My Files
 from customuser import api as cuser_api
-from questionbank import api as questionbank_api
-from course import api as course_api
-from bundle import api as bundle_api
-from cart import api as cart_api
+from questionbank.api import qb_api
+from course.api import course_api
+from bundle.api import bundle_api
+from cart.api import cart_api
+from custom_auth.api import auth_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Custom User API URLs
     path('api/customuser/', cuser_api.api.urls),
     # Question Bank API URLs
-    path('api/questionbank/', questionbank_api.api.urls),
+    path('api/questionbank/', qb_api.urls),
     # Course API URLs
-    path('api/course/', course_api.api.urls),
+    path('api/course/', course_api.urls),
     # Bundle API URLs
-    path('api/bundle/', bundle_api.api.urls),
+    path('api/bundle/', bundle_api.urls),
     # Cart API URLs
-    path('api/cart/', cart_api.api.urls),
+    path('api/cart/', cart_api.urls),
+    # Auth API URLs
+    path('api/auth/', auth_api.urls),
 ]
 
-if settings.DEBUG: # AZAK
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../hooks/useUser";
 import { useSignIn } from "../../../../../hooks/userSignedIn";
+import { usePasswordStore } from "../../../../../hooks/usePassword";
 
 export default function Page() {
   const router = useRouter();
@@ -20,7 +21,8 @@ export default function Page() {
     });
   };
 
-
+  const password = usePasswordStore.getState().setPassword(formData.password)
+  console.log(password)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

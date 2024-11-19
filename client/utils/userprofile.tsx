@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useUser } from "../hooks/useUser";
 import { useSignIn } from "../hooks/userSignedIn";
+import { usePasswordStore } from "../hooks/usePassword";
 
 const Profile = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -29,6 +30,7 @@ const Profile = () => {
       if(data && data.status === 200)
         useUser.getState().setUser(null);
         useSignIn.getState().setSignedIn(false);
+        usePasswordStore.getState().clearPassword()
     }
 
   }

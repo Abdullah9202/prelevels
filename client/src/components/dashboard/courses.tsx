@@ -12,25 +12,19 @@ const Courses = () => {
 
   useEffect(() => {
     const getData = async () => {
+      if (!accessToken || !user?.username) return;
+  
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", { // AZAK
-          method: 'GET',
+        const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", {
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
-          credentials: 'include', // Include credentials in the request
         });
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          throw new TypeError("Received non-JSON response");
-        }
-
+  
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  
         const data = await res.json();
         setCourses(data);
       } catch (error) {
@@ -38,13 +32,10 @@ const Courses = () => {
         setError("Failed to load courses. Please try again later.");
       }
     };
-
-    if (user?.username && accessToken) {
-      getData();
-    } else if (user?.username) {
-      fetchTokens();
-    }
-  }, [user?.username, accessToken, fetchTokens]);
+  
+    getData();
+  }, [accessToken, user?.username]);
+  
 
   if (error) {
     console.log(accessToken);

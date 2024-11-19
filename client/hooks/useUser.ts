@@ -1,33 +1,28 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-
-interface UserState  {
-    user: any | null,
-    setUser : (user:any | null) => void;
+interface UserState {
+  user: any | null;
+  setUser: (user: any | null) => void;
 }
 
-
-
-interface UserState  {
-    user: any | null,
-    setUser : (user:any | null) => void;
+interface UserState {
+  user: any | null;
+  setUser: (user: any | null) => void;
 }
 
 export const useUser = create<UserState>()(
-    persist(
-        (set) => ({
-            user : null,
-            setUser: (user) => set({user}),
-        }),
-        {
-            name : "user-storage",
-            partialize: (state) => ({user: state.user}),
-        }
-    )
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+    }),
+    {
+      name: "user-storage",
+      partialize: (state) => ({ user: state.user }),
+    }
+  )
 );
-
-
 
 // creating the state
 // import create from 'zustand';
@@ -47,8 +42,6 @@ export const useUser = create<UserState>()(
 //   user: null,
 //   setUser: (user) => set({ user }),
 // }));
-
-
 
 //  how to use user after state
 // import React from 'react';
@@ -74,8 +67,6 @@ export const useUser = create<UserState>()(
 // };
 
 // export default Profile;
-
-
 
 // how to set user
 // import '../styles/globals.css';
@@ -104,7 +95,6 @@ export const useUser = create<UserState>()(
 // }
 
 // export default MyApp;
-
 
 // how to use this with persist
 

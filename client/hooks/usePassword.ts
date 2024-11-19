@@ -10,7 +10,11 @@ interface PasswordState {
 export const usePasswordStore = create<PasswordState>((set) => ({
   password: Cookies.get("user-password") || null, // Initialize from cookies
   setPassword: (password: string) => {
-    Cookies.set("user-password", password, { expires: 7, secure: true, sameSite: "strict" }); // Store in cookies
+    Cookies.set("user-password", password, {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    }); // Store in cookies
     set({ password });
   },
   clearPassword: () => {

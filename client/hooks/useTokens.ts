@@ -11,7 +11,7 @@ const useTokens = () => {
   // Fetch tokens from backend
   const fetchTokens = async (): Promise<void> => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/token/pair", {
+      const res = await fetch("http://127.0.0.1:8000/api/auth/token/pair", { // AZAK
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: user?.username, password: password }),
@@ -32,7 +32,7 @@ const useTokens = () => {
   // Refresh access token using refresh token
   const refreshAccessTokens = async (): Promise<boolean> => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/token/refresh", {
+      const res = await fetch("http://127.0.0.1:8000/api/auth/token/refresh", { // AZAK
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh: refreshToken }),
@@ -54,7 +54,7 @@ const useTokens = () => {
   // Verify access token
   const verifyAccessToken = async (): Promise<boolean> => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/token/verify", {
+      const res = await fetch("http://127.0.0.1:8000/api/auth/token/verify", { // AZAK
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: accessToken }),

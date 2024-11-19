@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "./useUser";
 import { usePasswordStore } from "./usePassword";
 
@@ -30,7 +30,7 @@ const useTokens = () => {
   };
 
   // Refresh access token using refresh token
-  const refreshAccessTokens = async (): Promise<boolean> => {
+  const refreshAccessTokens = useCallback(async (): Promise<boolean> => {
     try {
       const res = await fetch("http://127.0.0.1:8000/api/auth/token/refresh", { // AZAK
         method: "POST",
@@ -42,6 +42,7 @@ const useTokens = () => {
 
       const data = await res.json();
       setAccessToken(data.access);
+      setRefreshToken(data.refresh)
 
       console.log("Access token refreshed successfully");
       return true;
@@ -49,10 +50,10 @@ const useTokens = () => {
       console.error("Error refreshing access token:", error);
       return false;
     }
-  };
+  }, [refreshToken]);
 
   // Verify access token
-  const verifyAccessToken = async (): Promise<boolean> => {
+  const verifyAccessToken = useCallback(async (): Promise<boolean> => {
     try {
       const res = await fetch("http://127.0.0.1:8000/api/auth/token/verify", { // AZAK
         method: "POST",
@@ -75,7 +76,20 @@ const useTokens = () => {
     }
 
     return false; // Token is invalid and could not be refreshed
-  };
+  }, [accessToken, refreshToken, refreshAccessTokens]);
+
+  // Automatically refresh token every 4.5 minutes (270,000 ms)
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      console.log("Attempting to refresh access token...");
+      const refreshed = await refreshAccessTokens();
+      if (!refreshed) {
+        console.error("Failed to refresh token. Consider logging out the user.");
+      }
+    }, 270000); // 4.5 minutes
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, [refreshAccessTokens]); // Dependency: refreshAccessTokens
 
   return {
     accessToken,

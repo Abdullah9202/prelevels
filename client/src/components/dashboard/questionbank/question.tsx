@@ -1,7 +1,7 @@
 "use client";
 
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
-
+import useTokens from "../../../../hooks/useTokens";
 import { useUser } from "../../../../hooks/useUser";
 
 import { useRouter } from "next/navigation";
@@ -42,6 +42,7 @@ const CourseCard = ({
 );
 
 export default function Question() {
+  const {accessToken,refreshAccessTokens,refreshToken, verifyAccessToken, fetchTokens} = useTokens()
   const user = useUser((state) => state.user);
   useEffect(() => {
     const getQuestionBank = async () => {

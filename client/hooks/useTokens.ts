@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useUser } from "./useUser";
 import { usePasswordStore } from "./usePassword";
+import Cookies from "js-cookie";
 
 const useTokens = () => {
   const password = usePasswordStore((state) => state.password);
@@ -22,6 +23,8 @@ const useTokens = () => {
       const data = await res.json();
       setAccessToken(data.access);
       setRefreshToken(data.refresh);
+      Cookies.set("accessToken", data.access, { expires: 7 });
+      Cookies.set("refreshToken", data.refresh, { expires: 7 });
 
       console.log("Tokens fetched successfully");
     } catch (error) {
@@ -42,7 +45,7 @@ const useTokens = () => {
 
       const data = await res.json();
       setAccessToken(data.access);
-      setRefreshToken(data.refresh)
+      Cookies.set("accessToken", data.access, { expires: 7 });
 
       console.log("Access token refreshed successfully");
       return true;
@@ -77,6 +80,14 @@ const useTokens = () => {
 
     return false; // Token is invalid and could not be refreshed
   }, [accessToken, refreshToken, refreshAccessTokens]);
+
+  // Retrieve tokens from cookies on mount
+  useEffect(() => {
+    const storedAccessToken = Cookies.get("accessToken");
+    const storedRefreshToken = Cookies.get("refreshToken");
+    if (storedAccessToken) setAccessToken(storedAccessToken);
+    if (storedRefreshToken) setRefreshToken(storedRefreshToken);
+  }, []);
 
   // Automatically refresh token every 4.5 minutes (270,000 ms)
   useEffect(() => {

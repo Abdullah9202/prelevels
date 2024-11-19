@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 import { useUser } from "../../../hooks/useUser";
+import useTokens from "../../../hooks/useTokens";
 
 const Courses = () => {
+  const { accessToken, fetchTokens } = useTokens();
   const user = useUser((state) => state.user);
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -11,11 +13,12 @@ const Courses = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/course/${user.username}/my-courses/`, { // AZAK
+        const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", { // AZAK
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-        },
+            "Authorization": `Bearer ${accessToken}`,
+          },
           credentials: 'include', // Include credentials in the request
         });
 
@@ -36,12 +39,15 @@ const Courses = () => {
       }
     };
 
-    if (user?.username) {
+    if (user?.username && accessToken) {
       getData();
+    } else if (user?.username) {
+      fetchTokens();
     }
-  }, [user?.username]);
+  }, [user?.username, accessToken, fetchTokens]);
 
   if (error) {
+    console.log(accessToken);
     return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;
   }
 

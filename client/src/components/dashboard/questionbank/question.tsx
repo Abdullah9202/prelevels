@@ -44,24 +44,42 @@ const CourseCard = ({
 export default function Question() {
   const {accessToken,refreshAccessTokens,refreshToken, verifyAccessToken, fetchTokens} = useTokens()
   const user = useUser((state) => state.user);
+  
   useEffect(() => {
     const getQuestionBank = async () => {
       try {
+        // Verify the token before making the API call
+        const isTokenValid = await verifyAccessToken();
+        if (!isTokenValid) {
+          console.warn("Token invalid or expired. Attempting to refresh...");
+          const refreshed = await refreshAccessTokens();
+          if (!refreshed) {
+            console.error("Unable to refresh token. User might need to log in.");
+            alert("Session expired. Please log in again.");
+            return; // Stop further execution
+          }
+        }
+  
+        // Proceed with the API call using the (now valid) accessToken
         const res = await fetch(
           "http://127.0.0.1:8000/api/questionbank/my-questionbanks/",
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include access token here
             },
-            credentials: "include",
+            credentials: "include", // Include credentials if needed
           }
         );
-
+  
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         } else {
           alert("Your response is successful");
+          // Handle the response data as needed
+          const data = await res.json();
+          console.log("Question bank data:", data);
         }
       } catch (error) {
         console.error("Error fetching question bank:", error);
@@ -72,11 +90,12 @@ export default function Question() {
         }
       }
     };
-
+  
     if (user?.username) {
       getQuestionBank();
     }
-  }, [user]);
+  }, [user, accessToken, verifyAccessToken, refreshAccessTokens]);
+  
   const router = useRouter();
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">

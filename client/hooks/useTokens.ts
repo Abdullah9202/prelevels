@@ -10,32 +10,44 @@ const useTokens = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   // Fetch tokens from backend
-  const fetchTokens = async (): Promise<void> => {
+  const fetchTokens = useCallback(async (): Promise<void> => {
+    if (!user?.username || !password) {
+      console.warn("Missing credentials. Cannot fetch tokens.");
+      return;
+    }
+  
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/token/pair", { // AZAK
+      const res = await fetch("http://127.0.0.1:8000/api/auth/token/pair", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: user?.username, password: password }),
+        body: JSON.stringify({ username: user?.username, password }),
       });
-
+  
       if (!res.ok) throw new Error("Failed to fetch tokens");
-
+  
       const data = await res.json();
       setAccessToken(data.access);
       setRefreshToken(data.refresh);
       Cookies.set("accessToken", data.access, { expires: 7 });
       Cookies.set("refreshToken", data.refresh, { expires: 7 });
-
+  
       console.log("Tokens fetched successfully");
     } catch (error) {
       console.error("Error fetching tokens:", error);
     }
-  };
+  }, [user?.username, password]);
+  
 
   // Refresh access token using refresh token
+// Only refresh if the refreshToken exists
   const refreshAccessTokens = useCallback(async (): Promise<boolean> => {
+    if (!refreshToken) {
+      console.warn("Refresh token is missing. Cannot refresh access token.");
+      return false;
+    }
+
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/token/refresh", { // AZAK
+      const res = await fetch("http://127.0.0.1:8000/api/auth/token/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh: refreshToken }),
@@ -54,6 +66,7 @@ const useTokens = () => {
       return false;
     }
   }, [refreshToken]);
+
 
   // Verify access token
   const verifyAccessToken = useCallback(async (): Promise<boolean> => {
@@ -97,10 +110,11 @@ const useTokens = () => {
       if (!refreshed) {
         console.error("Failed to refresh token. Consider logging out the user.");
       }
-    }, 270000); // 4.5 minutes
-
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, [refreshAccessTokens]); // Dependency: refreshAccessTokens
+    }, 300000); // 5 minutes in milliseconds
+  
+    return () => clearInterval(interval);
+  }, [refreshAccessTokens]);
+  
 
   return {
     accessToken,

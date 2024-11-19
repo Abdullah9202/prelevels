@@ -148,6 +148,10 @@ class Option(models.Model):
 class WhyCorrectOption(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True, blank=True)
+    why_correct_option_image = models.ImageField(_("Why Correct Option Image"), 
+                                                upload_to="images/", 
+                                                height_field=None, width_field=None, max_length=None,
+                                                null=True, blank=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
     is_active = models.BooleanField(_("Is Active"), default=True)

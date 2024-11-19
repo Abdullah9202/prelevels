@@ -32,19 +32,6 @@ auth_router = Router()
 logger = logging.getLogger(__name__)
 
 
-@auth_router.get("/set-csrf-token/")
-def get_csrf_token(request):
-    csrf_token_meta = request.META.get("CSRF_COOKIE", None)
-    csrf_token = get_token(request)
-    logger.debug(f"CSRF Token Meta: {csrf_token_meta}, CSRF Token: {csrf_token}")
-    return JsonResponse(
-        {
-            "csrf_token_meta": csrf_token_meta,
-            "csrf_token": csrf_token
-        }
-    )
-
-
 # Register User Router
 @auth_router.post("/register/", response={200: RegisterSchema, codes_4xx: dict, codes_5xx: dict})
 async def register_user(request, payload: RegisterSchema, *args, **kwargs):

@@ -35,7 +35,7 @@ def process_question_file(sender, instance, created, **kwargs):
         specified_sheets = instance.sheet_names.split(',')
 
         # Check if the user entered "all"
-        if 'all' in specified_sheets:
+        if 'all' in specified_sheets or 'All' in specified_sheets:
             specified_sheets = question_file.sheet_names
 
         # Iterating over each sheet

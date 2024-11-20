@@ -108,7 +108,12 @@ class Question(models.Model):
     # Function to save unique identifier
     def save(self, *args, **kwargs) -> None:
         if not self.unique_identifier:
-            self.unique_identifier = f"{self.question_bank.name}_{self.subject}_{self.topic}_{self.question_number}"
+            base_identifier = f"{self.question_bank.name}_{self.subject}_{self.topic}_{self.question_number}"
+            self.unique_identifier = base_identifier
+            counter = 1
+            while Question.objects.filter(unique_identifier=self.unique_identifier).exists():
+                self.unique_identifier = f"{base_identifier}_{counter}"
+                counter += 1
         super().save(*args, **kwargs)
 
     def __str__(self):

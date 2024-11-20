@@ -250,8 +250,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Django session settings
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True # AZAK 
-SESSION_COOKIE_AGE = 14400 # AZAK
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False # AZAK 
+SESSION_COOKIE_AGE = 5 * 60 # AZAK
 
 # Additionally, you can use Django's built-in session cleanup 
 # management command to periodically clean up expired sessions. 

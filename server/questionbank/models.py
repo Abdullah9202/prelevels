@@ -44,6 +44,7 @@ class QuestionBank(models.Model):
                                             null=True, blank=True)
     description = models.TextField(_("Description"), null=True, blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
+    sheet_names = models.CharField(_("Input sheet names separated with comma , or enter all"), max_length=255, null=True, blank=True)
     question_file = models.FileField(_("Question File"), 
                                     upload_to="excel_files/", 
                                     null=True, blank=True)

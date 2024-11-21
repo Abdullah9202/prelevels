@@ -26,7 +26,7 @@ bundle_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all bundles router
-@bundle_router.get("/", response={200: List[BundleSchema], codes_4xx: dict})
+@bundle_router.get("/all/", response={200: List[BundleSchema], codes_4xx: dict})
 async def get_all_bundles(request, *args, **kwargs):
     try:
         # Getting all bundles

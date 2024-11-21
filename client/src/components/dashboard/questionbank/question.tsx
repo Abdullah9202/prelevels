@@ -62,7 +62,7 @@ export default function Question() {
   
         // Proceed with the API call using the (now valid) accessToken
         const res = await fetch(
-          "http://127.0.0.1:8000/api/questionbank/my-questionbanks/",
+          "http://127.0.0.1:8000/api/questionbank/my-questionbanks/", // AZAK
           {
             method: "GET",
             headers: {

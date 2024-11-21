@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 import { useUser } from "../../../hooks/useUser";
+import { useRouter } from "next/navigation";
 import useTokens from "../../../hooks/useTokens";
 
 const Courses = () => {
@@ -9,10 +10,11 @@ const Courses = () => {
   const user = useUser((state) => state.user);
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter()
 
   useEffect(() => {
     const getData = async () => {
-      if (!accessToken || !user?.username) return;
+      if (!accessToken || !user?.username) alert("No user name and access tokens");
   
       try {
         const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", {
@@ -46,7 +48,7 @@ const Courses = () => {
     <div className="mt-8 bg-[#D9D9D9] border-2 border-white p-6 shadow-md rounded-lg mx-auto">
       <h2 className="text-xl font-semibold mb-4">Your Courses</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map((course) => (
+        {courses.slice(0,3).map((course) => (
           <CourseCard
             key={course.id}
             title={course.name}
@@ -60,7 +62,7 @@ const Courses = () => {
         ))}
       </div>
       <div className="flex items-center justify-center space-x-2">
-        <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded-2xl">
+        <button onClick={()=>router.push('/dashboard/courses')} className="mt-4 bg-red-600 text-white px-4 py-2 rounded-2xl">
           View All Courses
         </button>
       </div>

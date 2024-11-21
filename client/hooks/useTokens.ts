@@ -28,7 +28,7 @@ const useTokens = () => {
       const data = await res.json();
       setAccessToken(data.access);
       setRefreshToken(data.refresh);
-      Cookies.set("accessToken", data.access, { expires: 7 });
+      Cookies.set("accessToken", data.access, { expires: 1 });
       Cookies.set("refreshToken", data.refresh, { expires: 7 });
   
       console.log("Tokens fetched successfully");

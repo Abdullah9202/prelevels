@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     # 3rd party apps
     'corsheaders',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
     'ninja_extra',
     'ninja_jwt',
     # Main App

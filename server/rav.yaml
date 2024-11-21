@@ -10,7 +10,7 @@ scripts:
     python manage.py shell
   createsuperuser:
     python manage.py createsuperuser
-  clearsession:
+  clearsessions:
     python manage.py clearsessions
   
   ###################### MAC OS ###################### 
@@ -24,7 +24,7 @@ scripts:
     python3 manage.py shell
   m_createsuperuser:
     python3 manage.py createsuperuser
-  m_clearsession:
+  m_clearsessions:
     python3 manage.py clearsessions
   venv_act:
     source venv/bin/activate

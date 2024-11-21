@@ -80,6 +80,31 @@ async def get_saved_questions(request, *args, **kwargs):
         raise HttpError(500, "An unexpected error occurred. Please try again later.")
 
 
+# Get User Question Bank router
+@question_bank_router.get("/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, auth=JWTAuth())
+async def get_user_questionbanks(request, *args, **kwargs):
+    try:
+        # Getting the authenticated user
+        user = request.user
+        
+        # Getting the question banks concerned with user
+        question_banks = await sync_to_async(
+            lambda: list(QuestionBank.objects.filter(user=user).annotate(question_count=Count("questions")))
+        )()
+        
+        # Serializing the question banks
+        serialized_question_banks = [QuestionBankSchema.from_orm(qb).dict() for qb in question_banks]
+
+        # Returning the Json response
+        return JsonResponse(serialized_question_banks, status=200, safe=False)
+    except HttpError as err:
+        logger.error(f"HttpError: {err}")
+        raise err
+    except Exception as err:
+        logger.error(f"Unexpected error: {str(err)}")
+        raise HttpError(500, "An unexpected error occurred. Please try again later.")
+
+
 # Get the details of specific Question bank
 @question_bank_router.get("/{question_bank_id}/", response={200: QuestionBankSchema, 
                                                             codes_4xx: dict}, auth=JWTAuth())
@@ -147,31 +172,6 @@ async def get_question_in_question_bank(request, question_bank_id: UUID, questio
     
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
-        raise HttpError(500, "An unexpected error occurred. Please try again later.")
-
-
-# Get User Question Bank router
-@question_bank_router.get("/my-questionbanks/", response={200: QuestionBankSchema, codes_4xx: dict}, auth=JWTAuth())
-async def get_user_questionbanks(request, *args, **kwargs):
-    try:
-        # Getting the authenticated user
-        user = request.user
-        
-        # Getting the question banks concerned with user
-        question_banks = await sync_to_async(
-            lambda: list(QuestionBank.objects.filter(user=user).annotate(question_count=Count("questions")))
-        )()
-        
-        # Serializing the question banks
-        serialized_question_banks = [QuestionBankSchema.from_orm(qb).dict() for qb in question_banks]
-
-        # Returning the Json response
-        return JsonResponse(serialized_question_banks, status=200, safe=False)
-    except HttpError as err:
-        logger.error(f"HttpError: {err}")
-        raise err
-    except Exception as err:
-        logger.error(f"Unexpected error: {str(err)}")
         raise HttpError(500, "An unexpected error occurred. Please try again later.")
 
 

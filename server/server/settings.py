@@ -213,7 +213,6 @@ CORS_ALLOWED_ORIGINS = [ # AZAK
     "http://127.0.0.1:3001",
 ]
 
-
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",

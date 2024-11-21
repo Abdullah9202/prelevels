@@ -1,15 +1,17 @@
 scripts:
 ###################### Windows ######################
   server:
-    python.exe .\manage.py runserver
+    python manage.py runserver
   makemigrations:
-    python.exe .\manage.py makemigrations
+    python manage.py makemigrations
   migrate:
-    python.exe .\manage.py migrate
+    python manage.py migrate
   shell:
-    python.exe .\manage.py shell
+    python manage.py shell
   createsuperuser:
-    python.exe .\manage.py createsuperuser
+    python manage.py createsuperuser
+  clearsession:
+    python manage.py clearsessions
   
   ###################### MAC OS ###################### 
   m_server:
@@ -22,5 +24,7 @@ scripts:
     python3 manage.py shell
   m_createsuperuser:
     python3 manage.py createsuperuser
+  m_clearsession:
+    python3 manage.py clearsessions
   venv_act:
     source venv/bin/activate

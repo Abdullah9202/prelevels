@@ -26,7 +26,7 @@ course_router = Router()
 logger = logging.getLogger(__name__)
 
 # Get all courses router
-@course_router.get("/", response={200: List[GetCourseDetailSchema], codes_4xx: dict})
+@course_router.get("/all/", response={200: List[GetCourseDetailSchema], codes_4xx: dict})
 async def get_all_courses(request, *args, **kwargs):
     try:
         # Getting all courses

@@ -24,52 +24,48 @@ export default function Page() {
   const password = usePasswordStore.getState().setPassword(formData.password)
   console.log(password)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", {
-      // AZAK
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", {
+  //     // AZAK
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(formData),
+  //   });
 
-    const data = await res.json();
-    if (res.ok) {
-      useUser.getState().setUser(data);
-      router.push("/");
-      useSignIn.getState().setSignedIn(true);
-      console.log("server responded");
-    }
-    console.log(formData);
-  };
+  //   const data = await res.json();
+  //   if (res.ok) {
+  //     useUser.getState().setUser(data);
+  //     router.push("/");
+  //     useSignIn.getState().setSignedIn(true);
+  //     console.log("server responded");
+  //   }
+  //   console.log(formData);
+  // };
 
   const handleSubmitButton = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+        const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }else{
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+        const data = await res.json();
         useUser.getState().setUser(data?.user_data);
-        router.push("/");
         useSignIn.getState().setSignedIn(true);
-        console.log("server responded");
-      }
 
-      
-      console.log("Data:", data);
-      alert("Data successfully received");
+        router.push("/");
+        console.log("server responded", data);
     } catch (error) {
-      console.error("Error during login:", error);
+        console.error("Error during login:", error);
     }
-  };
+};
+
   // return value
 
   return (

@@ -43,6 +43,21 @@ export default function Page() {
     console.log(formData);
   };
 
+  const handleSubmitButton = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const res = await fetch('/api/login', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    })
+
+    const data = await res.json()
+    if(res.ok){
+      
+      alert("data success full")
+    }
+  }
   // return value
 
   return (
@@ -51,7 +66,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">
           Login
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmitButton} className="space-y-6">
           <div>
             <label
               htmlFor="phone_number"

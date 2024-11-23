@@ -5,8 +5,12 @@ import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
 import useTokens from "../../../hooks/useTokens";
 
+
+
+
+
 const Courses = () => {
-  const { accessToken, fetchTokens } = useTokens();
+  const { accessToken, refreshAccessTokens, verifyAccessToken } = useTokens();
   const user = useUser((state) => state.user);
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +44,9 @@ const Courses = () => {
   
 
   if (error) {
-    console.log(accessToken);
+    console.log("access tokens",accessToken);
+    console.log("Refresh access token", refreshAccessTokens)
+    console.log('Verify access tokens', verifyAccessToken)
     return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;
   }
 

@@ -44,20 +44,26 @@ export default function Page() {
   };
 
   const handleSubmitButton = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const res = await fetch('/api/login', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    })
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await res.json()
-    if(res.ok){
-      
-      alert("data success full")
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log("Data:", data);
+      alert("Data successfully received");
+    } catch (error) {
+      console.error("Error during login:", error);
     }
-  }
+  };
   // return value
 
   return (

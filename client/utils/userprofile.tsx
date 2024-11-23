@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+
 import { useUser } from "../hooks/useUser";
 import { useSignIn } from "../hooks/userSignedIn";
 import { usePasswordStore } from "../hooks/usePassword";
+
 
 const Profile = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ const Profile = () => {
 
 
   const handleLogoutRequest = async () => {
-    const res = await fetch('http://127.0.0.1:8000/api/customuser/logout/', {
+    const res = await fetch('/api/logout', {
       method : 'POST',
       headers: {"Content-Type": "application/json"},
       credentials: 'include'
@@ -27,10 +28,12 @@ const Profile = () => {
     
     const data = await res.json()
     if (res.ok){
-      if(data && data.status === 200)
+      if(data && data.status === 200) {
+        
         useUser.getState().setUser(null);
         useSignIn.getState().setSignedIn(false);
-        usePasswordStore.getState().clearPassword()
+        usePasswordStore.getState().clearPassword();
+      }
     }
 
   }

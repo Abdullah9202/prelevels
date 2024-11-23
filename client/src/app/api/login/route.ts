@@ -2,29 +2,26 @@
 
 // import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { error } from "console";
+
+import { getRefreshToken, getToken, setReFreshToken, setToken } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-    const authToken = (await cookies()).get("auth-token")
-    console.log(authToken)
+    const authToken = await getToken()
+    const refreshToken = await getRefreshToken() 
+    
+    console.log(authToken, refreshToken)
 
     const req_data = await req.json()
-    const res = await fetch('http://127.0.0.1:8000/api/auth/token/pair', {
+    const res = await fetch('http://127.0.0.1:8000/api/auth/my-token/pair', {
         method:"POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username: req_data.name , password: req_data.password })
+        body: JSON.stringify({ phone_number: req_data.phone_number , password: req_data.password })
     })
     const token_res = await res.json()
+    const {access, refresh} = token_res
     if(res.ok) {
-        ;(await cookies()).set({
-            name : 'auth-token',
-            value :  token_res.access,
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge : 3600,
-            secure : process.env.NODE_ENV !== 'development'
-        })
+        setToken(access)
+        setReFreshToken(refresh)
     }else{
         console.error("user name is not define ")
     }

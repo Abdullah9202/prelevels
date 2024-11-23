@@ -53,11 +53,17 @@ export default function Page() {
         body: JSON.stringify(formData),
       });
 
+      const data = await res.json();
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
+      }else{
+        useUser.getState().setUser(data?.user_data);
+        router.push("/");
+        useSignIn.getState().setSignedIn(true);
+        console.log("server responded");
       }
 
-      const data = await res.json();
+      
       console.log("Data:", data);
       alert("Data successfully received");
     } catch (error) {

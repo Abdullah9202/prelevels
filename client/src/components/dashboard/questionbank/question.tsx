@@ -1,12 +1,12 @@
 "use client";
 
-import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
-import useTokens from "../../../../hooks/useTokens";
+
+
 import { useUser } from "../../../../hooks/useUser";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useEffect } from "react";
+
 
 const CourseCard = ({
   title,
@@ -42,59 +42,10 @@ const CourseCard = ({
 );
 
 export default function Question() {
-  const {accessToken,refreshAccessTokens,refreshToken, verifyAccessToken, fetchTokens} = useTokens()
+  
   const user = useUser((state) => state.user);
   
-  useEffect(() => {
-    const getQuestionBank = async () => {
-      try {
-        // Verify the token before making the API call
-        const isTokenValid = await verifyAccessToken();
-        if (!isTokenValid) {
-          console.warn("Token invalid or expired. Attempting to refresh...");
-          const refreshed = await refreshAccessTokens();
-          if (!refreshed) {
-            console.error("Unable to refresh token. User might need to log in.");
-            alert("Session expired. Please log in again.");
-            return; // Stop further execution
-          }
-        }
   
-        // Proceed with the API call using the (now valid) accessToken
-        const res = await fetch(
-          "http://127.0.0.1:8000/api/questionbank/my-questionbanks/", // AZAK
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`, // Include access token here
-            },
-            credentials: "include", // Include credentials if needed
-          }
-        );
-  
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        } else {
-          alert("Your response is successful");
-          // Handle the response data as needed
-          const data = await res.json();
-          console.log("Question bank data:", data);
-        }
-      } catch (error) {
-        console.error("Error fetching question bank:", error);
-        if (error instanceof Error && error.message.includes("401")) {
-          alert("Unauthorized. Please log in again.");
-          // Optionally, redirect to login page
-          // router.push("/login");
-        }
-      }
-    };
-  
-    if (user?.username) {
-      getQuestionBank();
-    }
-  }, [user, accessToken, verifyAccessToken, refreshAccessTokens]);
   
   const router = useRouter();
   return (

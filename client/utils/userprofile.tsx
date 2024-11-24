@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useUser } from "../hooks/useUser";
 import { useSignIn } from "../hooks/userSignedIn";
 import { usePasswordStore } from "../hooks/usePassword";
-import useHandleLogout from "@/lib/logout";
+import useHandleLogout from "../lib/logout";
 
 
 const Profile = () => {

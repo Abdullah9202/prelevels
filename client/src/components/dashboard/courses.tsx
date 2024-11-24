@@ -1,60 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
-import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
-import useTokens from "../../../hooks/useTokens";
-
-
-
-
 
 const Courses = () => {
-  const { accessToken, refreshAccessTokens, verifyAccessToken } = useTokens();
-  const user = useUser((state) => state.user);
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
-      if (!accessToken || !user?.username) alert("No user name and access tokens");
-  
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", {
+        const res = await fetch("/api/getDashboardCourses/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
           },
         });
-  
+
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  
+
         const data = await res.json();
-        setCourses(data);
+        console.log("Fetched data:", data); // Debugging log
+        setCourses(data.course_data);
       } catch (error) {
         console.error("Error fetching courses:", error);
         setError("Failed to load courses. Please try again later.");
+        setCourses([]); // Set courses to an empty array on error
       }
     };
-  
+
     getData();
-  }, [accessToken, user?.username]);
-  
+  }, []);
 
   if (error) {
-    console.log("access tokens",accessToken);
-    console.log("Refresh access token", refreshAccessTokens)
-    console.log('Verify access tokens', verifyAccessToken)
     return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;
   }
+
+  console.log("Courses:", courses); // Debugging log
 
   return (
     <div className="mt-8 bg-[#D9D9D9] border-2 border-white p-6 shadow-md rounded-lg mx-auto">
       <h2 className="text-xl font-semibold mb-4">Your Courses</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.slice(0,3).map((course) => (
+        {Array.isArray(courses) && courses.slice(0, 3).map((course) => (
           <CourseCard
             key={course.id}
             title={course.name}
@@ -68,7 +57,7 @@ const Courses = () => {
         ))}
       </div>
       <div className="flex items-center justify-center space-x-2">
-        <button onClick={()=>router.push('/dashboard/courses')} className="mt-4 bg-red-600 text-white px-4 py-2 rounded-2xl">
+        <button onClick={() => router.push('/dashboard/courses')} className="mt-4 bg-red-600 text-white px-4 py-2 rounded-2xl">
           View All Courses
         </button>
       </div>

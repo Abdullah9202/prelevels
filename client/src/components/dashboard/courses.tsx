@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useSWR from 'swr'
-import useHandleLogout from "../../../lib/logout";
+import useHandleLogout from "@/lib/logout";
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json())
 

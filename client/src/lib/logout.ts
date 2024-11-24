@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
-import { useUser } from "../hooks/useUser";
-import { useSignIn } from "../hooks/userSignedIn";
-import { usePasswordStore } from "../hooks/usePassword";
+import { useUser } from "../../hooks/useUser";
+import { useSignIn } from "../../hooks/userSignedIn";
+import { usePasswordStore } from "../../hooks/usePassword";
 
 const useHandleLogout = () => {
   const router = useRouter();

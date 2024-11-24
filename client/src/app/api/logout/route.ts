@@ -1,6 +1,6 @@
 "use server"
 
-import { deleteTokens } from "@/lib/auth";
+import { deleteTokens } from "../../../../lib/auth";
 
 import { NextRequest, NextResponse } from "next/server";
 

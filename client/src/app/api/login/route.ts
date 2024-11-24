@@ -1,7 +1,7 @@
 "use server"
 
 import { NextRequest, NextResponse } from "next/server";
-import { getRefreshToken, getToken, setReFreshToken, setToken } from "@/lib/auth";
+import { getRefreshToken, getToken, setReFreshToken, setToken } from "../../../../lib/auth";
 
 export async function POST(req: NextRequest) {
     const authToken = await getToken();

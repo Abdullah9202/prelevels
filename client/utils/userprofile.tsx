@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import { useUser } from "../hooks/useUser";
 import { useSignIn } from "../hooks/userSignedIn";
 import { usePasswordStore } from "../hooks/usePassword";
+import useHandleLogout from "@/lib/logout";
 
 
 const Profile = () => {
+  const handleLogout = useHandleLogout()
   const [isMenuOpen, setMenuOpen] = useState(false);
   const data = useUser((state) => state.user);
 
@@ -19,24 +21,24 @@ const Profile = () => {
 
 
 
-  const handleLogoutRequest = async () => {
-    const res = await fetch('/api/logout', {
-      method : 'POST',
-      headers: {"Content-Type": "application/json"},
-      credentials: 'include'
-    });
+  // const handleLogoutRequest = async () => {
+  //   const res = await fetch('/api/logout', {
+  //     method : 'POST',
+  //     headers: {"Content-Type": "application/json"},
+  //     credentials: 'include'
+  //   });
     
-    const data = await res.json()
-    if (res.ok){
-      if(data && data.status === 200) {
+  //   const data = await res.json()
+  //   if (res.ok){
+  //     if(data && data.status === 200) {
         
-        useUser.getState().setUser(null);
-        useSignIn.getState().setSignedIn(false);
-        usePasswordStore.getState().clearPassword();
-      }
-    }
+  //       useUser.getState().setUser(null);
+  //       useSignIn.getState().setSignedIn(false);
+  //       usePasswordStore.getState().clearPassword();
+  //     }
+  //   }
 
-  }
+  // }
 
   return (
     <div>
@@ -67,7 +69,7 @@ const Profile = () => {
             <li className="px-4 py-2 flex items-center">
               <span className="mr-2">🚪</span>
               <button
-                onClick={handleLogoutRequest}
+                onClick={handleLogout}
                 className="w-full text-left hover:bg-gray-400 cursor-pointer"
               >
                 Logout

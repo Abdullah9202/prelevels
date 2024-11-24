@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaGoogleDrive, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import useSWR from 'swr'
+import useHandleLogout from "@/lib/logout";
+
+const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json())
 
 const Courses = () => {
   const [courses, setCourses] = useState<{ id: number; name: string; validity: string; resource_link: string; whatsapp_link: string; course_image: string; }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<number>(0);
   const router = useRouter();
+  const handlelogout = useHandleLogout()
 
   useEffect(() => {
     const getData = async () => {
@@ -19,10 +25,12 @@ const Courses = () => {
         });
 
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
+        
         const data = await res.json();
+       
         console.log("Fetched data:", data); // Debugging log
         setCourses(data.course_data);
+        setStatus(res.status);
       } catch (error) {
         console.error("Error fetching courses:", error);
         setError("Failed to load courses. Please try again later.");
@@ -31,7 +39,17 @@ const Courses = () => {
     };
 
     getData();
-  }, []);
+  }, []); // Empty dependency array to run only once
+
+  useEffect(()=> {
+    if(status === 401){
+      handlelogout
+    }
+  })
+
+  useEffect(() => {
+    console.log("Status updated:", status); // Log the updated status
+  }, [status]);
 
   if (error) {
     return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;

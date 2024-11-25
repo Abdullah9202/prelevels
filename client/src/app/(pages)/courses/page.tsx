@@ -13,7 +13,7 @@ export default function CoursesPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/course/", {
+        const res = await fetch("http://127.0.0.1:8000/api/course/", { // AZAK
           method: "GET",
         });
         const data = await res.json();

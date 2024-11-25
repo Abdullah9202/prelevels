@@ -13,7 +13,7 @@ export default function QuestionBankPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/bundle/", {
+        const res = await fetch("http://127.0.0.1:8000/api/bundle/", { // AZAK
           method: "GET",
         });
         const data = await res.json();

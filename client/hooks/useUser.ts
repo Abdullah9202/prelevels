@@ -80,7 +80,7 @@ export const useUser = create<UserState>()(
 //   useEffect(() => {
 //     const fetchUserData = async () => {
 //       try {
-//         const response = await fetch('http://127.0.0.1:8000/api/user/profile/');
+//         const response = await fetch('http://127.0.0.1:8000/api/user/profile/'); // AZAK
 //         const data = await response.json();
 //         setUser(data);
 //       } catch (error) {
@@ -102,7 +102,7 @@ export const useUser = create<UserState>()(
 
 // const fetchUserData = async () => {
 //   try {
-//     const response = await fetch("http://127.0.0.1:8000/api/user/profile/");
+//     const response = await fetch("http://127.0.0.1:8000/api/user/profile/"); // AZAK
 //     const data = await response.json();
 //     useUser.getState().setUser(data); // Store user data
 //   } catch (error) {

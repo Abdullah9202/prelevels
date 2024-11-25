@@ -91,7 +91,7 @@ export default function Sidebar({ data, type }: SidebarProps) {
 
 
   const handleAddTOCart = async (product_id: string,quantity: number) => {
-    const res = await fetch("http://127.0.0.1:8000/api/cart/add/", {
+    const res = await fetch("http://127.0.0.1:8000/api/cart/add/", { // AZAK
       method: "POST",
       headers : {"Content-Type": "application/json"},
       body: JSON.stringify({ product_id, product_model:type, quantity })

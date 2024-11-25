@@ -20,7 +20,7 @@ export default function Testing() {
   const handleClick = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/student/register/",
+        "http://127.0.0.1:8000/api/student/register/", // AZAK
         {
           // Replace with your Python backend URL
           method: "POST",

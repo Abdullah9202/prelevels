@@ -30,7 +30,7 @@ const Courses = () => {
        
         console.log("Fetched data:", data); // Debugging log
         setCourses(data.course_data);
-        setStatus(res.status);
+        setStatus(data.status);
       } catch (error) {
         console.error("Error fetching courses:", error);
         setError("Failed to load courses. Please try again later.");
@@ -43,7 +43,7 @@ const Courses = () => {
 
   useEffect(()=> {
     if(status === 401){
-      handlelogout
+      handlelogout()
     }
   })
 

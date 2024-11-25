@@ -24,7 +24,7 @@ const DashboardPage = () => {
       {/* Top Section */}
       <div className="w-full">
         <h1 className="md:text-3xl text-xs w-full md:w-auto font-semibold mb-4 md:mb-0 md:pb-9">
-          Welcome Back, {user.full_name} 👋
+          Welcome Back, {user?.full_name} 👋
         </h1>
 
         {/* Flex layout for md and larger */}
@@ -38,17 +38,17 @@ const DashboardPage = () => {
             {/* Stat Cards */}
             <div className="grid grid-cols-3 mt-4 md:mt-0 md:grid-cols-3 gap-2 md:gap-2 order-first md:order-none">
               <StatCard
-                title={user.daysStreak}
+                title={user?.daysStreak}
                 subtitle="Days Streak"
                 icon={<FaCalendarAlt />}
               />
               <StatCard
-                title={user.questionSolved}
+                title={user?.questionSolved}
                 subtitle="Questions Solved"
                 icon={<FaCheckSquare />}
               />
               <StatCard
-                title={user.questionRemained}
+                title={user?.questionRemained}
                 subtitle="Questions Remaining"
                 icon={<FaClock />}
               />

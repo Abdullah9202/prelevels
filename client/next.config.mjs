@@ -24,9 +24,9 @@ const nextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'localhost',
-        port: '8000',
-        pathname: '/**'
+        hostname: '127.0.0.1',
+        port: '8000', // Port your backend server runs on
+        pathname: '/uploads/images/**', // Adjust this to match your image path
       }
     ],
   },

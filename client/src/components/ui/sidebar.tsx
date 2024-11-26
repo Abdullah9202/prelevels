@@ -81,8 +81,8 @@ export default function Sidebar({ data, type }: SidebarProps) {
 
   useEffect(() => {
     if (status === 401) {
-      // handlelogout();
-      alert("Get 401")
+      handlelogout();
+      
     }
   }, [status, handlelogout]);
 

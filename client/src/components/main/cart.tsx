@@ -1,34 +1,56 @@
-"use client";
-
-import { useState } from "react";
+'use client'
+import useHandleLogout from "@/lib/logout";
+import React, { useEffect, useState } from "react";
 
 const CartComponent = () => {
-  // Dynamic data for the cart
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "MDCAT Question Bank",
-      price: 2000,
-      quantity: 1,
-      validTill: "25 June 2025",
-    },
-    {
-      id: 2,
-      name: "ETEA Bundle",
-      price: 2600,
-      quantity: 1,
-      validTill: "16 August 2026",
-    },
-  ]);
+  const [data, setData] = useState<any[]>([]); // Ensure data is initialized as an array
+  const [status, setStatus] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const handlelogout = useHandleLogout()
 
-  // Calculate total price
+  useEffect(() => {
+    const getCartData = async () => {
+      try {
+        const res = await fetch("/api/getCartData", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setData(data.cart_data);
+          setStatus(data.status);
+        }
+      } catch (error) {
+        setError(String(error));
+      }
+    };
+
+    getCartData();
+  }, []); // Ensure the dependency array is always provided
+
+  useEffect(() => {
+    if (status === 401) {
+      // Handle logout or redirect to login page
+      console.log("Unauthorized access, redirecting to login...");
+      handlelogout()
+    
+    }
+  }, [status, handlelogout]); // Add status as a dependency
+
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    return Array.isArray(data)? data.reduce((total, item) => total + item.price * item.quantity, 0) : 0;
   };
 
+  const roundOff = (value: number) => {
+    return Math.round(value * 100) / 100; // Round to 2 decimal places
+  };
+
+  if (error) {
+    return <div className="mt-8 bg-red-100 border-2 border-red-500 p-6 shadow-md rounded-lg mx-auto">{error}</div>;
+  }
+  console.log('this is the data',data)
   return (
     <>
       <div className="flex flex-col items-center mt-8 mx-auto">
@@ -41,16 +63,16 @@ const CartComponent = () => {
             <div className="flex justify-between font-bold text-sm mb-2">
               <p className="w-2/5">Items</p>
               <p className="w-1/5 text-center">Quantity</p>
-              <p className="w-1/5 text-center">Valid Till</p>
+              <p className="w-1/5 text-center">Category</p>
               <p className="w-1/5 text-right">Cost</p>
             </div>
             <div className="border-b border-gray-500 mb-4"></div>
             {/* Dynamic items */}
-            {cartItems.map((item) => (
+            {Array.isArray(data) && data.map((item) => (
               <div key={item.id} className="flex justify-between text-sm mb-3">
-                <p className="w-2/5">{item.name}</p>
+                <p className="w-2/5">{item.product_name}</p>
                 <p className="w-1/5 text-center">{item.quantity}</p>
-                <p className="w-1/5 text-center">{item.validTill}</p>
+                <p className="w-1/5 text-center">{item.category}</p>
                 <p className="w-1/5 text-right">
                   Rs. {item.price * item.quantity}
                 </p>
@@ -61,58 +83,18 @@ const CartComponent = () => {
             {/* Total calculation */}
             <div className="flex justify-between">
               <p>Subtotal</p>
-              <p className="font-bold">Rs. {calculateTotal()}</p>
+              <p className="font-bold">Rs. {roundOff(calculateTotal())}</p>
             </div>
             <div className="flex justify-between">
               <p>Tax</p>
-              <p className="font-bold">Rs. 0</p>
+              <p className="font-bold">Rs. {roundOff(calculateTotal() * 0.1)}</p>
             </div>
-            <div className="flex justify-between text-lg font-bold mt-2">
+            <div className="flex justify-between">
               <p>Total</p>
-              <p>Rs. {calculateTotal()}</p>
+              <p className="font-bold">Rs. {roundOff(calculateTotal() * 1.1)}</p>
             </div>
           </div>
-          <button className="bg-green-500 hover:bg-green-600 text-white w-full py-2 mt-6 rounded-lg font-bold">
-            Place Order
-          </button>
-          <p className="text-sm text-center text-red-400 mt-2">
-            Read the instructions below before placing the order!
-          </p>
         </div>
-      </div>
-      <div className="lg:px-60 mt-10">
-        <h1 className="font-bold mb-5">Instructions:</h1>
-        <div className="border-t border-gray-400 mb-3">
-          <div className="grid grid-cols-3 lg:gap-80 text-gray-700 text-sm mt-2">
-            <p className="font-bold">Bank</p>
-            <p className="font-bold">Account Holder</p>
-            <p className="font-bold">Account Number</p>
-          </div>
-          <div className="grid grid-cols-3 bg-gray-300 p-3 lg:gap-80 text-gray-700 text-sm mt-2">
-            <p>EasyPaisa</p>
-            <p>XY Name</p>
-            <p>03199249384</p>
-          </div>
-          <div className="grid grid-cols-3 lg:gap-80 text-gray-700 text-sm mt-4">
-            <p>JazzCash</p>
-            <p>XY Name</p>
-            <p>03199249384</p>
-          </div>
-          <div className="grid grid-cols-3 bg-gray-300 p-3 lg:gap-80 text-gray-700 text-sm mt-4">
-            <p>Meezan Bank</p>
-            <p>XY Name</p>
-            <p>03199249384</p>
-          </div>
-        </div>
-        <h1 className="mt-10 text-sm text-gray-700 leading-relaxed">
-          After placing the order, transfer the mentioned amount to the any of
-          the above account. Capture the clear screenshot of payment and send it
-          to the admins with the order ID. Customer support team will process
-          and confirm your order within 24 to 48 hours. After that, you can view
-          the items in your dashboard. <br />
-          In case of any issue, contact our customer support through contact
-          form.
-        </h1>
       </div>
     </>
   );

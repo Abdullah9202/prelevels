@@ -79,7 +79,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/auth/sign-up"
-                className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-2xl text-xs md:text-sm font-medium hover:bg-red-700"
+                className="bg-red-600 text-white lg:px-5 px-3 py-2 rounded-3xl text-xs md:text-sm font-medium hover:bg-red-700"
               >
                 Create Account
               </Link>

@@ -13,7 +13,7 @@ export default function QuestionBankPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/bundle/all/", { // AZAK
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bundle/all/`, { // Use environment variable for the backend URL
           method: "GET",
         });
         const data = await res.json();
@@ -27,23 +27,18 @@ export default function QuestionBankPage() {
         console.error("Error fetching posts:", error);
       }
     };
+
     fetchPost();
   }, []);
 
   return (
     <div>
+      <Navbar />
+      <Banner src={bundle} alt="Bundle Image" text="Bundle" />
+      <Sidebar data={posts} type="Bundle"/>
       <SeasonSale />
-      <div className="bg-[#F4F4F4] min-h-screen">
-        <Navbar />
-        <Banner src={bundle} alt="Bundle Image" text="Bundle" />
-        <Sidebar data={posts} type="Bundle"/>
-        <div className="py-15 hidden sm:block">
-          <Footer />
-        </div>
-        <div className="hidden sm:block">
-          <Belowfooter />
-        </div>
-      </div>
+      <Footer />
+      <Belowfooter />
     </div>
   );
 }

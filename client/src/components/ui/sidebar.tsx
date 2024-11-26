@@ -4,6 +4,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 import TestImage from "@/assets/Banner.png";
 import Image from "next/image";
 import { FaBook, FaInfoCircle } from "react-icons/fa";
+import useHandleLogout from "@/lib/logout";
 
 interface SidebarProps {
   data: any;
@@ -17,6 +18,8 @@ export default function Sidebar({ data, type }: SidebarProps) {
   const [category, setCategory] = useState<string | "ETEA">("ETEA");
   const [currentPage, setCurrentPage] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  const [status, setStatus] = useState<number>(0);
+  const handlelogout = useHandleLogout()
 
   const pricingData = [
     {
@@ -76,6 +79,13 @@ export default function Sidebar({ data, type }: SidebarProps) {
     setHydrated(true);
   }, []);
 
+  useEffect(() => {
+    if (status === 401) {
+      // handlelogout();
+      alert("Get 401")
+    }
+  }, [status, handlelogout]);
+
   if (!hydrated) {
     return null;
   }
@@ -91,16 +101,22 @@ export default function Sidebar({ data, type }: SidebarProps) {
 
 
   const handleAddTOCart = async (product_id: string,quantity: number) => {
-    const res = await fetch("http://127.0.0.1:8000/api/cart/add/", { // AZAK
+    const res = await fetch("/api/addToCart", { // AZAK
       method: "POST",
       headers : {"Content-Type": "application/json"},
-      body: JSON.stringify({ product_id, product_model:type, quantity })
+      body: JSON.stringify({ product_id:product_id, product_model:type, quantity:quantity })
     })
-
+    const data = await res.json();
     if (res.ok){
+      setStatus(data.status)
       alert("Items has been added to cart")
+    }else{
+      throw new Error("Error Getting data")
     }
   }
+
+
+
 
   const nextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -118,6 +134,8 @@ export default function Sidebar({ data, type }: SidebarProps) {
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
+
+
 
   return (
     <div className="flex h-[925px]">

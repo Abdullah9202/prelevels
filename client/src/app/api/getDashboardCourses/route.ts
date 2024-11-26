@@ -1,6 +1,6 @@
 import { getToken } from "@/lib/auth";
 import { error } from "console";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 
 export async function GET() {
   const accessToken = await getToken();

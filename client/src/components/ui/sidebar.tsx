@@ -100,11 +100,11 @@ export default function Sidebar({ data, type }: SidebarProps) {
   const totalPages = Math.ceil(filterData.length / itemsPerPage);
 
 
-  const handleAddTOCart = async (product_id: string,quantity: number) => {
+  const handleAddTOCart = async (product_id: string) => {
     const res = await fetch("/api/addToCart", { // AZAK
       method: "POST",
       headers : {"Content-Type": "application/json"},
-      body: JSON.stringify({ product_id:product_id, product_model:type, quantity:quantity })
+      body: JSON.stringify({ product_id:product_id, product_model:type, quantity:1 })
     })
     const data = await res.json();
     if (res.ok){
@@ -275,7 +275,7 @@ export default function Sidebar({ data, type }: SidebarProps) {
                         <div className="h-7"></div>
                       )}
                     </div>
-                    <button onClick={ ()=> handleAddTOCart(item.id , item.price)} className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
+                    <button onClick={ ()=> handleAddTOCart(item.id )} className="mt-4 w-full bg-neutral border-red-500 border text-red-500 py-2 rounded-3xl">
                       Add to Cart
                     </button>
                   </div>

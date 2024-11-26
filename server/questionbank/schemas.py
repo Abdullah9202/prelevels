@@ -31,7 +31,7 @@ class QuestionBankSchema(Schema):
     is_active: bool = True
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Schema for QuestionBank model (Short)
 class QuestionBankSchema_Short(Schema):
@@ -43,7 +43,7 @@ class QuestionBankSchema_Short(Schema):
     is_active: bool = True
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Schema for Option model
@@ -58,7 +58,7 @@ class OptionSchema(Schema):
     is_active: bool = True
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Schema for WhyCorrectOption model
@@ -71,7 +71,7 @@ class WhyCorrectOptionSchema(Schema):
     is_active: bool = True
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Schema for Question model (Full)
@@ -92,7 +92,7 @@ class QuestionSchema(Schema):
     why_correct_option: Optional[WhyCorrectOptionSchema] = None
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Schema for Question model (Short)
 class QuestionSchema_Short(Schema):
@@ -108,7 +108,7 @@ class QuestionSchema_Short(Schema):
     why_correct_option: Optional[WhyCorrectOptionSchema] = None
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Save question Schema

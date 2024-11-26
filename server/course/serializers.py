@@ -19,7 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'category', 'id', 'name', 'description', 'additional_details', 'course_image', 
+            'category', 'id', 'name', 'description', 'additional_details', 'image', 
             'whatsapp_link', 'resource_link','price', 'discount', 'validity', 'created_at', 
             'updated_at', 'is_active',
         ]
@@ -31,6 +31,6 @@ class CourseSerializer_Short(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'name', 'description', 'additional_details', 'course_image',
+            'id', 'name', 'description', 'additional_details', 'image',
             'validity', 'created_at', 'updated_at', 'is_active'
         ]

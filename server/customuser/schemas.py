@@ -79,7 +79,7 @@ class UserSchema(Schema):
     # User identity and details
     first_name: str
     last_name: str
-    user_image: Optional[str] = None
+    image: Optional[str] = None
     email: str
     username: str
     password: str

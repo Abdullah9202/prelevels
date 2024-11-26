@@ -53,20 +53,20 @@ def process_question_file(sender, instance, created, **kwargs):
                     question_bank=instance,
                     question_number=convert_to_serializable(row['Question Number']),
                     question_text=convert_to_serializable(row['Question']),
-                    question_image=convert_to_serializable(row['Question Image']),
+                    image=convert_to_serializable(row['Question Image']),
                     subject=convert_to_serializable(row['Subject']),
                     topic=convert_to_serializable(row['Topic']),
                 )
                 
                 # Iterating over the options
-                for option, option_image in zip(['A', 'B', 'C', 'D', 'E'], ['A Image', 'B Image', 'C Image', 'D Image', 'E Image']):
+                for option, image in zip(['A', 'B', 'C', 'D', 'E'], ['A Image', 'B Image', 'C Image', 'D Image', 'E Image']):
                     # Validation for options and options images
-                    if option in df.columns and option_image in df.columns:
+                    if option in df.columns and image in df.columns:
                         # Creating the options with option images
                         Option.objects.create(
                             question=question,
                             option_text=convert_to_serializable(row[option]),
-                            option_image=convert_to_serializable(row[option_image]),
+                            image=convert_to_serializable(row[image]),
                             is_correct=True if row['Answer'] == option else False,
                             is_active=True,
                         )
@@ -77,7 +77,7 @@ def process_question_file(sender, instance, created, **kwargs):
                 WhyCorrectOption.objects.create(
                     question=question,
                     why_correct_option_text=convert_to_serializable(row['Answer Explanation']),
-                    why_correct_option_image=convert_to_serializable(row['Answer Explanation Image']),
+                    image=convert_to_serializable(row['Answer Explanation Image']),
                     is_active=True,
                 )
     else:

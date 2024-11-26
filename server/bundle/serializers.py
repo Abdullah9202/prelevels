@@ -23,7 +23,7 @@ class BundleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bundle
         fields = [
-            'category', 'id', 'name', 'bundle_image', 'description', 'additional_details', 
+            'category', 'id', 'name', 'image', 'description', 'additional_details', 
             'price', 'discount', 'validity', 'created_at', 'updated_at', 'is_active', 
             'course', 'question_bank'
         ]
@@ -35,6 +35,6 @@ class BundleSerializer_Short(serializers.ModelSerializer):
     class Meta:
         model = Bundle
         fields = [
-            'id', 'name', 'bundle_image', 'description', 'additional_details', 
+            'id', 'name', 'image', 'description', 'additional_details', 
             'validity', 'created_at', 'updated_at', 'is_active',
         ]

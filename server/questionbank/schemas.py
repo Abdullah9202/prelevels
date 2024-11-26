@@ -18,7 +18,7 @@ class QuestionBankSchema(Schema):
     category: CategorySchema
     id: UUID
     name: str
-    question_bank_image: Optional[str] = None
+    image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
     question_file: Optional[str] = None
@@ -37,7 +37,7 @@ class QuestionBankSchema(Schema):
 class QuestionBankSchema_Short(Schema):
     id: UUID
     name: str
-    question_bank_image: Optional[str] = None
+    image: Optional[str] = None
     description: Optional[str] = None
     additional_details: Optional[str] = None
     is_active: bool = True
@@ -51,7 +51,7 @@ class OptionSchema(Schema):
     question: UUID
     id: UUID
     option_text: Optional[str] = None
-    option_image: Optional[str] = None
+    image: Optional[str] = None
     is_correct: bool
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
@@ -81,7 +81,7 @@ class QuestionSchema(Schema):
     subject: str
     topic: str
     question_number: int
-    question_image: Optional[str] = None
+    image: Optional[str] = None
     question_text: Optional[str] = None
     additional_details: Optional[str] = None
     unique_identifier: Optional[str]
@@ -100,7 +100,7 @@ class QuestionSchema_Short(Schema):
     subject: str
     topic: str
     question_number: int
-    question_image: Optional[str] = None
+    image: Optional[str] = None
     question_text: Optional[str] = None
     additional_details: Optional[str] = None
     is_active: bool = True

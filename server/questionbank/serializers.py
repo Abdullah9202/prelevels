@@ -22,7 +22,7 @@ class QuestionBankSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionBank
         fields = [
-            'id', 'category', 'name', 'question_bank_image', 'description', 'additional_details', 
+            'id', 'category', 'name', 'image', 'description', 'additional_details', 
             'question_file', 'question_count', 'price', 'discount', 'validity', 'created_at', 
             'updated_at', 'is_active',
         ]
@@ -32,7 +32,7 @@ class QuestionBankSerializer_Short(serializers.ModelSerializer):
     class Meta:
         model = QuestionBank
         fields = [
-            'id', 'name', 'question_bank_image', 'description', 'additional_details',
+            'id', 'name', 'image', 'description', 'additional_details',
             'is_active',
         ]
 
@@ -42,7 +42,7 @@ class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
         fields = [
-            'id', 'option_text', 'option_image', 'is_correct', 'created_at', 'updated_at', 
+            'id', 'option_text', 'image', 'is_correct', 'created_at', 'updated_at', 
             'is_active', 'question'
         ]
 
@@ -67,7 +67,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = [
             'question_bank', 'id', 'subject', 'topic', 'question_number',
-            'question_image', 'question_text', 'additional_details', 'unique_identifier', 
+            'image', 'question_text', 'additional_details', 'unique_identifier', 
             'created_at', 'updated_at', 'is_active', 'options', 'why_correct_option',
         ]
 

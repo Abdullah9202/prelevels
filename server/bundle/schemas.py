@@ -20,6 +20,7 @@ class BundleSchema(Schema):
     name: str
     description: Optional[str] = None
     additional_details: Optional[str] = None
+    image: Optional[str] = None
     price: int
     discount: Optional[int] = None
     validity: Optional[int] = None

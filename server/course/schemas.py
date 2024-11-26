@@ -19,7 +19,7 @@ class GetCourseDetailSchema(Schema):
     name: str
     description: str = None
     additional_details: Optional[str] = None
-    course_image: Optional[str] = None
+    image: Optional[str] = None
     whatsapp_link: str = None
     resource_link: str = None
     price: int

@@ -38,7 +38,7 @@ class Course(models.Model):
     name = models.CharField(_("Name"), max_length=50, null=False, default="Untitled Course", unique=True)
     description = models.TextField(_("Description"), null=True, blank=True)
     additional_details = models.TextField(_("Additional Details"), null=True, blank=True)
-    course_image = models.ImageField(_("Course Image"),
+    image = models.ImageField(_("Course Image"),
                                     upload_to="images/", 
                                     height_field=None, width_field=None, max_length=None,
                                     null=True, blank=True)

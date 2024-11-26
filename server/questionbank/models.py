@@ -38,7 +38,7 @@ class QuestionBank(models.Model):
                                     on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=50, null=False, blank=False, default="Untitled Question Bank",
                             unique=True)
-    question_bank_image = models.ImageField(_("Question Bank Image"), 
+    image = models.ImageField(_("Question Bank Image"), 
                                             upload_to="images/", 
                                             height_field=None, width_field=None, max_length=None, 
                                             null=True, blank=True)

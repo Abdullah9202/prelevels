@@ -33,12 +33,15 @@ export default function QuestionBankPage() {
 
   return (
     <div>
+      <SeasonSale/>
+      <div className="bg-[#F4F4F4] min-h-screen">
       <Navbar />
       <Banner src={bundle} alt="Bundle Image" text="Bundle" />
       <Sidebar data={posts} type="Bundle"/>
       <SeasonSale />
       <Footer />
       <Belowfooter />
+      </div>
     </div>
   );
 }

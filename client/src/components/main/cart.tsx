@@ -97,7 +97,10 @@ const CartComponent = () => {
             <div className="max-h-64 overflow-y-auto pr-4">
               {Array.isArray(data) &&
                 data.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm mb-3">
+                  <div
+                    key={item.id}
+                    className="flex justify-between text-sm mb-3"
+                  >
                     <p className="w-2/5">{item.product_name}</p>
                     <p className="w-1/5 text-center">{item.quantity}</p>
                     <p className="w-1/5 text-center">{item.category}</p>
@@ -106,7 +109,8 @@ const CartComponent = () => {
                     </p>
                     <button
                       onClick={() => deleteCartItem(item.id)}
-                      className="w-1/5 text-right text-red-500 hover:text-red-700">
+                      className="w-1/5 text-right text-red-500 hover:text-red-700"
+                    >
                       Delete
                     </button>
                   </div>
@@ -117,15 +121,21 @@ const CartComponent = () => {
             {/* Total calculation */}
             <div className="flex justify-between">
               <p>Subtotal</p>
-              <p className="font-bold text-green-400">Rs. {roundOff(calculateTotal())}</p>
+              <p className="font-bold text-green-400">
+                Rs. {roundOff(calculateTotal())}
+              </p>
             </div>
             <div className="flex justify-between">
               <p>Tax</p>
-              <p className="font-bold text-green-400">Rs. {roundOff(calculateTotal() * 0.1)}</p>
+              <p className="font-bold text-green-400">
+                Rs. {roundOff(calculateTotal() * 0.1)}
+              </p>
             </div>
             <div className="flex justify-between">
               <p>Total</p>
-              <p className="font-bold text-green-400">Rs. {roundOff(calculateTotal() * 1.1)}</p>
+              <p className="font-bold text-green-400">
+                Rs. {roundOff(calculateTotal() * 1.1)}
+              </p>
             </div>
           </div>
         </div>

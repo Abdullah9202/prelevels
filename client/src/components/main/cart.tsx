@@ -85,7 +85,7 @@ const CartComponent = () => {
           </h1>
           <div className="border-t border-gray-500 pt-4">
             {/* Table header */}
-            <div className="flex justify-between font-bold text-sm mb-2">
+            <div className="flex justify-between font-bold text-sm mb-2 pr-8">
               <p className="w-2/5">Items</p>
               <p className="w-1/5 text-center">Quantity</p>
               <p className="w-1/5 text-center">Category</p>
@@ -94,7 +94,7 @@ const CartComponent = () => {
             </div>
             <div className="border-b border-gray-500 mb-4"></div>
             {/* Dynamic items */}
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-64 overflow-y-auto pr-4">
               {Array.isArray(data) &&
                 data.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm mb-3">

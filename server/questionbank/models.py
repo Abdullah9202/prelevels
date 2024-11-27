@@ -90,7 +90,7 @@ class Question(models.Model):
     subject = models.CharField(_("Subject"), max_length=50, null=False)
     topic = models.CharField(_("Topic"), max_length=50, null=False)
     question_number = models.IntegerField(_("Question Number"), null=False)
-    question_image = models.ImageField(_("Question Image"), 
+    image = models.ImageField(_("Question Image"), 
                                     upload_to="images/", 
                                     height_field=None, width_field=None, max_length=None, 
                                     null=True, blank=True)
@@ -127,7 +127,7 @@ class Question(models.Model):
 class Option(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     option_text = models.TextField(_("Option Text"), null=True, blank=True)
-    option_image = models.ImageField(_("Option Image"),
+    image = models.ImageField(_("Option Image"),
                                     upload_to="images/", 
                                     height_field=None, width_field=None, max_length=None, 
                                     null=True, blank=True)
@@ -154,7 +154,7 @@ class Option(models.Model):
 class WhyCorrectOption(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, null=False)
     why_correct_option_text = models.TextField(_("Why Correct Option Text"), null=True, blank=True)
-    why_correct_option_image = models.ImageField(_("Why Correct Option Image"), 
+    image = models.ImageField(_("Why Correct Option Image"), 
                                                 upload_to="images/", 
                                                 height_field=None, width_field=None, max_length=None,
                                                 null=True, blank=True)

@@ -79,7 +79,7 @@ const CartComponent = () => {
   return (
     <>
       <div className="flex flex-col items-center mt-8 mx-auto">
-        <div className="bg-[#454A54] w-full h-[500px] md:max-w-[1200px] rounded-lg shadow-md p-6 text-gray-200">
+        <div className="bg-[#454A54] w-full md:max-w-[1200px] rounded-lg shadow-md p-6 text-gray-200">
           <h1 className="text-2xl font-bold mb-4">
             Here’s what you have ordered:
           </h1>
@@ -92,24 +92,26 @@ const CartComponent = () => {
               <p className="w-1/5 text-right">Cost</p>
               <p className="w-1/5 text-right">Action</p>
             </div>
-            <div className="border-b border-gray-500 mb-4 max-h-64 overflow-y-auto"></div>
+            <div className="border-b border-gray-500 mb-4"></div>
             {/* Dynamic items */}
-            {Array.isArray(data) &&
-              data.map((item) => (
-                <div key={item.id} className="flex justify-between text-sm mb-3 space-y-4">
-                  <p className="w-2/5">{item.product_name}</p>
-                  <p className="w-1/5 text-center">{item.quantity}</p>
-                  <p className="w-1/5 text-center">{item.category}</p>
-                  <p className="w-1/5 text-right text-green-400">
-                    Rs. {item.price * item.quantity}
-                  </p>
-                  <button
-                    onClick={() => deleteCartItem(item.id)}
-                    className="w-1/5 text-right text-red-500 hover:text-red-700">
-                    Delete
-                  </button>
-                </div>
-              ))}
+            <div className="max-h-64 overflow-y-auto">
+              {Array.isArray(data) &&
+                data.map((item) => (
+                  <div key={item.id} className="flex justify-between text-sm mb-3">
+                    <p className="w-2/5">{item.product_name}</p>
+                    <p className="w-1/5 text-center">{item.quantity}</p>
+                    <p className="w-1/5 text-center">{item.category}</p>
+                    <p className="w-1/5 text-right text-green-400">
+                      Rs. {item.price * item.quantity}
+                    </p>
+                    <button
+                      onClick={() => deleteCartItem(item.id)}
+                      className="w-1/5 text-right text-red-500 hover:text-red-700">
+                      Delete
+                    </button>
+                  </div>
+                ))}
+            </div>
           </div>
           <div className="border-t border-gray-500 pt-4 space-y-3">
             {/* Total calculation */}

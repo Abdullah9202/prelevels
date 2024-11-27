@@ -92,7 +92,7 @@ const CartComponent = () => {
               <p className="w-1/5 text-right">Cost</p>
               <p className="w-1/5 text-right">Action</p>
             </div>
-            <div className="border-b border-gray-500 mb-4"></div>
+            <div className="border-b border-gray-500 mb-4 max-h-64 overflow-y-auto"></div>
             {/* Dynamic items */}
             {Array.isArray(data) &&
               data.map((item) => (

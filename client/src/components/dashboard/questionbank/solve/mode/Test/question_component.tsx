@@ -1,5 +1,6 @@
 // components/QuestionComponent.js
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 interface QuestionData {
   question: string;
@@ -55,6 +56,15 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
     };
   }, [isHighlighterActive, highlightText]);
 
+  const isUrl = (string: string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Question */}
@@ -62,7 +72,11 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
         <h2 className="text-xl font-semibold mb-4">
           Question {currentQuestionIndex + 1}:
         </h2>
-        <p className="text-lg">{questionData.question}</p>
+        {isUrl(questionData.question) ? (
+          <Image src={questionData.question} width={300} height={300} alt="Question" className="w-full h-auto" />
+        ) : (
+          <p className="text-lg">{questionData.question}</p>
+        )}
       </div>
 
       {/* Options */}
@@ -75,8 +89,14 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
             }`}
             onClick={() => handleOptionSelect(option.id)}
           >
-            <span className="font-bold mr-2">{option.id}</span>
-            {option.text}
+            {isUrl(option.text) ? (
+              <Image src={option.text} width={300} height={300} alt={`Option ${option.id}`} className="w-full h-auto" />
+            ) : (
+              <>
+                <span className="font-bold mr-2">{option.id}</span>
+                {option.text}
+              </>
+            )}
           </button>
         ))}
       </div>
@@ -100,7 +120,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
           onClick={onPrevious}
           disabled={currentQuestionIndex === 0}
         >
-          Previous
+          &laquo;&laquo; Previous
         </button>
         <div>
           {currentQuestionIndex + 1}/{totalQuestions}
@@ -110,7 +130,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
           onClick={onNext}
           disabled={currentQuestionIndex === totalQuestions - 1}
         >
-          Next
+          Next &raquo;&raquo;
         </button>
       </div>
     </div>

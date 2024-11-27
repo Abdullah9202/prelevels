@@ -10,7 +10,7 @@ const ReportModel: FC<ReportModelProps> = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h1 className="text-lg font-semibold mb-2">Report this question:</h1>
         <p className="text-sm mb-4">

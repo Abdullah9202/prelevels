@@ -142,7 +142,7 @@ def remove_from_cart(request, cart_item_id: UUID, *args, **kwargs):
     except Cart.DoesNotExist:
         return JsonResponse({"error": "Cart item not found"}, status=404)
     except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+        return JsonResponse({"error": f"An error occurred, please try again later."})
     else:
         cart_item.delete()
         return JsonResponse({"message": "Item deleted from cart"})

@@ -3,13 +3,60 @@ import { useUser } from "../../../../../hooks/useUser";
 import MDCAT from "@/assets/MDCATBanner.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import useHandleLogout from "@/lib/logout";
 
 export default function SolveQuestion() {
-  const user = useUser((state) => state.user)
+  const handlelogout = useHandleLogout();
+  const user = useUser((state) => state.user);
   const router = useRouter();
+  const [data, setData] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<number | null>(null);
 
-  // Array to repeat the block of code
-  const repeatedBlocks = Array(4).fill(null);
+  useEffect(() => {
+    const getYearlyData = async () => {
+      try {
+        const res = await fetch('/api/getDashboardMyQuestionBank', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setData(data?.user_data);
+          console.log("Fetched data:", data); // Debugging log
+          setStatus(data.status);
+        } else {
+          throw new globalThis.Error('Failed to fetch data');
+        }
+      } catch (error) {
+        if (error instanceof globalThis.Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+    };
+
+    getYearlyData();
+  }, []);
+
+  useEffect(() => {
+    if (status === 401) {
+      console.log("Unauthorized access, redirecting to login...");
+      handlelogout();
+    }
+  }, [status, handlelogout]);
+
+  // Group data by category
+  const groupedData = data.reduce((acc, item) => {
+    const category = item.category.name;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(item);
+    return acc;
+  }, {});
 
   return (
     <div className="flex-1 md:p-6 p-4 lg:py-7 py-4 bg-gray-100 md:mr-0 mx-auto">
@@ -32,19 +79,19 @@ export default function SolveQuestion() {
             Topical
           </button>
         </div>
-        <div className="bg-[#D9D9D9] shadow-sm rounded-lg mt-5 border-2 border-white">
+      </div>
+      {Object.keys(groupedData).map((category) => (
+        <div key={category} className="bg-[#D9D9D9] shadow-sm rounded-lg mt-5 border-2 border-white">
           <h1 className="px-10 py-5 font-bold">
             <span className="text-red-500 font-bold pr-2">Logo</span>
-            Sindh NMDCAT
+            {category}
           </h1>
-          {repeatedBlocks.map((_, index) => (
-            <div key={index} className="px-14 pb-4">
+          {groupedData[category].map((item: any, index: number) => (
+            <div key={item.id} className="px-14 pb-4">
               <div className="flex justify-between items-center">
-                <p>202{index}</p>
+                <p>{item.name}</p>
                 <button
-                  onClick={() =>
-                    router.push("/dashboard/question-bank/solve/mode")
-                  }
+                  onClick={() => router.push("/dashboard/question-bank/solve/mode")}
                   className="bg-red-600 text-white px-4 py-1 rounded-3xl"
                 >
                   Start Test
@@ -54,32 +101,7 @@ export default function SolveQuestion() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div>
-        <div className="bg-[#D9D9D9] shadow-sm rounded-lg mt-5 border-2 border-white">
-          <h1 className="px-10 py-5 font-bold">
-            <span className="text-red-500 font-bold pr-2">Logo</span>
-            UHS MDCAT
-          </h1>
-          {repeatedBlocks.map((_, index) => (
-            <div key={index} className="px-14 pb-4">
-              <div className="flex justify-between items-center">
-                <p>202{index}</p>
-                <button
-                  onClick={() =>
-                    router.push("/dashboard/question-bank/solve/mode")
-                  }
-                  className="bg-red-600 text-white px-4 py-1 rounded-3xl"
-                >
-                  Start Test
-                </button>
-              </div>
-              <hr className="border-1 border-gray-400 w-full mt-2" />
-            </div>
-          ))}
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

@@ -24,6 +24,19 @@ export default function Home() {
     alert("Report submitted");
   };
 
+  useEffect(() => {
+      const questionBankIdString = localStorage.getItem('question-bank-id');
+      const question_bank_id = questionBankIdString ? JSON.parse(questionBankIdString) : null;
+      const handleQuestions = async () => {
+        const res = await fetch('/api/getQuestions' , {
+          method:'POST',
+          headers:{'Content-Type' : 'application/json'},
+          body:JSON.stringify({question_id: question_bank_id})
+        })
+        handleQuestions()
+      }
+  }, [])
+
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleNext = () => {

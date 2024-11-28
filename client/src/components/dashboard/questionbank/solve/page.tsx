@@ -48,6 +48,12 @@ export default function SolveQuestion() {
     }
   }, [status, handlelogout]);
 
+
+  const handlePushLogic = (questionId : string) => {
+    localStorage.setItem('question-bank-id',JSON.stringify(questionId))
+    router.push("/dashboard/question-bank/solve/mode")
+  }
+
   // Group data by category
   const groupedData = data.reduce((acc, item) => {
     const category = item.category.name;
@@ -91,7 +97,7 @@ export default function SolveQuestion() {
               <div className="flex justify-between items-center">
                 <p>{item.name}</p>
                 <button
-                  onClick={() => router.push("/dashboard/question-bank/solve/mode")}
+                  onClick={() => handlePushLogic(item?.id)}
                   className="bg-red-600 text-white px-4 py-1 rounded-3xl"
                 >
                   Start Test

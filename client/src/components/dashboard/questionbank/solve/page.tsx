@@ -3,11 +3,50 @@ import { useUser } from "../../../../../hooks/useUser";
 import MDCAT from "@/assets/MDCATBanner.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import useHandleLogout from "@/lib/logout";
 
 export default function SolveQuestion() {
+  const handlelogout = useHandleLogout()
   const user = useUser((state) => state.user)
   const router = useRouter();
+  const [data, setData] = useState<any []>([])
+  const [Error, setError] = useState<string | null>(null)
+  const [status, setStatus] = useState<number | null>( null)
 
+  useEffect(() => {
+    const getYearlyData = async () => {
+      try {
+        const res = await fetch('/api/getDashboardMyQuestionBank', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setData(data?.user_data);
+          console.log("Fetched data:", data); // Debugging log
+          setStatus(data.status)
+        } else {
+          throw new globalThis.Error('Failed to fetch data');
+        }
+      } catch (error) {
+        if (error instanceof globalThis.Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+    };
+
+    getYearlyData();
+  }, []);
+
+  useEffect(() => {
+    if (status === 401) {
+      console.log("Unauthorized access, redirecting to login...");
+      handlelogout();
+    }
+  }, [status, handlelogout]); 
   // Array to repeat the block of code
   const repeatedBlocks = Array(4).fill(null);
 

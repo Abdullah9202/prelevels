@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User, TopicalProgress, YearlyProgress
 
+
 class UserAdmin(UserAdmin):
     model = User
     list_display = ('username', 'phone_number', 'email', 'createdAt', 'updatedAt', 'last_login')

@@ -1,10 +1,13 @@
-from rest_framework import serializers
+# Django imports
 from django.contrib.auth.password_validation import validate_password
+# REST imports
+from rest_framework import serializers
 # My Files
 from .models import User, TopicalProgress, YearlyProgress
 from questionbank.serializers import QuestionBankSerializer_Short
 from course.serializers import CourseSerializer_Short
 from bundle.serializers import BundleSerializer_Short
+
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()

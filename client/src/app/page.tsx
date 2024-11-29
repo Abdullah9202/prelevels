@@ -13,15 +13,15 @@ import { useEffect, useState } from "react";
 import React from "react";
 
 export default function Home() {
- const [hydrated, setHydrated] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
- useEffect (() => {
-    setHydrated(true)
- }, [])
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
- if (!hydrated) {
-  return null;
- }
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <>

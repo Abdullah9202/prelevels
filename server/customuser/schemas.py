@@ -1,9 +1,11 @@
+# Python imports
 from uuid import UUID
 from datetime import datetime
-from ninja import Schema
 from pydantic import field_validator, EmailStr
 from typing import Optional
 import phonenumbers
+# Ninja imports
+from ninja import Schema
 
 
 # Function to validate the phone number
@@ -44,6 +46,9 @@ class UpdateSchema(Schema):
     avatar_url: Optional[str]
     phone_number: str
     password: str
+    
+    # Validating the phone number 
+    _phone_number_validator = phone_number_validator
 
 # Question bank, courses and bundle schema
 class QuestionBankSchema(Schema):

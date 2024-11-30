@@ -32,10 +32,15 @@ class RegisterSchema(Schema):
     # Validating the phone number 
     _phone_number_validator = phone_number_validator
 
+
 # Login Schema
 class LoginSchema(Schema):
     phone_number: str
     password: str
+    
+    # Validating the phone number 
+    _phone_number_validator = phone_number_validator
+
 
 # Update Schema
 class UpdateSchema(Schema):
@@ -49,6 +54,7 @@ class UpdateSchema(Schema):
     
     # Validating the phone number 
     _phone_number_validator = phone_number_validator
+
 
 # Question bank, courses and bundle schema
 class QuestionBankSchema(Schema):

@@ -45,20 +45,18 @@ async def register_user(request, payload: RegisterSchema, *args, **kwargs):
         # Creating the username
         username = f"{payload.first_name.capitalize()}{payload.last_name.capitalize()}{random.randint(1000, 9999)}"
 
-        # Creating the user
-        user = await sync_to_async(User.objects.create)(
-            first_name=payload.first_name,
-            last_name=payload.last_name,
-            username=username,
-            email=payload.email,
-            phone_number=payload.phone_number,
-        )
-        await sync_to_async(user.set_password)(payload.password)
-        await sync_to_async(user.save)()
+        payload_dict = payload.dict()
+        payload_dict['username'] = username
 
-        # Serializing the user data
-        serialized_data = RegisterSchema.from_orm(user).dict()
+        # Attempting to serialize and save the user
+        serializer = RegisterSerializer(data=payload_dict)
+        if not serializer.is_valid():
+            logger.error("Serializer validation failed: %s", serializer.errors)
+            raise HttpError(400, str(serializer.errors))
 
+        user = await sync_to_async(serializer.save)()
+        serialized_data = RegisterSerializer(user).data
+        
         logger.info("User registered successfully: %s", serialized_data)
         return JsonResponse(serialized_data, status=200)
 

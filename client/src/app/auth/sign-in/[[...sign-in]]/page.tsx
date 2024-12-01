@@ -21,8 +21,8 @@ export default function Page() {
     });
   };
 
-  const password = usePasswordStore.getState().setPassword(formData.password)
-  console.log(password)
+  const password = usePasswordStore.getState().setPassword(formData.password);
+  console.log(password);
 
   // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
@@ -47,24 +47,24 @@ export default function Page() {
     e.preventDefault();
 
     try {
-        const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-        });
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-        const data = await res.json();
-        useUser.getState().setUser(data?.user_data);
-        useSignIn.getState().setSignedIn(true);
+      const data = await res.json();
+      useUser.getState().setUser(data?.user_data);
+      useSignIn.getState().setSignedIn(true);
 
-        router.push("/");
-        console.log("server responded", data);
+      router.push("/");
+      console.log("server responded", data);
     } catch (error) {
-        console.error("Error during login:", error);
+      console.error("Error during login:", error);
     }
-};
+  };
 
   // return value
 

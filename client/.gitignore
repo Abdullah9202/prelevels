@@ -24,11 +24,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # Local environment variables
-.env
-.env*.local
-.env.*.local
-.env.*.env
-.env.production.local
+# .env
+# .env*.local
+# .env.*.local
+# .env.*.env
+# .env.production.local
 
 # Vercel
 .vercel

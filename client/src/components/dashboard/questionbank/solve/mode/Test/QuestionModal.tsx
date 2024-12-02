@@ -21,10 +21,12 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
   );
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-3xl w-full max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl max-h-[80vh] flex flex-col">
         <h2 className="text-xl font-semibold mb-4">All Questions:</h2>
-        <div className="grid grid-cols-10 gap-2 overflow-y-auto max-h-[60vh]">
+        
+        {/* Scrollable Container */}
+        <div className="flex-grow overflow-y-auto grid grid-cols-10 gap-2">
           {questionDots.map((questionNumber) => (
             <button
               key={questionNumber}
@@ -35,6 +37,8 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
             </button>
           ))}
         </div>
+        
+        {/* Close Button */}
         <div className="flex justify-end mt-4">
           <button
             onClick={onClose}

@@ -72,11 +72,11 @@ export default function Home() {
     alert("Report submitted");
   };
 
-  const currentQuestion = questionList.length > 0 ? questionList[currentQuestionIndex] : null;
+  const currentQuestion = questionList?.length > 0 ? questionList[currentQuestionIndex] : null;
 
 
   const handleNext = () => {
-    if (currentQuestionIndex < questionList.length - 1) {
+    if (currentQuestionIndex < questionList?.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -243,13 +243,13 @@ export default function Home() {
             isOpen={isModalOpen}
             onClose={handleModalClose}
             onQuestionSelect={handleQuestionSelect}
-            totalQuestions={questionList.length}
+            totalQuestions={questionList?.length}
           />
           {currentQuestion ? (
           <QuestionComponent
             questionData={currentQuestion}
             currentQuestionIndex={currentQuestionIndex}
-            totalQuestions={questionList.length}
+            totalQuestions={questionList?.length}
             onNext={handleNext}
             isHighlighterActive={isHighlighterActive}
             onPrevious={handlePrevious}

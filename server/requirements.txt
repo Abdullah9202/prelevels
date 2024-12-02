@@ -12,6 +12,7 @@ cryptography
 requests
 pyjwt
 python3-saml
+python-decouple
 
 # Django dependencies
 django

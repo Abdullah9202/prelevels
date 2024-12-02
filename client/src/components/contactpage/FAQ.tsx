@@ -36,7 +36,7 @@ const FAQ = () => {
     <div className="max-w-7xl mx-auto py-16 px-6 lg:px-16 ">
       <div className="lg:flex lg:space-x-16">
         <div className="lg:w-1/2">
-          <h2 className="text-gray-900 text-sm font-medium">FAQ</h2>
+          <h2 className="text-gray-900 text-md font-bold">FAQ</h2>
           <h1 className="text-4xl font-bold text-gray-900">
             Frequently <br />
             asked <br />{" "}

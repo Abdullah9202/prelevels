@@ -9,11 +9,12 @@ export async function POST(req:NextRequest) {
         const res = await fetch(`http://localhost:8000/api/questionbank/${data?.question_id}/all-questions/`, {
             method: 'GET',
             headers:{'Content-Type' : 'application/json',
-                Authorization: `Bearer${accessToken}`
+                Authorization: `Bearer ${accessToken}`,
             },
-            body:JSON.stringify({question_bank_id: data?.question_id})
+            
         })
         const res_data = await res.json()
+        
         if(res.ok){
             return new NextResponse(JSON.stringify({message:'Success', questions_data:res_data, status:200}))
         }else{

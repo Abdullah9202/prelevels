@@ -22,9 +22,9 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-3xl w-full">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-3xl w-full max-h-[80vh] overflow-hidden">
         <h2 className="text-xl font-semibold mb-4">All Questions:</h2>
-        <div className="grid grid-cols-10 gap-2">
+        <div className="grid grid-cols-10 gap-2 overflow-y-auto max-h-[60vh]">
           {questionDots.map((questionNumber) => (
             <button
               key={questionNumber}

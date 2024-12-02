@@ -2,15 +2,10 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
-interface QuestionData {
-  question: string;
-  options: { id: string; text: string }[];
-  correctOption: string;
-  explanation: string;
-}
+
 
 interface QuestionComponentProps {
-  questionData: QuestionData;
+  questionData: any;
   currentQuestionIndex: number;
   totalQuestions: number;
   onNext: () => void;
@@ -72,16 +67,16 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
         <h2 className="text-xl font-semibold mb-4">
           Question {currentQuestionIndex + 1}:
         </h2>
-        {isUrl(questionData?.question) ? (
-          <Image src={questionData.question} width={300} height={300} alt="Question" className="w-full h-auto" />
+        {isUrl(questionData?.image) ? (
+          <Image src={questionData?.image} width={300} height={300} alt="Question" className="w-full h-auto" />
         ) : (
-          <p className="text-lg">{questionData?.question}</p>
+          <p className="text-lg">{questionData?.question_text}</p>
         )}
       </div>
 
       {/* Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {questionData?.options.map((option) => (
+        {questionData?.options.map((option: { id: string; text: string }) => (
           <button
             key={option.id}
             className={`border border-gray-300 rounded-lg p-4 text-left hover:bg-gray-200 ${

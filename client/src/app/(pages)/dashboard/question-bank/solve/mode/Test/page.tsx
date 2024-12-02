@@ -1,19 +1,22 @@
 "use client";
 // pages/index.js
 import { useEffect, useState } from "react";
+import useHandleLogout from "@/lib/logout";
 import { useTime } from "../../../../../../../../hooks/useTime";
 import { questions } from "@/components/dashboard/questionbank/solve/mode/Test/mockQuestion"; // Import dummy data
 import QuestionComponent from "@/components/dashboard/questionbank/solve/mode/Test/question_component"; // Import the QuestionComponent
 import QuestionModal from "@/components/dashboard/questionbank/solve/mode/Test/QuestionModel";
 import ReportModel from "@/components/dashboard/questionbank/solve/mode/Test/report_model";
 
+
 export default function Home() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  
+  const handlelogout = useHandleLogout()
   const [isHighlighterActive, setHighlighter] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [questionList, setQuestionList] = useState<any[]>([]);
+  const [status , setStatus] = useState<number>(0)
 
 
   const handleReportModelOpen = () => setIsReportModalOpen(true);
@@ -39,6 +42,7 @@ export default function Home() {
 
         const data = await res.json();
         if (res.ok) {
+          setStatus(data?.status)
           setQuestionList(data?.questions_data);
           console.log("Fetched questions:", data); // Debugging log
         } else {
@@ -55,6 +59,12 @@ export default function Home() {
       console.error("No question_bank_id found in local storage");
     }
   }, []);
+
+  useEffect(() => {
+    if (status === 401){
+      handlelogout()
+    }
+  }, [status, handlelogout])
   
 
   // report model submit function
@@ -62,11 +72,11 @@ export default function Home() {
     alert("Report submitted");
   };
 
-  const currentQuestion = questions.length > 0 ? questions[currentQuestionIndex] : null;
+  const currentQuestion = questionList.length > 0 ? questionList[currentQuestionIndex] : null;
 
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex < questionList.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -233,13 +243,13 @@ export default function Home() {
             isOpen={isModalOpen}
             onClose={handleModalClose}
             onQuestionSelect={handleQuestionSelect}
-            totalQuestions={questions.length}
+            totalQuestions={questionList.length}
           />
           {currentQuestion ? (
           <QuestionComponent
             questionData={currentQuestion}
             currentQuestionIndex={currentQuestionIndex}
-            totalQuestions={questions.length}
+            totalQuestions={questionList.length}
             onNext={handleNext}
             isHighlighterActive={isHighlighterActive}
             onPrevious={handlePrevious}

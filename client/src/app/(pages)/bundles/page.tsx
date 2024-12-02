@@ -38,7 +38,6 @@ export default function QuestionBankPage() {
       <Navbar />
       <Banner src={bundle} alt="Bundle Image" text="Bundle" />
       <Sidebar data={posts} type="Bundle"/>
-      <SeasonSale />
       <Footer />
       <Belowfooter />
       </div>

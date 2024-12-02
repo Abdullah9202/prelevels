@@ -22,11 +22,11 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl max-h-[80vh] flex flex-col">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl max-h-[80vh] overflow-auto flex flex-col">
         <h2 className="text-xl font-semibold mb-4">All Questions:</h2>
         
         {/* Scrollable Container */}
-        <div className="flex-grow overflow-y-auto grid grid-cols-10 gap-2">
+        <div className="flex-grow overflow-y-auto grid grid-cols-10 gap-2 h-96 ">
           {questionDots.map((questionNumber) => (
             <button
               key={questionNumber}

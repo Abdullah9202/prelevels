@@ -15,6 +15,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 
 load_dotenv()
@@ -27,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=61fzdfndd)secure-!^svmd)-django-1h&zlol!z*tg88e=prelevels^^ygj4&z)1(-ss=a'
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # (AZAK)
+DEBUG = config('DJANGO_DEBUG', cast=bool, default=False) # (AZAK)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # AZAK
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',') # AZAK
 
 # Application definition
 INSTALLED_APPS = [
@@ -96,11 +97,11 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default=5432, cast=int),
     }
 }
 
@@ -143,10 +144,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
 
 # Media Files (Question bank images, question files, etc.)
-MEDIA_URL = 'uploads/'
+MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 
 # Default primary key field type

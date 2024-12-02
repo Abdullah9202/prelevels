@@ -72,16 +72,16 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
         <h2 className="text-xl font-semibold mb-4">
           Question {currentQuestionIndex + 1}:
         </h2>
-        {isUrl(questionData.question) ? (
+        {isUrl(questionData?.question) ? (
           <Image src={questionData.question} width={300} height={300} alt="Question" className="w-full h-auto" />
         ) : (
-          <p className="text-lg">{questionData.question}</p>
+          <p className="text-lg">{questionData?.question}</p>
         )}
       </div>
 
       {/* Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {questionData.options.map((option) => (
+        {questionData?.options.map((option) => (
           <button
             key={option.id}
             className={`border border-gray-300 rounded-lg p-4 text-left hover:bg-gray-200 ${

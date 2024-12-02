@@ -13,10 +13,48 @@ export default function Home() {
   const [isHighlighterActive, setHighlighter] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [questionList, setQuestionList] = useState<any[]>([]);
+
 
   const handleReportModelOpen = () => setIsReportModalOpen(true);
   const handleReportModelClose = () => setIsReportModalOpen(false);
   const time = useTime((state) => state.time)
+
+
+  useEffect(() => {
+    const questionBankIdString = localStorage.getItem("question-bank-id");
+    const question_bank_id = questionBankIdString ? JSON.parse(questionBankIdString) : null;
+
+    console.log("question_bank_id:", question_bank_id); // Debugging log
+
+    const handleQuestions = async () => {
+      try {
+        const res = await fetch("/api/getQuestions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question_id: question_bank_id }),
+        });
+
+        console.log("Request sent to /api/getQuestions"); // Debugging log
+
+        const data = await res.json();
+        if (res.ok) {
+          setQuestionList(data?.questions_data);
+          console.log("Fetched questions:", data); // Debugging log
+        } else {
+          console.error("Failed to fetch questions");
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    if (question_bank_id) {
+      handleQuestions(); // Call the function after defining it
+    } else {
+      console.error("No question_bank_id found in local storage");
+    }
+  }, []);
   
 
   // report model submit function
@@ -24,7 +62,8 @@ export default function Home() {
     alert("Report submitted");
   };
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions.length > 0 ? questions[currentQuestionIndex] : null;
+
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -196,6 +235,7 @@ export default function Home() {
             onQuestionSelect={handleQuestionSelect}
             totalQuestions={questions.length}
           />
+          {currentQuestion ? (
           <QuestionComponent
             questionData={currentQuestion}
             currentQuestionIndex={currentQuestionIndex}
@@ -204,6 +244,10 @@ export default function Home() {
             isHighlighterActive={isHighlighterActive}
             onPrevious={handlePrevious}
           />
+        ) : (
+          <div>Loading questions...</div>
+        )}
+
         </main>
       </div>
     </div>

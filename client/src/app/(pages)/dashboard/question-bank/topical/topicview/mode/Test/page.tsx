@@ -13,6 +13,7 @@ export default function Home() {
   const [isHighlighterActive, setHighlighter] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [questions, setQuestions] = useState<any []>([])
 
   const handleReportModelOpen = () => setIsReportModalOpen(true);
   const handleReportModelClose = () => setIsReportModalOpen(false);
@@ -25,19 +26,39 @@ export default function Home() {
   };
 
   useEffect(() => {
-      const questionBankIdString = localStorage.getItem('question-bank-id');
-      const question_bank_id = questionBankIdString ? JSON.parse(questionBankIdString) : null;
-      const handleQuestions = async () => {
-        const res = await fetch('/api/getQuestions' , {
-          method:'POST',
-          headers:{'Content-Type' : 'application/json'},
-          body:JSON.stringify({question_id: question_bank_id})
-        })
-        handleQuestions()
+    const questionBankIdString = localStorage.getItem("question-bank-id");
+    const question_bank_id = questionBankIdString ? JSON.parse(questionBankIdString) : null;
+    console.log("question_bank_id:", question_bank_id); 
+    const handleQuestions = async () => {
+      try {
+        const res = await fetch("/api/getQuestions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question_id: question_bank_id }),
+        });
+        console.log("Request sent to /api/getQuestions");
+        
+        const data = await res.json();
+        if (res.ok) {
+          setQuestions(data?.questions_data);
+        } else {
+          console.error("Failed to fetch questions");
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
       }
-  }, [])
-
+    };
+    if(question_bank_id){
+      handleQuestions();
+    }else{
+      console.error('NO question bank id found in local storage')
+    }
+     // Call the function after defining it
+  }, []);
+    console.log('questions', questions)
   const currentQuestion = questions[currentQuestionIndex];
+
+  console.log("this is hte question bank")
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {

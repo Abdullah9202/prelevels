@@ -237,7 +237,7 @@ export default function Sidebar({ data, type }: SidebarProps) {
                 >
                   <div className="relative">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${item.image}` || TestImage}
+                      src={`http://127.0.0.1:8000${item.image}` || TestImage}
                       alt={item.title || "Image"}
                       className="w-full h-48 object-cover"
                       

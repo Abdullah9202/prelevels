@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const accessToken = await getToken();
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionbank/${data?.question_id}/all-questions/`,
+      `http://127.0.0.1:8000/api/questionbank/${data?.question_id}/all-questions/`,
       {
         method: "GET",
         headers: {

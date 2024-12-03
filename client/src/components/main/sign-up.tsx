@@ -28,7 +28,7 @@ export default function SignUp() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/customuser/register/`, // AZAK
+        'http://127.0.0.1:8000/api/customuser/register/', // AZAK
         {
           // AZAK
           method: "POST",

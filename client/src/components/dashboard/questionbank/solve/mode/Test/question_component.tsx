@@ -76,11 +76,15 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
 
       {/* Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {questionData?.options.map((option: { id: string; text: string }) => (
+        {questionData?.options.map((option: { id: string; text: string; option_text:string; is_correct:boolean }) => (
           <button
             key={option.id}
             className={`border border-gray-300 rounded-lg p-4 text-left hover:bg-gray-200 ${
-              selectedOption === option.id ? "bg-gray-300" : ""
+              selectedOption === option.id 
+              ? option.is_correct
+              ? "bg-green-400"
+              : "bg-red-400"
+              : ""
             }`}
             onClick={() => handleOptionSelect(option.id)}
           >
@@ -88,7 +92,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
               <Image src={option.text} width={300} height={300} alt={`Option ${option.id}`} className="w-full h-auto" />
             ) : (
               <>
-                <span className="font-bold mr-2">{option.id}</span>
+                <span className="font-bold mr-2">{option?.option_text}</span>
                 {option.text}
               </>
             )}
@@ -97,14 +101,10 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
       </div>
 
       {/* Explanation */}
-      {selectedOption && (
+      {selectedOption && questionData.options.find((option: { id: string; text: string; option_text: string; is_correct: boolean }) => option.id === selectedOption)?.is_correct && (
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4">Explanation:</h3>
-          <p>
-            {selectedOption === questionData.correctOption
-              ? questionData.explanation
-              : "Wrong answer. Please try again!"}
-          </p>
+          <p>{questionData?.why_correct_option.why_correct_option_text          }</p>
         </div>
       )}
 

@@ -1,10 +1,12 @@
 import { getToken } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import domainUrl from "@/environment/dynamicEnvironment";
+
 
 export async function GET(req:NextRequest){
     const accessToken = await getToken()
     try{
-        const res = await fetch('http://127.0.0.1:8000/api/cart/', {
+        const res = await fetch(`${domainUrl}/api/cart/`, {
             method: "GET",
             headers: {'Content_Type': 'application/json', Authorization: `Bearer ${accessToken}`}
         })

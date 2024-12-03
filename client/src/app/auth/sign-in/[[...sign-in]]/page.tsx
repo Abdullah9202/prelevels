@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../hooks/useUser";
 import { useSignIn } from "../../../../../hooks/userSignedIn";
 import { usePasswordStore } from "../../../../../hooks/usePassword";
+import domainUrl from "@/environment/dynamicEnvironment";
+
 
 export default function Page() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function Page() {
 
   // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
-  //   const res = await fetch("http://127.0.0.1:8000/api/customuser/login/", { // AZAK
+  //   const res = await fetch(`${domainUrl}/api/customuser/login/`, { // AZAK
   //     // AZAK
   //     method: "POST",
   //     headers: { "Content-Type": "application/json" },

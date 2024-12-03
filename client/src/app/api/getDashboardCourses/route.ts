@@ -1,12 +1,14 @@
 import { getToken } from "@/lib/auth";
 import { error } from "console";
 import {  NextResponse } from "next/server";
+import domainUrl from "@/environment/dynamicEnvironment";
+
 
 export async function GET() {
   const accessToken = await getToken();
   console.log(accessToken);
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/course/my-courses/", {
+    const res = await fetch(`${domainUrl}/api/course/my-courses/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

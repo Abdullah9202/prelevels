@@ -7,14 +7,15 @@ import Sidebar from "@/components/ui/sidebar";
 import BannerImage from "@/assets/Banner.png";
 import { useEffect, useState } from "react";
 import SeasonSale from "@/components/ui/timeline";
+import domainUrl from "@/environment/dynamicEnvironment";
 
 export default function QuestionBankPage() {
   const [posts, setPosts] = useState([]);
-
+  
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/questionbank/all/", { // AZAK
+        const res = await fetch(`${domainUrl}/questionbank/all/`, { // AZAK
           method: "GET",
         });
         const data = await res.json();

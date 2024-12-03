@@ -7,7 +7,6 @@ import {
   setReFreshToken,
   setToken,
 } from "@/lib/auth";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export async function POST(req: NextRequest) {
@@ -17,7 +16,7 @@ export async function POST(req: NextRequest) {
   console.log(authToken, refreshToken);
 
   const req_data = await req.json();
-  const res = await fetch(`${domainUrl}/api/auth/my-token/pair`, { // AZAK
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/my-token/pair`, { // AZAK
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -36,7 +35,7 @@ export async function POST(req: NextRequest) {
 
   // Fetch user data from the backend
   const resUserData = await fetch(
-    `${domainUrl}/api/customuser/login/`, // AZAK
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/customuser/login/`, // AZAK
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

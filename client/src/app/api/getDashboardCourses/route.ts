@@ -1,14 +1,13 @@
 import { getToken } from "@/lib/auth";
 import { error } from "console";
 import {  NextResponse } from "next/server";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export async function GET() {
   const accessToken = await getToken();
   console.log(accessToken);
   try {
-    const res = await fetch(`${domainUrl}/api/course/my-courses/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/course/my-courses/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

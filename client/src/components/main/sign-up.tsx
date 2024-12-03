@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export default function SignUp() {
@@ -29,7 +28,7 @@ export default function SignUp() {
 
     try {
       const res = await fetch(
-        `${domainUrl}/api/customuser/register/`, // AZAK
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/customuser/register/`, // AZAK
         {
           // AZAK
           method: "POST",

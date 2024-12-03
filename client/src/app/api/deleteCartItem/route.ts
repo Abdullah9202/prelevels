@@ -1,6 +1,5 @@
 import { getToken } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export async function POST(req: NextRequest) {
@@ -8,7 +7,7 @@ export async function POST(req: NextRequest) {
   const accessToken = await getToken();
   try {
     const res = await fetch(
-      `${domainUrl}/api/cart/${data?.id}/delete/`, // AZAK
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart/${data?.id}/delete/`, // AZAK
       {
         method: "DELETE",
         headers: {

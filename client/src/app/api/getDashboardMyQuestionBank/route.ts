@@ -1,11 +1,10 @@
 import { getToken } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 export async function GET(req: NextRequest) {
   const accessToken = await getToken();
   try {
-    const res = await fetch(`${domainUrl}/api/questionbank/my-questionbanks/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionbank/my-questionbanks/`, {
       // AZAk
       method: "GET",
       headers: {

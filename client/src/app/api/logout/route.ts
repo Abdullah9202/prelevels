@@ -2,11 +2,10 @@
 
 import { deleteTokens } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export async function POST(req: NextRequest) {
-  const res = await fetch(`${domainUrl}/customuser/logout/`, { // AZAK
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/customuser/logout/`, { // AZAK
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

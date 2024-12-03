@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { json } from "stream/consumers";
-import domainUrl from "@/environment/dynamicEnvironment";
 
 
 export default function Testing() {
@@ -22,7 +21,7 @@ export default function Testing() {
   const handleClick = async () => {
     try {
       const response = await fetch(
-        `${domainUrl}/api/student/register/`, // AZAK
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/register/`, // AZAK
         {
           // Replace with your Python backend URL
           method: "POST",

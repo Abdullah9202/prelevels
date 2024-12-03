@@ -23,10 +23,16 @@ const nextConfig = {
         pathname: '/**'
       },
       {
-        protocol: 'http',
+        protocol: 'http', // AZAK
         hostname: '127.0.0.1',
         port: '8000', // Port your backend server runs on
         pathname: '/uploads/images/**', // Adjust this to match your image path
+      },
+      {
+        protocol: 'http', // AZAK
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/uploads/images/**',
       }
     ],
   },

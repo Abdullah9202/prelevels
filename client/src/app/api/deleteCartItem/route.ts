@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const accessToken = await getToken();
   try {
     const res = await fetch(
-      `http://127.0.0.1:8000/api/cart/${data?.id}/delete/`, // AZAK
+      `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${data?.id}/delete/`, // AZAK
       {
         method: "DELETE",
         headers: {

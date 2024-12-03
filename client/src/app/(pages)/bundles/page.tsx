@@ -8,12 +8,13 @@ import bundle from "@/assets/Banner.png";
 import SeasonSale from "@/components/ui/timeline";
 import { useEffect, useState } from "react";
 
+
 export default function QuestionBankPage() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/bundle/all/', { // Use environment variable for the backend URL
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bundle/all/`, { // Use environment variable for the backend URL
           method: "GET",
         });
         const data = await res.json();

@@ -6,11 +6,11 @@ import Image from "next/image";
 import { FaBook, FaInfoCircle } from "react-icons/fa";
 import useHandleLogout from "@/lib/logout";
 
+
 interface SidebarProps {
   data: any;
   type: string
 }
-
 
 
 export default function Sidebar({ data, type }: SidebarProps) {
@@ -237,7 +237,7 @@ export default function Sidebar({ data, type }: SidebarProps) {
                 >
                   <div className="relative">
                     <Image
-                      src={`http://127.0.0.1:8000${item.image}` || TestImage}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.image}` || TestImage} // AZAK
                       alt={item.title || "Image"}
                       className="w-full h-48 object-cover"
                       

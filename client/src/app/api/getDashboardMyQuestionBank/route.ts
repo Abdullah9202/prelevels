@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const accessToken = await getToken();
   try {
-    const res = await fetch('http://localhost:8000/api/questionbank/my-questionbanks/', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questionbank/my-questionbanks/`, {
       // AZAk
       method: "GET",
       headers: {

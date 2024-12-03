@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   console.log(authToken, refreshToken);
 
   const req_data = await req.json();
-  const res = await fetch('http://127.0.0.1:8000/api/auth/my-token/pair', { // AZAK
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/my-token/pair`, { // AZAK
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
   // Fetch user data from the backend
   const resUserData = await fetch(
-    'http://127.0.0.1:8000/api/customuser/login/', // AZAK
+    `${process.env.NEXT_PUBLIC_API_URL}/api/customuser/login/`, // AZAK
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const accessToken = await getToken();
   try {
     const res = await fetch(
-      `http://localhost:8000/api/questionbank/${data?.question_id}/all-questions/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/questionbank/${data?.question_id}/all-questions/`,
       {
         method: "GET",
         headers: {

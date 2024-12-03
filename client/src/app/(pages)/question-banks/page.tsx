@@ -14,7 +14,7 @@ export default function QuestionBankPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch('http://localhost:8000/api/questionbank/all/', { // AZAK
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questionbank/all/`, { // AZAK
           method: "GET",
         });
         const data = await res.json();

@@ -3,8 +3,8 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="py-20 px-4 lg:px-14">
-      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20">
+    <footer className="mt-10 py-20 px-4 lg:px-14 bg-[#D9D9D9]">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20">
         {/* Logo Section */}
         <div>
           <h2 className="text-red-500 text-xl font-bold mb-4">Prelevels</h2>

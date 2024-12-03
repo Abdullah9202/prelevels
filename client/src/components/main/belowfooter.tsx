@@ -2,9 +2,9 @@ import React from "react";
 
 export default function Belowfooter() {
   return (
-    <section className="px-14 pb-4">
+    <section className="px-24 pb-7 bg-[#D9D9D9]">
       {/* Horizontal Line */}
-      <hr className="border-gray-300 w-full mb-6" />
+      <hr className="border-gray-400 w-full mb-6" />
 
       {/* Footer Content */}
       <div className="flex items-center justify-between">
@@ -12,8 +12,8 @@ export default function Belowfooter() {
         <div className="flex items-center space-x-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="20"
+            height="20"
             fill="black"
             className="bi bi-c-circle-fill"
             viewBox="0 0 16 16"

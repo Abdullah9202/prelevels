@@ -18,7 +18,13 @@ from datetime import timedelta
 from decouple import config
 
 
-load_dotenv()
+# Determining the .env file to load according to the environments
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'local') # AZAK
+
+if ENVIRONMENT == 'production':
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / 'env.production')
+else:
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / 'env.local')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

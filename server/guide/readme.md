@@ -38,8 +38,23 @@ CREATE USER <username> WITH PASSWORD '<password>';
 Grant all privileges on the new database to the created user:
 
 ```sql
+ALTER DATABASE <database_name> OWNER TO <username>;
 GRANT ALL PRIVILEGES ON DATABASE <database_name> TO <username>;
+\c prelevels
+GRANT ALL PRIVILEGES ON SCHEMA public TO <username>;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <username>;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO <username>;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO <username>;
 ALTER SCHEMA public OWNER TO your_database_user;
+```
+
+### Optional
+
+If you want `<username>` to have superuser capabilities (not recommended unless necessary):
+
+```sql
+ALTER ROLE dbuser WITH SUPERUSER;
 ```
 
 ## Step 6: Exit PostgreSQL

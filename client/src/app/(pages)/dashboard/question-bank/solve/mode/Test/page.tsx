@@ -5,8 +5,9 @@ import useHandleLogout from "@/lib/logout";
 import { useTime } from "../../../../../../../../hooks/useTime";
 import { questions } from "@/components/dashboard/questionbank/solve/mode/Test/mockQuestion"; // Import dummy data
 import QuestionComponent from "@/components/dashboard/questionbank/solve/mode/Test/question_component"; // Import the QuestionComponent
-import QuestionModal from "@/components/dashboard/questionbank/solve/mode/Test/QuestionModel";
+import QuestionModel from "@/components/dashboard/questionbank/topical/topicView/mode/Test/QuestionModel";
 import ReportModel from "@/components/dashboard/questionbank/solve/mode/Test/report_model";
+
 
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [questionList, setQuestionList] = useState<any[]>([]);
   const [status , setStatus] = useState<number>(0)
+  const [resetState, setResetState] = useState<boolean>(false);
 
 
   const handleReportModelOpen = () => setIsReportModalOpen(true);
@@ -65,6 +67,12 @@ export default function Home() {
       handlelogout()
     }
   }, [status, handlelogout])
+
+  useEffect(() => {
+    if (resetState) {
+      setResetState(false); // Reset the resetState back to false after it has been set to true
+    }
+  }, [resetState]);
   
 
   // report model submit function
@@ -78,15 +86,17 @@ export default function Home() {
   const handleNext = () => {
     if (currentQuestionIndex < questionList?.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setResetState(true)
     }
   };
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
+    
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false);
+    
   };
 
   useEffect(() => {
@@ -104,22 +114,25 @@ export default function Home() {
     return () => clearInterval(intervalId)
   }, [time])
 
-  
+  const handleQuestionSelect = (index: number) => {
+    setCurrentQuestionIndex(index);
+    setIsModalOpen(false);
+    setResetState(true)
+  };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setResetState(true)
     }
   };
 
   const ToggleHighlighter = () => {
     setHighlighter(!isHighlighterActive);
+    
   };
 
-  const handleQuestionSelect = (index: number) => {
-    setCurrentQuestionIndex(index);
-    setIsModalOpen(false);
-  };
+
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -239,7 +252,7 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <QuestionModal
+          <QuestionModel
             isOpen={isModalOpen}
             onClose={handleModalClose}
             onQuestionSelect={handleQuestionSelect}
@@ -253,6 +266,7 @@ export default function Home() {
             onNext={handleNext}
             isHighlighterActive={isHighlighterActive}
             onPrevious={handlePrevious}
+            resetState={resetState}
           />
         ) : (
           <div>Loading questions...</div>

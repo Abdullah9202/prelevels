@@ -39,6 +39,7 @@ Grant all privileges on the new database to the created user:
 
 ```sql
 GRANT ALL PRIVILEGES ON DATABASE <database_name> TO <username>;
+ALTER SCHEMA public OWNER TO your_database_user;
 ```
 
 ## Step 6: Exit PostgreSQL

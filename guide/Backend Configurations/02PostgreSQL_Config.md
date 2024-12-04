@@ -93,6 +93,20 @@ For a new database, it will show `No relations found`, which is expected.
 
 ---
 
+## Step 8: Updating .env in backend
+
+```env
+DB_NAME="prelevels"
+DB_USER="prelevels_user"
+DB_PASSWORD="yourpassword"
+DB_HOST="localhost"
+DB_PORT="5432"
+
+DJANGO_SECRET_KEY="your-django-secret-key"
+DJANGO_DEBUG=False
+DJANGO_ALLOWED_HOSTS=yourdomain.com
+```
+
 ## Deleting the database
 
 ```bash

@@ -24,3 +24,6 @@ django-ratelimit
 django-filter
 django-ninja-jwt[crypto]
 django-phonenumber-field[phonenumbers]
+
+# 3rd Party dependencies
+gunicorn

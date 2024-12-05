@@ -7,6 +7,7 @@ import { questions } from "@/components/dashboard/questionbank/solve/mode/Test/m
 import QuestionComponent from "@/components/dashboard/questionbank/solve/mode/Test/question_component"; // Import the QuestionComponent
 import QuestionModel from "@/components/dashboard/questionbank/topical/topicView/mode/Test/QuestionModel";
 import ReportModel from "@/components/dashboard/questionbank/solve/mode/Test/report_model";
+import { useRouter } from "next/navigation";
 
 
 
@@ -19,6 +20,7 @@ export default function Home() {
   const [questionList, setQuestionList] = useState<any[]>([]);
   const [status , setStatus] = useState<number>(0)
   const [resetState, setResetState] = useState<boolean>(false);
+  const router = useRouter()
 
 
   const handleReportModelOpen = () => setIsReportModalOpen(true);
@@ -96,7 +98,7 @@ export default function Home() {
   };
 
   const handleModalClose = () => {
-    
+    setIsModalOpen(false)
   };
 
   useEffect(() => {
@@ -149,7 +151,7 @@ export default function Home() {
             MDCAT &gt; Sindh MDCAT 2023 &gt; Biology &gt; Genetics
           </div>
           <div className="text-gray-100 text-sm font-bold bg-red-500 px-4 py-2 rounded-2xl">
-            <button   >Exit</button>
+            <button onClick={()=> router.push('/dashboard/question-bank')}  >Exit</button>
           </div>
         </div>
       </header>

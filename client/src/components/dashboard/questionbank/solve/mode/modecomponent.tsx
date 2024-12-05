@@ -65,12 +65,12 @@ export default function ModeComponent() {
                 <option>60 mins</option>
               </select>
             </div>
-            <div className="text-center">
+            <div className="text-center mt-8">
               <button
                 onClick={() =>
                   router.push("/dashboard/question-bank/solve/mode/Test")
                 }
-                className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+                className="w-full bg-red-600 text-white py-2  px-4 rounded-lg hover:bg-red-700"
               >
                 Start Solving
               </button>

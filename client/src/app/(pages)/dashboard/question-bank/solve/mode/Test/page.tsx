@@ -20,6 +20,9 @@ export default function Home() {
   const [questionList, setQuestionList] = useState<any[]>([]);
   const [status , setStatus] = useState<number>(0)
   const [resetState, setResetState] = useState<boolean>(false);
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
+  const [questionBankId, setQuestionBankId] = useState<string | null>(null);
+  
   const router = useRouter()
 
 
@@ -31,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     const questionBankIdString = localStorage.getItem("question-bank-id");
     const question_bank_id = questionBankIdString ? JSON.parse(questionBankIdString) : null;
-
+    setQuestionBankId(question_bank_id);
     console.log("question_bank_id:", question_bank_id); // Debugging log
 
     const handleQuestions = async () => {
@@ -73,14 +76,33 @@ export default function Home() {
   useEffect(() => {
     if (resetState) {
       setResetState(false); // Reset the resetState back to false after it has been set to true
+      
     }
   }, [resetState]);
-  
 
+  useEffect(() => {
+    if (questionList.length > 0) {
+      setCurrentQuestionId(questionList[currentQuestionIndex]?.id);
+    }
+  }, [currentQuestionIndex, questionList]);
+  
+  console.log('This is the question id', currentQuestionId)
   // report model submit function
   const handleReportModelSubmit = () => {
     alert("Report submitted");
   };
+  
+  
+  const HandleSaveQuestion = async () => {
+    const res = await fetch('/api/saveQuestion', {
+      method:"POST",
+      headers:{'Content-Type': 'application/json'},
+      body: JSON.stringify({question_bank_id: questionBankId, question_id: currentQuestionId })
+    })
+    if(res.ok){
+      alert("Question Has been Saved")
+    }
+  }
 
   const currentQuestion = questionList?.length > 0 ? questionList[currentQuestionIndex] : null;
 
@@ -239,7 +261,7 @@ export default function Home() {
             Countdown: { time !==null ? formatTime(time) : 30}
             <div className="flex space-x-2 items-center">
               <h1 className="text-gray-700">Save</h1>
-              <button>
+              <button onClick={()=>HandleSaveQuestion()} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -269,6 +291,7 @@ export default function Home() {
             isHighlighterActive={isHighlighterActive}
             onPrevious={handlePrevious}
             resetState={resetState}
+            
           />
         ) : (
           <div>Loading questions...</div>

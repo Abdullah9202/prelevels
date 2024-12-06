@@ -28,6 +28,7 @@ interface QuestionComponentProps {
   onPrevious: () => void;
   isHighlighterActive: boolean;
   resetState: boolean
+  
 }
 
 const QuestionComponent: React.FC<QuestionComponentProps> = ({
@@ -37,19 +38,25 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
   onNext,
   onPrevious,
   isHighlighterActive,
-  resetState
+  resetState,
+  
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showAnswers, setShowAnswers] = useState<boolean>(false);
+  
 
   useEffect(() => {
     setSelectedOption(null);
     setShowAnswers(false);
   }, [resetState])
-  console.log('This is the reset state in the question component', resetState)
+
+  
+  
+  
   const handleOptionSelect = (optionId: string) => {
     setSelectedOption(optionId);
     setShowAnswers(true);
+    
   };
 
 
@@ -67,6 +74,7 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
     setShowAnswers(false);
       onNext();
   };
+
 
   return (
     <div className="max-w-4xl mx-auto">

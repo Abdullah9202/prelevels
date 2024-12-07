@@ -3,9 +3,24 @@ import { useUser } from "../../../hooks/useUser";
 import { FaCalendarAlt, FaCheckSquare, FaClock } from "react-icons/fa";
 import Progress from "./progress";
 import OverallProgress from "./radarComponenet";
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 const Statistics = () => {
   const user = useUser((state) => state.user);
@@ -42,7 +57,9 @@ const Statistics = () => {
           </div>
           <div className="bg-[#D9D9D9] border-2 border-white shadow-md rounded-lg p-4 flex justify-center items-center">
             <div className="w-full">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 text-center">Overall Progress</h2>
+              <h2 className="text-lg font-bold text-gray-700 mb-4 text-center">
+                Overall Progress
+              </h2>
               <OverallProgress />
             </div>
           </div>

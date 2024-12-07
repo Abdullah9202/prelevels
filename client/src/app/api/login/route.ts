@@ -8,7 +8,6 @@ import {
   setToken,
 } from "@/lib/auth";
 
-
 export async function POST(req: NextRequest) {
   const authToken = await getToken();
   const refreshToken = await getRefreshToken();
@@ -16,14 +15,18 @@ export async function POST(req: NextRequest) {
   console.log(authToken, refreshToken);
 
   const req_data = await req.json();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/my-token/pair`, { // AZAK
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      phone_number: req_data.phone_number,
-      password: req_data.password,
-    }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/my-token/pair`,
+    {
+      // AZAK
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone_number: req_data.phone_number,
+        password: req_data.password,
+      }),
+    }
+  );
   const token_res = await res.json();
   const { access, refresh } = token_res;
   if (res.ok) {

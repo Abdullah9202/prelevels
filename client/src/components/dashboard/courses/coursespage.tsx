@@ -47,11 +47,14 @@ export default function CoursePage() {
           {coursesList.map((course) => (
             <CourseCard
               key={course?.id}
-              title={course?.title}
-              status={course?.status}
-              validation={course?.validation}
+              title={course?.name}
+              status="by Prelevels"
+              validation={course?.validity}
               btnText="Join Meeting"
               Resources="Resources"
+              imageUrl={course?.image}
+              whatsappLink={course?.whatsapp_link}
+              resourceLink={course?.resource_link}
             />
           ))}
         </div>
@@ -66,16 +69,22 @@ const CourseCard = ({
   btnText,
   validation,
   Resources,
+  imageUrl,
+  whatsappLink,
+  resourceLink,
 }: {
   title: string;
   status: string;
   btnText: string;
   validation: string;
   Resources: string;
+  imageUrl: string;
+  whatsappLink: string;
+  resourceLink: string;
 }) => (
   <div className="p-4 bg-white shadow-md rounded-lg">
     <Image
-      src="https://via.placeholder.com/150"
+      src={imageUrl}
       alt="Course"
       className="w-full h-32 object-cover rounded-md"
       width={400}
@@ -85,14 +94,18 @@ const CourseCard = ({
     <p className="text-sm mt-4 text-gray-500">{status}</p>
     <p className="text-sm text-gray-500">{validation}</p>
     <div className="flex flex-col justify-center w-full">
-      <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-2xl flex items-center justify-center space-x-2">
-        <FaWhatsapp />
-        <span>{btnText}</span>
-      </button>
-      <button className="mt-4 bg-[#F2b301] text-white px-4 py-2 rounded-2xl flex items-center justify-center space-x-2">
-        <FaGoogleDrive />
-        <span>{Resources}</span>
-      </button>
+      <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+        <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-2xl flex items-center justify-center space-x-2">
+          <FaWhatsapp />
+          <span>{btnText}</span>
+        </button>
+      </a>
+      <a href={resourceLink} target="_blank" rel="noopener noreferrer">
+        <button className="mt-4 bg-[#F2b301] text-white px-4 py-2 rounded-2xl flex items-center justify-center space-x-2">
+          <FaGoogleDrive />
+          <span>{Resources}</span>
+        </button>
+      </a>
     </div>
   </div>
 );

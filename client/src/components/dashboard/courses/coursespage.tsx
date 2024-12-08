@@ -48,7 +48,7 @@ export default function CoursePage() {
             <CourseCard
               key={course?.id}
               title={course?.name}
-              status="By Prelevels"
+              status="by Prelevels"
               validation={course?.validity}
               btnText="Join Meeting"
               Resources="Resources"
@@ -91,17 +91,17 @@ const CourseCard = ({
       height={400}
     />
     <h3 className="mt-2 font-bold">{title}</h3>
-    <p className="text-sm mt-4 text-gray-500"><span className="font-bold text-base space-x-2">Validity </span>{status}</p>
-    <p className="text-sm text-gray-500">{validation}</p>
+    <p className="text-sm mt-4 text-gray-500">{status}</p>
+    <p className="text-sm text-gray-500"><span className="font-bold text-base space-x-2 text-red-500">Validity </span>{validation}</p>
     <div className="flex flex-col items-center justify-center w-full">
-      <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-        <button className="mt-4 bg-green-500 text-white px-6 py-2 rounded-2xl flex items-center justify-center space-x-2">
+      <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full">
+        <button className="mt-4 bg-green-500 text-white px-6 py-2 rounded-2xl flex items-center justify-center space-x-2 w-full">
           <FaWhatsapp />
           <span>{btnText}</span>
         </button>
       </a>
-      <a href={resourceLink} target="_blank" rel="noopener noreferrer">
-        <button className="mt-4 bg-[#F2b301] text-white px-6 py-2 rounded-2xl flex items-center justify-center space-x-2">
+      <a href={resourceLink} target="_blank" rel="noopener noreferrer" className="w-full">
+        <button className="mt-4 bg-[#F2b301] text-white px-6 py-2 rounded-2xl flex items-center justify-center space-x-2 w-full">
           <FaGoogleDrive />
           <span>{Resources}</span>
         </button>

@@ -52,7 +52,7 @@ export default function CoursePage() {
               validation={course?.validity}
               btnText="Join Meeting"
               Resources="Resources"
-              imageUrl={course?.image}
+              imageUrl={`${process.env.NEXT_PUBLIC_API_URL}${course?.image}`}
               whatsappLink={course?.whatsapp_link}
               resourceLink={course?.resource_link}
             />
@@ -93,7 +93,7 @@ const CourseCard = ({
     <h3 className="mt-2 font-bold">{title}</h3>
     <p className="text-sm mt-4 text-gray-500">{status}</p>
     <p className="text-sm text-gray-500">{validation}</p>
-    <div className="flex flex-col justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full">
       <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
         <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-2xl flex items-center justify-center space-x-2">
           <FaWhatsapp />

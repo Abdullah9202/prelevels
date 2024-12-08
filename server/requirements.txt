@@ -13,6 +13,7 @@ requests
 pyjwt
 python3-saml
 python-decouple
+mkdocs-material
 
 # Django dependencies
 django

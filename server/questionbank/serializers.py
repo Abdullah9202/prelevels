@@ -1,3 +1,4 @@
+# REST imports
 from rest_framework import serializers
 # My Files
 from .models import (
@@ -77,19 +78,18 @@ class SaveQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaveQuestion
         fields = [
-            'id', 'saved_at', 'user', 'question_bank', 'question'
+            'id', 'saved_at', 'user', 'question'
         ]
 
 
 # Get Saved Question Serializer
 class GetSavedQuestionSerializer(serializers.ModelSerializer):
-    question_bank = QuestionBankSerializer_Short(read_only=True) # Using Short Question Bank Serializer
     question = QuestionSerializer(read_only=True)
 
     class Meta:
         model = SaveQuestion
         fields = [
-            'id', 'saved_at', 'user', 'question_bank', 'question'
+            'id', 'saved_at', 'user', 'question'
         ]
 
 

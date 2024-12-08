@@ -116,7 +116,6 @@ class SaveQuestionSchema(Schema):
     id: UUID
     saved_at: datetime
     user: UUID
-    question_bank: UUID
     question: UUID
 
 

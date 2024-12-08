@@ -33,7 +33,13 @@ const nextConfig = {
         hostname: 'localhost',
         port: '8000',
         pathname: '/uploads/images/**',
-      }
+      },
+      {
+        protocol: 'https', // AZAK
+        hostname: 'www.prelevels.com',
+        port: '', // Port your backend server runs on
+        pathname: '/uploads/images/**', // Adjust this to match your image path
+      },
     ],
   },
 };

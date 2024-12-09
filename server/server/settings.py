@@ -213,7 +213,6 @@ CORS_ALLOWED_ORIGINS = [ # AZAK
     "http://localhost:3000",
     "http://localhost:3001",
     "https://prelevels.com",
-    "https://www.prelevels.com",
 ]
 
 CORS_ALLOW_METHODS = (
@@ -240,7 +239,6 @@ CSRF_TRUSTED_ORIGINS = [ # AZAK
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
     "https://prelevels.com",
-    "https://www.prelevels.com",
 ]
 
 ######## Custom settings ######## 

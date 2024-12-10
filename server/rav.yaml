@@ -13,13 +13,15 @@ scripts:
   clearsessions:
     python manage.py clearsessions
   
-  ###################### MAC OS ###################### 
+  ###################### Linux & MAC OS ###################### 
   m_server:
     python3 manage.py runserver
   m_makemigrations:
     python3 manage.py makemigrations
   m_migrate:
     python3 manage.py migrate
+  m_collectstatic:
+    python3 manage.py collectstatic
   m_shell:
     python3 manage.py shell
   m_createsuperuser:

@@ -37,7 +37,7 @@ ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',') # AZAK
 # Application definition
 INSTALLED_APPS = [
     # 3rd party apps
-    # 'corsheaders',
+    'corsheaders',
     # Djago Apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -208,42 +208,42 @@ NINJA_JWT = {
 
 
 # CORS Settings
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOWED_ORIGINS = [ # AZAK
-#     "https://prelevels.com",
-#     "https://www.prelevels.com",
-#     "http://127.0.0.1:3000",
-#     "http://localhost:3000",
-#     "http://localhost:3001",
-# ]
+CORS_ALLOWED_ORIGINS = [ # AZAK
+    "https://prelevels.com",
+    "https://www.prelevels.com",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "http://localhost:3001",
+]
 
-# CORS_ALLOW_METHODS = (
-#     "DELETE",
-#     "GET",
-#     "OPTIONS",
-#     "PATCH",
-#     "POST",
-#     "PUT",
-# )
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 
-# CORS_ALLOW_HEADERS = (
-#     "accept",
-#     "authorization",
-#     "content-type",
-#     "user-agent",
-#     "x-csrftoken",
-#     "x-requested-with",
-# )
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 
 # CSRF Settings
-# CSRF_TRUSTED_ORIGINS = [ # AZAK
-#     "https://prelevels.com",
-#     "https://www.prelevels.com",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-#     "http://127.0.0.1:3001",
-# ]
+CSRF_TRUSTED_ORIGINS = [ # AZAK
+    "https://prelevels.com",
+    "https://www.prelevels.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+]
 
 ######## Custom settings ######## 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

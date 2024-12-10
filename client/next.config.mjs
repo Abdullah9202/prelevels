@@ -25,8 +25,8 @@ const nextConfig = {
       {
         protocol: 'http', // AZAK
         hostname: '127.0.0.1',
-        port: '8000', // Port your backend server runs on
-        pathname: '/uploads/images/**', // Adjust this to match your image path
+        port: '8000',
+        pathname: '/uploads/images/**',
       },
       {
         protocol: 'http', // AZAK
@@ -36,9 +36,15 @@ const nextConfig = {
       },
       {
         protocol: 'https', // AZAK
+        hostname: 'prelevels.com',
+        port: '',
+        pathname: '/uploads/images/**',
+      },
+      {
+        protocol: 'https', // AZAK
         hostname: 'www.prelevels.com',
-        port: '', // Port your backend server runs on
-        pathname: '/uploads/images/**', // Adjust this to match your image path
+        port: '',
+        pathname: '/uploads/images/**',
       },
     ],
   },

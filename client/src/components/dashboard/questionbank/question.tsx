@@ -55,7 +55,7 @@ export default function Question() {
 
   useEffect(() => {
     const getDashboardCourses = async () => {
-      const res = await fetch("/api/getDashboardQuestion_bank", {
+      const res = await fetch("/backend/api/getDashboardQuestion_bank", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

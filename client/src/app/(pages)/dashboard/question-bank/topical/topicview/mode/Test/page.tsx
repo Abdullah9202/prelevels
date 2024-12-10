@@ -33,7 +33,7 @@ export default function Home() {
 
     const handleQuestions = async () => {
       try {
-        const res = await fetch("/api/getQuestions", {
+        const res = await fetch("/backend/api/getQuestions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question_id: question_bank_id }),
@@ -96,7 +96,7 @@ export default function Home() {
 
   const handleSave = async () => {
     try {
-      const res = await fetch("/api/saveQuestion", {
+      const res = await fetch("/backend/api/saveQuestion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question_id: currentQuestionId, question_bank_id: questionBankId }),

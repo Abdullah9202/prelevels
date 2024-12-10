@@ -8,7 +8,7 @@ const useHandleLogout = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/logout", {
+      const res = await fetch("/backend/api/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

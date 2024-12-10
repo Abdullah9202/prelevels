@@ -27,7 +27,7 @@ const Courses = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await fetch("/api/getDashboardCourses/", {
+        const res = await fetch("/backend/api/getDashboardCourses/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

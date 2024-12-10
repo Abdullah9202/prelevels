@@ -11,7 +11,7 @@ const CartComponent = () => {
   useEffect(() => {
     const getCartData = async () => {
       try {
-        const res = await fetch("/api/getCartData", {
+        const res = await fetch("/backend/api/getCartData", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const CartComponent = () => {
 
   const deleteCartItem = async (itemId: number) => {
     try {
-      const res = await fetch(`/api/deleteCartItem`, {
+      const res = await fetch(`/backend/api/deleteCartItem`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

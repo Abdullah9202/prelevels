@@ -14,7 +14,7 @@ export default function CoursePage() {
 
   useEffect(() => {
     const getDashboardCourses = async () => {
-      const res = await fetch("/api/getDashboardCourses2", {
+      const res = await fetch("/backend/api/getDashboardCourses2", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

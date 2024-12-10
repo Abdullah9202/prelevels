@@ -17,7 +17,7 @@ export default function SolveQuestion() {
   useEffect(() => {
     const getYearlyData = async () => {
       try {
-        const res = await fetch('/api/getDashboardMyQuestionBank', {
+        const res = await fetch('/backend/api/getDashboardMyQuestionBank', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });

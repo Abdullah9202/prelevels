@@ -77,7 +77,7 @@ export default function SignUp() {
                   name="first_name"
                   id="first_name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="first name"
+                  placeholder="First name"
                   onChange={handleChange}
                   required
                 />
@@ -91,7 +91,7 @@ export default function SignUp() {
                 </label>
                 <input
                   type="name"
-                  name="last_name"
+                  name="Last_name"
                   id="last_name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   onChange={handleChange}
@@ -113,7 +113,7 @@ export default function SignUp() {
                   id="phone_number"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   onChange={handleChange}
-                  placeholder="phone number"
+                  placeholder="+92xxxxxxxxxx"
                   required
                 />
               </div>
@@ -131,7 +131,7 @@ export default function SignUp() {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   onChange={handleChange}
-                  placeholder="name@company.com"
+                  placeholder="youremail@gmail.com"
                   required
                 />
               </div>
@@ -147,7 +147,7 @@ export default function SignUp() {
                   name="password"
                   id="password"
                   onChange={handleChange}
-                  placeholder="••••••••"
+                  placeholder="•••••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
@@ -163,7 +163,7 @@ export default function SignUp() {
                   type="password"
                   name="confirm-password"
                   id="confirm-password"
-                  placeholder="••••••••"
+                  placeholder="•••••••••••"
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required

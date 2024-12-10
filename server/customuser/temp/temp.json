@@ -2,96 +2,96 @@
     {
         "first_name": "Ali",
         "last_name": "Khan",
-        "username": "alikhan",
         "email": "alikhan123@gmail.com",
+        "username": "alikhan",
         "phone_number": "+923001234567",
         "password": "Pass@12345!"
     },
     {
         "first_name": "Ayesha",
         "last_name": "Ahmed",
-        "username": "ayeshaahmed",
         "email": "ayeshaahmed123@gmail.com",
+        "username": "ayeshaahmed",
         "phone_number": "+923002345678",
         "password": "Secure#78901!"
     },
     {
         "first_name": "Usman",
         "last_name": "Sheikh",
-        "username": "usmansheikh",
         "email": "usmansheikh123@gmail.com",
+        "username": "usmansheikh",
         "phone_number": "+923003456789",
         "password": "Strong&45678!"
     },
     {
         "first_name": "Sara",
         "last_name": "Javed",
-        "username": "sarajaved",
         "email": "sarajaved123@gmail.com",
+        "username": "sarajaved",
         "phone_number": "+923004567890",
         "password": "MyPass#101010!"
     },
     {
         "first_name": "Bilal",
         "last_name": "Malik",
-        "username": "bilalmalik",
         "email": "bilalmalik123@gmail.com",
+        "username": "bilalmalik",
         "phone_number": "+923005678901",
         "password": "Password@30303!"
     },
     {
         "first_name": "Mariam",
         "last_name": "Zafar",
-        "username": "mariamzafar",
         "email": "mariamzafar123@gmail.com",
+        "username": "mariamzafar",
         "phone_number": "+923006789012",
         "password": "Secure*202020!"
     },
     {
         "first_name": "Hamza",
         "last_name": "Ali",
-        "username": "hamzaali",
         "email": "hamzaali123@gmail.com",
+        "username": "hamzaali",
         "phone_number": "+923007890123",
         "password": "Pass&10101010!"
     },
     {
         "first_name": "Nida",
         "last_name": "Shaikh",
-        "username": "nidashaikh",
         "email": "nidashaikh123@gmail.com",
+        "username": "nidashaikh",
         "phone_number": "+923008901234",
         "password": "MySecure#80808!"
     },
     {
         "first_name": "Zain",
         "last_name": "Raza",
-        "username": "zainraza",
         "email": "zainraza123@gmail.com",
+        "username": "zainraza",
         "phone_number": "+923009012345",
         "password": "Zain@123123!"
     },
     {
         "first_name": "Rabia",
         "last_name": "Farooq",
-        "username": "rabiafarooq",
         "email": "rabiafarooq123@gmail.com",
+        "username": "rabiafarooq",
         "phone_number": "+923000123456",
         "password": "Rabia#789789!"
     },
     {
         "first_name": "Tariq",
         "last_name": "Hassan",
-        "username": "tariqhassan",
         "email": "tariqhassan123@gmail.com",
+        "username": "tariqhassan",
         "phone_number": "+923000234567",
         "password": "Tariq*456456!"
     },
     {
         "first_name": "Saba",
         "last_name": "Qureshi",
-        "username": "sabaqureshi",
         "email": "sabaqureshi123@gmail.com",
+        "username": "sabaqureshi",
         "phone_number": "+923000345678",
         "password": "Saba&202020!"
     }

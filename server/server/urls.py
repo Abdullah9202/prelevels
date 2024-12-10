@@ -29,17 +29,17 @@ from custom_auth.api import auth_api
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Custom User API URLs
-    path('api/customuser/', cuser_api.api.urls),
+    path('backend/api/customuser/', cuser_api.api.urls),
     # Question Bank API URLs
-    path('api/questionbank/', qb_api.urls),
+    path('backend/api/questionbank/', qb_api.urls),
     # Course API URLs
-    path('api/course/', course_api.urls),
+    path('backend/api/course/', course_api.urls),
     # Bundle API URLs
-    path('api/bundle/', bundle_api.urls),
+    path('backend/api/bundle/', bundle_api.urls),
     # Cart API URLs
-    path('api/cart/', cart_api.urls),
+    path('backend/api/cart/', cart_api.urls),
     # Auth API URLs
-    path('api/auth/', auth_api.urls),
+    path('backend/api/auth/', auth_api.urls),
 ]
 
 if settings.DEBUG: # AZAK

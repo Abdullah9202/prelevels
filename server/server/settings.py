@@ -36,6 +36,9 @@ ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',') # AZAK
 
 # Application definition
 INSTALLED_APPS = [
+    # 3rd party apps
+    'corsheaders',
+    # Djago Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd party apps
-    'corsheaders',
     'rest_framework',
     'ninja_extra',
     'ninja_jwt',
@@ -58,10 +60,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     # Cors Middleware
     "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -215,8 +217,6 @@ CORS_ALLOWED_ORIGINS = [ # AZAK
     "http://localhost:3000",
     "http://localhost:3001",
 ]
-
-CORS_ORIGINS_ALLOW_ALL = True # AZAK
 
 CORS_ALLOW_METHODS = (
     "DELETE",

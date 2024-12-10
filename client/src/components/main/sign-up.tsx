@@ -1,50 +1,51 @@
 "use client";
-import { useState } from "react";
+
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function SignUp() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    phone_number: "",
     email: "",
     password: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: "" }); // Clear the error message when the user starts typing
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let valid = true;
-    const newErrors = { email: "", password: "", confirmPassword: "" };
 
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-      valid = false;
-    }
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-      valid = false;
-    }
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Confirm Password is required";
-      valid = false;
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-      valid = false;
-    }
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customuser/register/`, // AZAK
+        {
+          // AZAK
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
-    setErrors(newErrors);
-
-    if (valid) {
-      // Submit the form
-      console.log("Form submitted successfully");
+      // const data = await res.json()
+      if (res.ok) {
+        router.push("/auth/sign-in");
+        alert("Data sent successFully");
+      } else {
+        alert("There is an error");
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -146,7 +147,7 @@ export default function SignUp() {
                   name="password"
                   id="password"
                   onChange={handleChange}
-                  placeholder="•••••••••••"
+                  placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
@@ -162,7 +163,7 @@ export default function SignUp() {
                   type="password"
                   name="confirm-password"
                   id="confirm-password"
-                  placeholder="•••••••••••"
+                  placeholder="••••••••"
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required

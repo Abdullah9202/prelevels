@@ -216,6 +216,8 @@ CORS_ALLOWED_ORIGINS = [ # AZAK
     "http://localhost:3001",
 ]
 
+CORS_ORIGINS_ALLOW_ALL = True # AZAK
+
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",

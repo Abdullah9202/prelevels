@@ -27,7 +27,7 @@ from cart.api import cart_api
 from custom_auth.api import auth_api
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/admin/', admin.site.urls),
     # Custom User API URLs
     path('api/customuser/', cuser_api.api.urls),
     # Question Bank API URLs

@@ -13,7 +13,6 @@ from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
 # Ninja imports
 from ninja_extra import Router
-from ninja_extra.security import django_auth
 from ninja.errors import HttpError
 from ninja.responses import codes_4xx, codes_5xx
 # My Files
